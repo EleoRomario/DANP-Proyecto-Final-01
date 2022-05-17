@@ -70,7 +70,8 @@ fun ListDepBodyContent(navController: NavController){
         }
         Row(modifier = Modifier
             .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
         ) {
             OutlinedTextField(
                 value = text,
@@ -93,13 +94,13 @@ fun ListDepBodyContent(navController: NavController){
                 .clickable { navController.navigate(route = AppScreens.GridDepartamentos.route) })
         }
         Spacer(modifier = Modifier.size(20.dp))
-        SliderCards()
+        SliderCards(navController)
     }
 }
 
 @ExperimentalPagerApi
 @Composable
-fun SliderCards(){
+fun SliderCards(navController: NavController){
 
     val pagerState  = rememberPagerState(
         pageCount = departamentosList.size,
@@ -136,7 +137,7 @@ fun SliderCards(){
             ) {
 
                 val newDepartamento = departamentosList[page]
-                CardDepartamento(title = newDepartamento.title, img = newDepartamento.imgUri)
+                CardDepartamento(code = newDepartamento.code,title = newDepartamento.title, img = newDepartamento.imgUri, navController)
 
             }
 
@@ -147,7 +148,7 @@ fun SliderCards(){
 }
 
 @Composable
-fun CardDepartamento(title:String, img:Int){
+fun CardDepartamento(code:String, title:String, img:Int, navController: NavController){
     Column(
         Modifier.background(Color.Transparent)
     ){
@@ -177,7 +178,9 @@ fun CardDepartamento(title:String, img:Int){
 
     }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
+            },
             contentPadding = PaddingValues(
                 start = 20.dp,
                 top = 12.dp,

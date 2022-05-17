@@ -27,7 +27,7 @@ fun AppNavigation (){
             navArgument(name = "departamento"){
                 type = NavType.StringType
             })){
-            DetalleDepartamentoScreen(navController)
+            DetalleDepartamentoScreen(navController,it.arguments?.getString("departamento"))
         }
 
         composable(route = AppScreens.ListLugaresTuristico.route + "/{departamento}" + "/{destinos}", arguments = listOf(

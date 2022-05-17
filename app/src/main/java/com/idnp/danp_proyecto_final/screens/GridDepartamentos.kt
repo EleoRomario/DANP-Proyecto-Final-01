@@ -60,7 +60,8 @@ fun GridBodyContent(navController: NavController){
         }
         Row(modifier = Modifier
             .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             OutlinedTextField(
                 value = text,
@@ -83,12 +84,12 @@ fun GridBodyContent(navController: NavController){
         }
         Spacer(modifier = Modifier.size(20.dp))
         //CardDepartamento()
-        GridCards(departamentosList)
+        GridCards(departamentosList, navController)
     }
 }
 
 @Composable
-fun GridCards(departamentos: List<DepartamentosData>){
+fun GridCards(departamentos: List<DepartamentosData>, navController: NavController){
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(
@@ -102,7 +103,7 @@ fun GridCards(departamentos: List<DepartamentosData>){
                 departamentos.size
             ){ departamento ->
                 Box(modifier = Modifier.padding(10.dp)){
-                    CardDep(title = departamentos[departamento].title, img = departamentos[departamento].imgUri)
+                    CardDep(title = departamentos[departamento].title, img = departamentos[departamento].imgUri,navController, departamentos[departamento].code)
                 }
             }
         }
@@ -112,12 +113,15 @@ fun GridCards(departamentos: List<DepartamentosData>){
 }
 
 @Composable
-fun CardDep(title:String, img:Int){
+fun CardDep(title:String, img:Int, navController: NavController, code:String){
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .height(200.dp)
             .width(200.dp)
+            .clickable {
+                navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
+            },
     ){
         Image(painterResource(img), contentDescription = "null", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         Box(
