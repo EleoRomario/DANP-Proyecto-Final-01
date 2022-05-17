@@ -4,6 +4,7 @@ import android.widget.RatingBar
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,10 +12,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,15 +31,20 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.navegation.navList
 import com.idnp.danp_proyecto_final.ui.theme.Primary
+import com.idnp.danp_proyecto_final.ui.theme.Secundary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import java.util.*
@@ -47,15 +56,43 @@ Eleo
 
 @Composable
 fun ListDepartamentosScreen(navController: NavController){
-    Scaffold {
-        CenterAlignedTopAppBar(
-            title = {Text("Perú")},
-            actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu), contentDescription = "menu")
-                }
-            }
+    Scaffold(
+        bottomBar = {
+            var selectedItem by remember { mutableStateOf(0) }
+            val items = navList
+                    NavigationBar(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clip(RoundedCornerShape(20.dp)),
+                        containerColor = Primary,
+                        contentColor = Color.Red
+
+                    ) {
+                        items.forEachIndexed {
+                            index, appScreens ->
+                            NavigationBarItem(
+                                icon = {
+                                    Image(imageVector = ImageVector.vectorResource(items.get(index).icon), contentDescription = "grid", modifier = Modifier
+                                       )
+                                },
+                                selected = selectedItem == index,
+                                onClick = {
+                                    navController.navigate(route = items.get(index).route)
+                                },
+
+
+                            )
+                        }
+                    }
+        },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {Text("Perú", fontSize = 25.sp)},
             )
+        }
+    ) {
+
+
         ListDepBodyContent(navController)
     }
 }
@@ -63,24 +100,20 @@ fun ListDepartamentosScreen(navController: NavController){
 @Composable
 fun ListDepBodyContent(navController: NavController){
     Column(modifier = Modifier
-        .padding(all = 20.dp)
-        .padding(top = 60.dp)) {
+        .padding(all = 30.dp)) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        Column() {
             OutlinedTextField(
                 value = text,
                 onValueChange = {newText -> text = newText},
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = Color.Gray,
-                    disabledBorderColor = Color.Gray,
-                    disabledTextColor = Color.Black
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    disabledBorderColor = Color.Transparent,
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Secundary
                 ),
                 shape = RoundedCornerShape(20.dp),
                 leadingIcon = {
@@ -88,13 +121,22 @@ fun ListDepBodyContent(navController: NavController){
                 },
                 placeholder = {
                     Text(text = "Buscar destino")
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_app), contentDescription = "grid", modifier = Modifier.weight(weight = 0.1f)
-                .clickable { navController.navigate(route = AppScreens.GridDepartamentos.route) })
+            Spacer( modifier = Modifier.padding(vertical = 20.dp))
+            Row(modifier = Modifier
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Departamentos", fontSize = 20.sp, color = Primary)
+                Image(imageVector = ImageVector.vectorResource(R.drawable.ic_app), contentDescription = "grid", modifier = Modifier
+                    .clickable { navController.navigate(route = AppScreens.GridDepartamentos.route) })
+            }
+            Spacer( modifier = Modifier.padding(vertical = 20.dp))
+            SliderCards(navController)
         }
-        Spacer(modifier = Modifier.size(20.dp))
-        SliderCards(navController)
     }
 }
 
@@ -135,7 +177,6 @@ fun SliderCards(navController: NavController){
                 .padding(40.dp, 0.dp, 40.dp, 0.dp),
                 //shape = RoundedCornerShape(20.dp)
             ) {
-
                 val newDepartamento = departamentosList[page]
                 CardDepartamento(code = newDepartamento.code,title = newDepartamento.title, img = newDepartamento.imgUri, navController)
 
@@ -203,9 +244,39 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
     }
 }
 
+@Composable
+fun bottomMenu(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .clip(RoundedCornerShape(20.dp))
+    ) {
+        Row(
+            modifier = Modifier.padding(vertical = 15.dp),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_home_white), contentDescription = "grid", modifier = Modifier
+                .clickable {
+                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
+                })
+            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_compass), contentDescription = "grid", modifier = Modifier
+                .clickable {
+                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
+                })
+            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_search), contentDescription = "grid", modifier = Modifier
+                .clickable {
+                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
+                })
+        }
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    //CardDepartamento()
-    //ListDepartamentosScreen()
+    val navController = rememberNavController()
+    //CardDepartameto()
+    ListDepartamentosScreen(navController)
 }
