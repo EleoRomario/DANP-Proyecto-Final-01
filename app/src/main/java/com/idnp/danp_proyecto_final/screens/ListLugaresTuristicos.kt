@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,12 +24,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.data.DepartamentosData
+import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.data.destinosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
@@ -39,9 +44,13 @@ import kotlinx.coroutines.launch
 Renato
 * */
 @Composable
-fun ListLugaresTuristicoScreen(navController: NavController){
+fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+
+    val departamento = departamentosList.first {
+        it.code == code
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -57,7 +66,7 @@ fun ListLugaresTuristicoScreen(navController: NavController){
 
                     }
                 },
-                title = { Text("Perú", color = Primary, fontSize = 25.sp) },
+                title = { Text(departamento.title, color = Primary, fontSize = 25.sp) },
                 actions = {
                     IconButton(
                         onClick = {
@@ -76,12 +85,12 @@ fun ListLugaresTuristicoScreen(navController: NavController){
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController)}
     ){
-        listLugaresBodyContent()
+        listLugaresBodyContent(departamento.title,code, navController)
     }
 }
 
 @Composable
-fun listLugaresBodyContent(){
+fun listLugaresBodyContent(title:String, code: String?, navController: NavController){
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)) {
         var text by remember {
@@ -112,23 +121,37 @@ fun listLugaresBodyContent(){
 
             Text("Destinos Turisticos", fontSize = 20.sp, color = Primary)
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
-            cardsLugaresTuristicos()
+            cardsLugaresTuristicos(title,code, navController)
         }
     }
 }
 
 @Composable
-fun cardsLugaresTuristicos(){
-    cardLugarTuristico()
+fun cardsLugaresTuristicos(title: String,code: String?, navController: NavController){
+    val destinos = destinosList.filter{
+        it.codeDep == code
+    }
+    LazyColumn(){
+        items(destinos.size){ destino ->
+            cardLugarTuristico(title,destinos[destino].title, destinos[destino].img, code, destinos[destino].code ,navController)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun cardLugarTuristico(){
+fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, code: String?, navController: NavController){
+    var isLiked by remember{
+        mutableStateOf(false)
+    }
     Card(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(0.1.dp, color = Color.LightGray),
-        backgroundColor = Color.White
+        backgroundColor = Color.White,
+        modifier = Modifier.padding(vertical = 10.dp)
+            .clickable {
+                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${codeDep}/${code}")
+            }
     ) {
         Row(
             modifier = Modifier
@@ -136,7 +159,7 @@ fun cardLugarTuristico(){
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(R.drawable.arequipa),
+                painter = painterResource(imgUri),
                 contentDescription = "",
                 modifier = Modifier
                     .size(100.dp, 110.dp)
@@ -154,10 +177,22 @@ fun cardLugarTuristico(){
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Top
                     ) {
-                        Text("Titulo", fontSize = 20.sp, color = Primary)
-                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_heart), contentDescription = "favorite")
+                        Text(title, fontSize = 20.sp, color = Primary,
+                            modifier = Modifier.weight(3f),
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Image(
+                            imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
+                            contentDescription = "favorite",
+                            modifier = Modifier.weight(1f).padding(top = 10.dp)
+                                .clickable {
+                                    isLiked = !isLiked
+                                }
+
+                        )
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -165,7 +200,7 @@ fun cardLugarTuristico(){
                     ) {
                         Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text("Ubicación", color = TextAlt)
+                        Text(dep, color = TextAlt)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -186,5 +221,5 @@ fun cardLugarTuristico(){
 @Composable
 fun ListLugarDefaultPreview() {
     val navController = rememberNavController()
-    ListLugaresTuristicoScreen(navController)
+    ListLugaresTuristicoScreen(navController,"arequipa")
 }

@@ -117,7 +117,7 @@ fun SliderCards(navController: NavController){
 
     val pagerState  = rememberPagerState(
         pageCount = departamentosList.size,
-        initialPage =  2
+        initialPage =  0
     )
 
     LaunchedEffect(Unit){

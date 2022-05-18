@@ -1,20 +1,18 @@
 package com.idnp.danp_proyecto_final.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -22,45 +20,112 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.ui.theme.ColorTopBar
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
+import kotlinx.coroutines.launch
 
 /*
 Rolando
 * */
 
 @Composable
-fun DetalleLugarTuristicoScreen(){
-    Scaffold {
-        LugarBodyContent()
+fun DetalleLugarTuristicoScreen(navController: NavController, departamento: String?, destino: String?){
+
+    val dep= departamentosList.first {
+        it.code == departamento
     }
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = { modal(navController)},
+
+    ){
+        LugarBodyContent(departamento, destino)
+        /**TopBar**/
+        Box(
+            modifier = Modifier.background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color(0xA1000C1F),
+                        Color.Transparent
+                    )
+                )
+            )
+        ){
+            CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    },
+                    ) {
+                        Image(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                            contentDescription = "back",
+                        )
+
+                    }
+                },
+                title = { Text(dep.title, color = Color.White, fontSize = 25.sp) },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        }) {
+                        Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_white), contentDescription = "menu")
+                    }
+
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
+            )
+        }
+    }
+
 
 }
 @Composable
-fun LugarBodyContent(){
+fun LugarBodyContent(codeDep: String?, code: String?){
+
+    val destinos = destinosList.filter{
+        it.codeDep == codeDep
+    }
+    val depTitle = departamentosList.first{
+        it.code == codeDep
+    }
+    val lugarT = destinos.first {
+        it.code == code
+    }
 
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.verticalScroll(scrollState)) {
-        Image(painter = painterResource(id = R.drawable.bosqueneblinacarpish), contentDescription = "",
+        Image(painter = painterResource(lugarT.img), contentDescription = "",
             contentScale  = ContentScale.Crop,
             modifier= Modifier
                 .fillMaxWidth()
                 .height(400.dp)
                 .clip(RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp))
         )
-        infoLugarTuristico()
+        infoLugarTuristico(depTitle.title, lugarT.title,lugarT.description,lugarT.latitud,lugarT.longitud)
+
     }
 
 }
 
 @Composable
-fun infoLugarTuristico(){
+fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, long: Double){
 
     Column(
         modifier = Modifier.padding(20.dp)
@@ -69,14 +134,19 @@ fun infoLugarTuristico(){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
-            Text(text = "Lugar Turistico", fontSize = 25.sp)
-            Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_heart), contentDescription = "heart",
-
-                )
+            Text(text = title,
+                fontSize = 25.sp,
+                modifier = Modifier.weight(4f)
+            )
+            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_heart_unselected), contentDescription = "heart",
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 10.dp)
+            )
         }
         Row(
             modifier = Modifier
@@ -86,25 +156,25 @@ fun infoLugarTuristico(){
         ) {
             Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_location), contentDescription = "location")
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = "Ubicacion" , fontSize = 16.sp, color = TextAlt)
+            Text(text = dep , fontSize = 16.sp, color = TextAlt)
         }
+        Spacer(modifier = Modifier.height(15.dp))
         Text("Descripcion", fontSize = 16.sp)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pretium erat quis luctus vestibulum. In arcu mauris, porttitor sit amet gravida non, pulvinar vitae purus.", fontSize = 14.sp, color = TextAlt)
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(text = des, fontSize = 14.sp, color = TextAlt)
         Spacer(modifier = Modifier.height(10.dp))
         Row(modifier = Modifier.height(400.dp)){
-            mapLugarTuristico()
+            mapLugarTuristico(lat,long, title)
         }
     }
 }
 
 @Composable
-fun mapLugarTuristico(){
-    val marker = LatLng(-9.5158261,-76.0369947)
+fun mapLugarTuristico(lat: Double, long: Double, title: String){
+    val marker = LatLng(lat,long)
     val cameraPositionState = rememberCameraPositionState{
         position = CameraPosition.fromLatLngZoom(marker, 10f)
     }
-
     Box () {
         GoogleMap(
             //modifier = Modifier.fillMaxSize(),
@@ -115,10 +185,9 @@ fun mapLugarTuristico(){
                 .clip(RoundedCornerShape(20.dp, 20.dp, 20.dp, 20.dp)),
             cameraPositionState = cameraPositionState
         ){
-            Marker(position = marker, title = "Lugar", snippet = "Bonito lugar")
+            Marker(position = marker, title = title, snippet = "Lugar Turistico")
         }
     }
-
 
 }
 
@@ -126,5 +195,6 @@ fun mapLugarTuristico(){
 @Preview(showBackground = true)
 @Composable
 fun LugaresDefaultPreview() {
-    DetalleLugarTuristicoScreen()
+    var navController= rememberNavController()
+    DetalleLugarTuristicoScreen(navController,"arequipa", "are_04")
 }
