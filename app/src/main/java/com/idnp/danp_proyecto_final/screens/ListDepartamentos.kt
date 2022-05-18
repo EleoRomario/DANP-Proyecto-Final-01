@@ -120,6 +120,17 @@ fun SliderCards(navController: NavController){
         initialPage =  2
     )
 
+    LaunchedEffect(Unit){
+        while (true){
+            yield()
+            delay(2000)
+            pagerState.animateScrollToPage(
+                page = (pagerState.currentPage + 1) % (pagerState.pageCount),
+                animationSpec = tween(600)
+            )
+        }
+    }
+
     Column(
     ) {
         HorizontalPager(state = pagerState,
@@ -186,12 +197,13 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
                 )
                 Text(title, modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 80.dp), fontSize = 40.sp, color = Color.White)
+                    .padding(bottom = 80.dp), fontSize = 35.sp, color = Color.White)
 
             }
         }
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             contentAlignment = Alignment.Center
         ){
