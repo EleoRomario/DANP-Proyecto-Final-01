@@ -103,7 +103,10 @@ fun ListDepBodyContent(navController: NavController){
             ) {
                 Text("Departamentos", fontSize = 20.sp, color = Primary)
                 Image(imageVector = ImageVector.vectorResource(R.drawable.ic_app), contentDescription = "grid", modifier = Modifier
-                    .clickable { navController.navigate(route = AppScreens.GridDepartamentos.route) })
+                    .clickable {
+                        navController.navigate(route = AppScreens.GridDepartamentos.route)
+                    }
+                    .size(15.dp, 15.dp))
             }
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
             SliderCards(navController)
@@ -117,7 +120,7 @@ fun SliderCards(navController: NavController){
 
     val pagerState  = rememberPagerState(
         pageCount = departamentosList.size,
-        initialPage =  2
+        initialPage =  0
     )
 
     LaunchedEffect(Unit){
@@ -197,7 +200,7 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
                 )
                 Text(title, modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 80.dp), fontSize = 35.sp, color = Color.White)
+                    .padding(bottom = 80.dp), fontSize = 25.sp, color = Color.White)
 
             }
         }
@@ -228,7 +231,7 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
 }
 
 
-
+//@Preview(showSystemUi = true)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
