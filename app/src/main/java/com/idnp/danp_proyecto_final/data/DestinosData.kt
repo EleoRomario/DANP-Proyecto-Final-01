@@ -207,7 +207,7 @@ val destinosList: List<DestinosData> = listOf(
         "Circuito de Playas de Camaná",
         R.drawable.playascamana,
         "Naturaleza e historia se encuentran en Camaná. Magníficas playas que son escenario de aventuras y biodiversidad en todo su esplendor. Sobresalen la caleta de Quilca y los balnearios La Miel, Cerrillos, Ibiza y La Punta.",
-        -16.6552318,-73.2450791
+        -16.660570, -72.646955
     ),
     DestinosData(
         "arequipa",

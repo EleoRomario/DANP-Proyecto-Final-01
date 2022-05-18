@@ -179,7 +179,7 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(title, fontSize = 20.sp, color = Primary,
+                        Text(title, fontSize = 15.sp, color = Primary,
                             modifier = Modifier.weight(3f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
@@ -200,7 +200,7 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                     ) {
                         Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(dep, color = TextAlt)
+                        Text(dep, color = TextAlt, fontSize = 12.sp)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),

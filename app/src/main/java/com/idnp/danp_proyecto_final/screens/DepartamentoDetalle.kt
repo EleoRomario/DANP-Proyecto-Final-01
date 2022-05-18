@@ -145,7 +145,7 @@ fun DetalleContent(code:String?, navController: NavController){
                 modifier = Modifier
                     .padding(10.dp)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(if(isExpanded) ColorTopBar else Color.Transparent)
+                    .background(if (isExpanded) ColorTopBar else Color.Transparent)
             ) {
                 Text(
                     text = departamento.title,
@@ -209,14 +209,22 @@ fun modal(navController: NavController){
         ){
             items(departamentosList) { departamento ->
                 Card(modifier = Modifier
+                    .height(70.dp)
                     .padding(10.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(20.dp))
                     .clickable {
-                        navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + departamento.code)
+                        navController.navigate(
+                            route = AppScreens.DetalleDepartamento.route + "/" + departamento.code
+                        )
                     },
                     backgroundColor = PrimaryAlpha
                 ) {
+                    Image(painter = painterResource(id = departamento.imgUri), contentDescription = "",
+                            modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    Box(modifier = Modifier.background(PrimaryAlpha).fillMaxSize())
                     Text(text = departamento.title,
                         Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
                         fontSize = 20.sp,
@@ -232,6 +240,6 @@ fun modal(navController: NavController){
 @Composable
 fun DetalleDefaultPreview() {
     val navController = rememberNavController()
-    DetalleDepartamentoScreen(navController, "arequipa")
-    //modal()
+    //DetalleDepartamentoScreen(navController, "arequipa")
+    modal(navController)
 }

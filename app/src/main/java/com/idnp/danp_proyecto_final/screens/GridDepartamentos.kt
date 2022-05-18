@@ -85,7 +85,11 @@ fun GridBodyContent(navController: NavController){
             ) {
                 Text("Departamentos", fontSize = 20.sp, color = Primary)
                 Image(imageVector = ImageVector.vectorResource(R.drawable.ic_list), contentDescription = "list", modifier = Modifier
-                    .clickable { navController.navigate(route = AppScreens.ListDepartamentos.route) })
+                    .clickable {
+                        navController.navigate(route = AppScreens.ListDepartamentos.route)
+                    }
+                    .size(15.dp,15.dp)
+                )
             }
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
             GridCards(departamentosList, navController)

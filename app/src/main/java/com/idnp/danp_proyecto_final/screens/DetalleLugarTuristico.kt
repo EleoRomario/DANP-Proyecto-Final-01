@@ -159,10 +159,12 @@ fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, lon
             Text(text = dep , fontSize = 16.sp, color = TextAlt)
         }
         Spacer(modifier = Modifier.height(15.dp))
-        Text("Descripcion", fontSize = 16.sp)
+        Text("Descripción", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = des, fontSize = 14.sp, color = TextAlt)
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
+        Text("Localización", fontSize = 16.sp)
+        Spacer(modifier = Modifier.height(15.dp))
         Row(modifier = Modifier.height(400.dp)){
             mapLugarTuristico(lat,long, title)
         }
