@@ -26,26 +26,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.DepartamentosData
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.ui.theme.Primary
+import com.idnp.danp_proyecto_final.ui.theme.Secundary
 
 /*
 Eleo
 * */
 @Composable
 fun GridDepartamentosScreen(navController: NavController){
-    Scaffold {
-        CenterAlignedTopAppBar(
-            title = { Text("Perú") },
-            actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu), contentDescription = "menu")
-                }
-            }
-        )
+    Scaffold (
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {Text("Perú", fontSize = 25.sp)},
+            )
+        }
+            ){
         GridBodyContent(navController)
     }
 }
@@ -53,24 +53,20 @@ fun GridDepartamentosScreen(navController: NavController){
 @Composable
 fun GridBodyContent(navController: NavController){
     Column(modifier = Modifier
-        .padding(all = 20.dp)
-        .padding(top = 60.dp)) {
+        .padding(horizontal = 30.dp)) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        Column() {
             OutlinedTextField(
                 value = text,
                 onValueChange = {newText -> text = newText},
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = Color.Gray,
-                    disabledBorderColor = Color.Gray,
-                    disabledTextColor = Color.Black
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    disabledBorderColor = Color.Transparent,
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Secundary
                 ),
                 shape = RoundedCornerShape(20.dp),
                 leadingIcon = {
@@ -78,14 +74,24 @@ fun GridBodyContent(navController: NavController){
                 },
                 placeholder = {
                     Text(text = "Buscar destino")
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_list), contentDescription = "grid", modifier = Modifier.weight(weight = 0.1f).clickable { navController.navigate(route = AppScreens.ListDepartamentos.route) })
+            Spacer( modifier = Modifier.padding(vertical = 10.dp))
+            Row(modifier = Modifier
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Departamentos", fontSize = 20.sp, color = Primary)
+                Image(imageVector = ImageVector.vectorResource(R.drawable.ic_list), contentDescription = "list", modifier = Modifier
+                    .clickable { navController.navigate(route = AppScreens.ListDepartamentos.route) })
+            }
+            Spacer( modifier = Modifier.padding(vertical = 10.dp))
+            GridCards(departamentosList, navController)
         }
-        Spacer(modifier = Modifier.size(20.dp))
-        //CardDepartamento()
-        GridCards(departamentosList, navController)
     }
+
 }
 
 @Composable
@@ -93,9 +99,9 @@ fun GridCards(departamentos: List<DepartamentosData>, navController: NavControll
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(
-            start = 12.dp,
+            start = 0.dp,
             top = 16.dp,
-            end = 12.dp,
+            end = 0.dp,
             bottom = 16.dp
         ),
         content = {
@@ -147,5 +153,6 @@ fun CardDep(title:String, img:Int, navController: NavController, code:String){
 @Preview(showBackground = true)
 @Composable
 fun GridDefaultPreview() {
-    //GridDepartamentosScreen()
+    val navController = rememberNavController()
+    GridDepartamentosScreen(navController)
 }

@@ -1,8 +1,12 @@
 package com.idnp.danp_proyecto_final.screens
 
+import android.text.Layout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -11,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,10 +32,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.DepartamentosData
 import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.ui.theme.Primary
+import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
+import kotlinx.coroutines.launch
 
 /*
 Eleo
@@ -38,30 +47,44 @@ Eleo
 
 @Composable
 fun DetalleDepartamentoScreen(navController: NavController, departamento:String?){
-    Scaffold {
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = { modal(navController)}
+    ){
         DetalleContent(departamento)
+
         CenterAlignedTopAppBar(
             navigationIcon = {
-               IconButton(onClick = {
-                   navController.popBackStack()
-                    },
-               ) {
-                   Image(
-                       imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
-                       contentDescription = "back",
-                   )
+                IconButton(onClick = {
+                    navController.popBackStack()
+                },
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                        contentDescription = "back",
+                    )
 
-               }              
+                }
             },
-            title = { Text("Perú", color = Color.White) },
+            title = { Text("Perú", color = Color.White, fontSize = 25.sp) },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    }) {
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_white), contentDescription = "menu")
                 }
+
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
 
-        )
+            )
+
+
 
     }
 }
@@ -131,8 +154,48 @@ fun DetalleContent(code:String?){
     }
 }
 
+@Composable
+fun modal(navController: NavController){
+    Column(
+        Modifier
+            .background(color = Primary)
+            .fillMaxHeight()
+    ) {
+        Text(text = "Perú", fontSize = 25.sp ,color= Color.White,
+            modifier = Modifier
+                .padding(30.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+        LazyColumn(
+            modifier = Modifier
+                .padding(20.dp)
+        ){
+            items(departamentosList) { departamento ->
+                Card(modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(20.dp))
+                    .clickable {
+                        navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + departamento.code)
+                    },
+                    backgroundColor = PrimaryAlpha
+                ) {
+                    Text(text = departamento.title,
+                        Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DetalleDefaultPreview() {
-    //DetalleDepartamentoScreen()
+    val navController = rememberNavController()
+    DetalleDepartamentoScreen(navController, "arequipa")
+    //modal()
 }

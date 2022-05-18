@@ -47,6 +47,7 @@ import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
+import org.intellij.lang.annotations.JdkConstants
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -57,42 +58,12 @@ Eleo
 @Composable
 fun ListDepartamentosScreen(navController: NavController){
     Scaffold(
-        bottomBar = {
-            var selectedItem by remember { mutableStateOf(0) }
-            val items = navList
-                    NavigationBar(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .clip(RoundedCornerShape(20.dp)),
-                        containerColor = Primary,
-                        contentColor = Color.Red
-
-                    ) {
-                        items.forEachIndexed {
-                            index, appScreens ->
-                            NavigationBarItem(
-                                icon = {
-                                    Image(imageVector = ImageVector.vectorResource(items.get(index).icon), contentDescription = "grid", modifier = Modifier
-                                       )
-                                },
-                                selected = selectedItem == index,
-                                onClick = {
-                                    navController.navigate(route = items.get(index).route)
-                                },
-
-
-                            )
-                        }
-                    }
-        },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {Text("Perú", fontSize = 25.sp)},
             )
         }
     ) {
-
-
         ListDepBodyContent(navController)
     }
 }
@@ -100,7 +71,7 @@ fun ListDepartamentosScreen(navController: NavController){
 @Composable
 fun ListDepBodyContent(navController: NavController){
     Column(modifier = Modifier
-        .padding(all = 30.dp)) {
+        .padding(horizontal = 30.dp)) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
@@ -124,7 +95,7 @@ fun ListDepBodyContent(navController: NavController){
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer( modifier = Modifier.padding(vertical = 20.dp))
+            Spacer( modifier = Modifier.padding(vertical = 10.dp))
             Row(modifier = Modifier
                 .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -134,7 +105,7 @@ fun ListDepBodyContent(navController: NavController){
                 Image(imageVector = ImageVector.vectorResource(R.drawable.ic_app), contentDescription = "grid", modifier = Modifier
                     .clickable { navController.navigate(route = AppScreens.GridDepartamentos.route) })
             }
-            Spacer( modifier = Modifier.padding(vertical = 20.dp))
+            Spacer( modifier = Modifier.padding(vertical = 10.dp))
             SliderCards(navController)
         }
     }
@@ -153,7 +124,7 @@ fun SliderCards(navController: NavController){
     ) {
         HorizontalPager(state = pagerState,
         ) { page ->
-            Card(modifier = Modifier
+            Box(modifier = Modifier
                 .graphicsLayer {
                     val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
 
@@ -190,87 +161,60 @@ fun SliderCards(navController: NavController){
 
 @Composable
 fun CardDepartamento(code:String, title:String, img:Int, navController: NavController){
-    Column(
-        Modifier.background(Color.Transparent)
+    Box(
     ){
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .height(400.dp)
-            .fillMaxWidth()
-        ){
-        Image(painterResource(img), contentDescription = "null", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-        Box(
-            modifier = Modifier
-                .height(250.dp)
+        Box(Modifier.padding(bottom = 20.dp)) {
+            Box(modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .height(400.dp)
                 .fillMaxWidth()
-                .align(Alignment.BottomEnd)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color.Transparent,
-                            Color(0xCE000C1F)
+            ){
+                Image(painterResource(img), contentDescription = "null", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                Box(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.BottomEnd)
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    Color(0xCE000C1F)
+                                )
+                            )
                         )
-                    )
                 )
-        )
-        Text(title, modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 80.dp), fontSize = 40.sp, color = Color.White)
+                Text(title, modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 80.dp), fontSize = 40.sp, color = Color.White)
 
-    }
-        Button(
-            onClick = {
-                      navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
-            },
-            contentPadding = PaddingValues(
-                start = 20.dp,
-                top = 12.dp,
-                end = 20.dp,
-                bottom = 12.dp
-            ),
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-            modifier = Modifier
-                .layout{
-                    measurable, constraints ->
-                val placeable = measurable.measure(constraints)
-                layout(constraints.maxWidth, constraints.maxHeight){
-                    placeable.placeRelative(constraints.maxWidth / 2 - placeable.width / 2, -1 * placeable.height / 2)
-                }
-            },
-        ) {
-            Text("Explorar", fontSize = 20.sp, color = Primary)
+            }
+        }
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            contentAlignment = Alignment.Center
+        ){
+            Button(
+                onClick = {
+                    navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
+                },
+                contentPadding = PaddingValues(
+                    start = 20.dp,
+                    top = 12.dp,
+                    end = 20.dp,
+                    bottom = 12.dp
+                ),
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+
+                ) {
+                Text("Explorar", fontSize = 20.sp, color = Primary)
+            }
         }
     }
 }
 
-@Composable
-fun bottomMenu(){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .clip(RoundedCornerShape(20.dp))
-    ) {
-        Row(
-            modifier = Modifier.padding(vertical = 15.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_home_white), contentDescription = "grid", modifier = Modifier
-                .clickable {
-                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
-                })
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_compass), contentDescription = "grid", modifier = Modifier
-                .clickable {
-                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
-                })
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_search), contentDescription = "grid", modifier = Modifier
-                .clickable {
-                    //navController.navigate(route = AppScreens.GridDepartamentos.route)
-                })
-        }
-    }
-}
 
 
 @Preview(showBackground = true)
