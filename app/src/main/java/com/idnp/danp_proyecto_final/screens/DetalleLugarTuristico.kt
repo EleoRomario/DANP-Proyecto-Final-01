@@ -29,6 +29,8 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 
 /*
 Rolando
@@ -127,5 +129,4 @@ fun mapLugarTuristico(){
 @Composable
 fun LugaresDefaultPreview() {
     LugarTuristico()
-
 }
