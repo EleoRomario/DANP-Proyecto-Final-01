@@ -49,7 +49,7 @@ fun AppNavigation (){
                 type = NavType.StringType
             },
         )){
-            DetalleLugarTuristicoScreen(navController)
+            DetalleLugarTuristicoScreen()
         }
     }
 }
