@@ -58,25 +58,7 @@ fun GridBodyContent(navController: NavController){
             mutableStateOf(TextFieldValue(""))
         }
         Column() {
-            OutlinedTextField(
-                value = text,
-                onValueChange = {newText -> text = newText},
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    disabledBorderColor = Color.Transparent,
-                    disabledTextColor = Color.Transparent,
-                    backgroundColor = Secundary
-                ),
-                shape = RoundedCornerShape(20.dp),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Search, contentDescription = "searchIcon")
-                },
-                placeholder = {
-                    Text(text = "Buscar destino")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
             Row(modifier = Modifier
                 .fillMaxWidth(),
