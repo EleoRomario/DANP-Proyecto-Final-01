@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -68,9 +69,7 @@ fun TopBarBack(navController: NavController){
 }
 
 @Composable
-fun TopBarDepBack(navController: NavController){
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+fun TopBarDepBack(title:String,scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
     CenterAlignedTopAppBar(
         navigationIcon = {
             IconButton(onClick = {
@@ -84,7 +83,7 @@ fun TopBarDepBack(navController: NavController){
 
             }
         },
-        title = { Text("Perú", fontSize = 25.sp) },
+        title = { Text(title, color = Primary, fontSize = 20.sp) },
         actions = {
             IconButton(
                 onClick = {
@@ -92,16 +91,12 @@ fun TopBarDepBack(navController: NavController){
                         scaffoldState.drawerState.open()
                     }
                 }) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu),
-                    contentDescription = "menu"
-                )
+                Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
             }
 
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
-
-        )
+    )
 }
 
 @Composable
@@ -131,6 +126,53 @@ fun TopBarMenu(scope: CoroutineScope,scaffoldState: ScaffoldState,navController:
                 }
             },
             title = { Text("Perú", color = Color.White, fontSize = 25.sp) },
+            actions = {
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    }) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_white),
+                        contentDescription = "menu"
+                    )
+                }
+
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
+
+            )
+    }
+}
+
+@Composable
+fun TopBarMenuDep(dep: String, scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
+    Box(
+        modifier = Modifier.background(
+            Brush.verticalGradient(
+                listOf(
+                    Color(0xA1000C1F),
+                    Color.Transparent
+                )
+            )
+        )
+    ) {
+        CenterAlignedTopAppBar(
+            navigationIcon = {
+                IconButton(
+                    onClick = {
+                        navController.popBackStack()
+                    },
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                        contentDescription = "back",
+                    )
+
+                }
+            },
+            title = { Text(dep, color = Color.White, fontSize = 25.sp) },
             actions = {
                 IconButton(
                     onClick = {
@@ -207,10 +249,16 @@ fun BottomBarNavegation(id:Int,navController: NavController){
     val items = navList
 
     BottomNavigation(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
-            .padding(horizontal = 30.dp, vertical = 5.dp),
+        modifier = Modifier.fillMaxWidth()
+            .graphicsLayer {
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp
+                )
+                clip = true
+            },
         backgroundColor = Color.White,
-        elevation = 1.dp
+        elevation = 5.dp
     ) {
         items.forEachIndexed{ index, item ->
             NavigationBarItem(

@@ -52,38 +52,16 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
         it.code == code
     }
     Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    },
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_1),
-                            contentDescription = "back",
-                        )
-
-                    }
-                },
-                title = { Text(departamento.title, color = Primary, fontSize = 25.sp) },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                scaffoldState.drawerState.open()
-                            }
-                        }) {
-                        Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
-                    }
-
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
-
-                )
-        },
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)}
+        drawerContent = { modal(navController)},
+        topBar = {
+            TopBarDepBack(departamento.title,scope,scaffoldState,navController)
+        },
+        bottomBar = {
+            BottomBarNavegation(3,navController)
+        },
+
+
     ){
         listLugaresBodyContent(departamento.title,code, navController)
     }
@@ -92,11 +70,14 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
 @Composable
 fun listLugaresBodyContent(title:String, code: String?, navController: NavController){
     Column(modifier = Modifier
-        .padding(horizontal = 30.dp)) {
+        .padding(horizontal = 30.dp)
+    ) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
-        Column() {
+        Column(
+            Modifier.padding(bottom = 100.dp)
+        ) {
 
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
 

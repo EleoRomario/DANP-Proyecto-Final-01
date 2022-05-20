@@ -61,7 +61,9 @@ fun ListBodyContent(navController: NavController){
 
 @Composable
 fun GridCards(departamentos: List<DepartamentosData>, navController: NavController){
-    Column(){
+    Column(
+        Modifier.padding(bottom = 75.dp)
+    ){
         Row(modifier = Modifier
             .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

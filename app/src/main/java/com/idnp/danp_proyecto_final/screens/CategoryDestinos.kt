@@ -52,7 +52,7 @@ fun Categories(category:String?, navController: NavController){
         mutableStateOf(false)
     }
     Column(
-        modifier = Modifier.padding(bottom = 100.dp),
+        modifier = Modifier.padding(bottom = 75.dp),
     ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -112,7 +112,7 @@ fun ListCardsCategory(category : String?, navController: NavController){
             var departamento = departamentosList.first{
                 it.code == destinos[destino].codeDep
             }
-            cardLugarTuristico(departamento.title,destinos[destino].title, destinos[destino].img, category, destinos[destino].code ,navController)
+            cardLugarTuristico(departamento.title,destinos[destino].title, destinos[destino].img, destinos[destino].codeDep, destinos[destino].code ,navController)
         }
     }
 }

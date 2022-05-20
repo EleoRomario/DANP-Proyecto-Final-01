@@ -49,48 +49,12 @@ fun DetalleLugarTuristicoScreen(navController: NavController, departamento: Stri
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController)},
-
+        bottomBar = {
+            BottomBarNavegation(3,navController)
+        },
     ){
         LugarBodyContent(departamento, destino)
-        /**TopBar**/
-        Box(
-            modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(0xA1000C1F),
-                        Color.Transparent
-                    )
-                )
-            )
-        ){
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    },
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
-                            contentDescription = "back",
-                        )
-
-                    }
-                },
-                title = { Text(dep.title, color = Color.White, fontSize = 25.sp) },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                scaffoldState.drawerState.open()
-                            }
-                        }) {
-                        Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_white), contentDescription = "menu")
-                    }
-
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
-            )
-        }
+        TopBarMenuDep(dep.title,scope,scaffoldState,navController)
     }
 
 
@@ -128,7 +92,7 @@ fun LugarBodyContent(codeDep: String?, code: String?){
 fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, long: Double){
 
     Column(
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier.padding(30.dp)
     ) {
         Row(
             modifier = Modifier
