@@ -3,35 +3,29 @@ package com.idnp.danp_proyecto_final.navegation
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.DepartamentosData
 
-data class NavData (
-    val title:String,
-    val icon:Int,
-    val route: String,
-    //val destino: List<DestinosData>,
-
-    /**
-     * Departamentos / Destinos List
-     * */
+data class NavData(
+    var id: Int,
+    var title:String,
+    var icon: Int,
+    var route: String,
 )
 val navList: List<NavData> = listOf(
     NavData(
-        "home",
+        0,
+        "Home",
         R.drawable.ic_home,
-        "AppScreens.HomeDepartamentos.route",
+        AppScreens.HomeDepartamentos.route
     ),
     NavData(
-        "destinos",
+        1,
+        "List",
         R.drawable.ic_compass,
-        "AppScreens.ListDepartamentos.route",
+        AppScreens.ListDepartamentos.route
     ),
     NavData(
-        "search",
+        2,
+        "Categorias",
         R.drawable.ic_categori,
-        "AppScreens.GridDepartamentos.route",
-    ),
-    NavData(
-        "search",
-        R.drawable.ic_search_menu,
-        "AppScreens.GridDepartamentos.route",
-    ),
+        AppScreens.CategoryDestinos.route + "/cultural"
+    )
 )

@@ -43,8 +43,6 @@ import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
-import com.idnp.danp_proyecto_final.navegation.NavData
-import com.idnp.danp_proyecto_final.navegation.navList
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
@@ -66,7 +64,7 @@ fun HomeDepartamentosScreen(navController: NavController){
             TopBarPeru()
         },
         bottomBar = {
-            BottomBarNavegation(navController)
+            BottomBarNavegation(0,navController)
         }
     ) {
         HomeDepBodyContent(navController)

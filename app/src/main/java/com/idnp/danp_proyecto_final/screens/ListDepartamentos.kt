@@ -43,7 +43,7 @@ fun ListDepartamentosScreen(navController: NavController){
             TopBarBack(navController)
         },
         bottomBar = {
-            BottomBarNavegation(navController)
+            BottomBarNavegation(1,navController)
         }
             ){
         ListBodyContent(navController)

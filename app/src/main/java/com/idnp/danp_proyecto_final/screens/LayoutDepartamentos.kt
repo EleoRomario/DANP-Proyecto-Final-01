@@ -9,14 +9,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,21 +39,6 @@ import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 import kotlinx.coroutines.launch
-/**
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LayoutDepartamentos(navController: NavController){
-    Scaffold(
-        topBar = {
-            TopBarMenu(navController)
-        },
-        bottomBar = {
-            BottomBarNavegation(navController)
-        }
-    ) {
-
-    }
-}**/
 
 @Composable
 fun TopBarPeru(){
@@ -201,7 +186,9 @@ fun modal(navController: NavController){
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
-                    Box(modifier = Modifier.background(PrimaryAlpha).fillMaxSize())
+                    Box(modifier = Modifier
+                        .background(PrimaryAlpha)
+                        .fillMaxSize())
                     Text(text = departamento.title,
                         Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
                         fontSize = 20.sp,
@@ -216,19 +203,20 @@ fun modal(navController: NavController){
 
 
 @Composable
-fun BottomBarNavegation(navController: NavController){
+fun BottomBarNavegation(id:Int,navController: NavController){
+
+    val items = navList
+
     BottomNavigation(
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
+            .padding(horizontal = 30.dp, vertical = 5.dp),
         backgroundColor = Color.White,
-        modifier = Modifier.padding(10.dp).clip(RoundedCornerShape(20.dp))
-    )
-    {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        val items = navList
-        items.forEach{ item ->
-            BottomNavigationItem(
-                icon = { Image(imageVector = ImageVector.vectorResource(id = item.icon), contentDescription = null) },
-                selected = currentRoute == item.route,
+        elevation = 1.dp
+    ) {
+        items.forEachIndexed{ index, item ->
+            NavigationBarItem(
+                icon = {Image(imageVector = ImageVector.vectorResource(id = item.icon), contentDescription = "home")},
+                selected = id == index,
                 onClick = {
                     navController.navigate(item.route)
                 }
@@ -246,7 +234,8 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(0.1.dp, color = Color.LightGray),
         backgroundColor = Color.White,
-        modifier = Modifier.padding(vertical = 10.dp)
+        modifier = Modifier
+            .padding(vertical = 10.dp)
             .clickable {
                 navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${codeDep}/${code}")
             }
@@ -285,7 +274,9 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                         Image(
                             imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
                             contentDescription = "favorite",
-                            modifier = Modifier.weight(1f).padding(top = 10.dp)
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(top = 10.dp)
                                 .clickable {
                                     isLiked = !isLiked
                                 }
@@ -319,5 +310,5 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
 @Composable
 fun LayoutDefaultPreview() {
     val navController = rememberNavController()
-    //LayoutDepartamentos(navController)
+    BottomBarNavegation(2,navController)
 }

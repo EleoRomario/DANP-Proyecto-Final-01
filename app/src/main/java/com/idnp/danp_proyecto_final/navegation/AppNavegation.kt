@@ -29,7 +29,7 @@ fun AppNavigation (){
             navArgument(name = "category"){
                 type = NavType.StringType
             })){
-            CategoryDestinosScreen(it.arguments?.getString("category"), navController)
+            CategoryDestinosScreen(navController, it.arguments?.getString("category"))
         }
 
         composable(route = AppScreens.DetalleDepartamento.route + "/{departamento}", arguments = listOf(

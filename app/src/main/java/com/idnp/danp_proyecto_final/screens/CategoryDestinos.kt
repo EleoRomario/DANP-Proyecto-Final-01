@@ -25,13 +25,13 @@ import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 
 @Composable
-fun CategoryDestinosScreen(category:String?,navController: NavController){
+fun CategoryDestinosScreen(navController: NavController,category:String?){
     Scaffold (
         topBar = {
             TopBarBack(navController)
         },
         bottomBar = {
-            BottomBarNavegation(navController)
+            BottomBarNavegation(2,navController)
         }
     ){
         CategoryBodyContent(category,navController)
@@ -63,7 +63,8 @@ fun Categories(category:String?, navController: NavController){
                 ),
                 enabled = if(category == "cultural") false else true,
                 onClick = {
-                    navController.navigate(route = AppScreens.CategoryDestinos.route + "/cultural")
+                    navController.navigate(
+                        route = AppScreens.CategoryDestinos.route + "/cultural")
                 },
                 border = BorderStroke(1.dp, Primary)
             ) {
@@ -89,7 +90,7 @@ fun Categories(category:String?, navController: NavController){
                 ),
                 enabled = if(category == "extremo") false else true,
                 onClick = {
-                    navController.navigate(route = AppScreens.CategoryDestinos.route + "/extremo")
+                    navController.navigate(AppScreens.CategoryDestinos.route + "/extremo")
                 },
                 border = BorderStroke(1.dp, Primary)
             ) {
@@ -120,5 +121,5 @@ fun ListCardsCategory(category : String?, navController: NavController){
 fun CategoryDefaultPreview() {
     val navController = rememberNavController()
     //CardDepartameto()
-    CategoryDestinosScreen("aventura", navController)
+    CategoryDestinosScreen(navController,"extremo", )
 }
