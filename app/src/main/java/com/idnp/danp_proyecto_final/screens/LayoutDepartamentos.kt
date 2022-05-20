@@ -38,6 +38,7 @@ import com.idnp.danp_proyecto_final.navegation.navList
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -104,9 +105,7 @@ fun TopBarDepBack(navController: NavController){
 }
 
 @Composable
-fun TopBarMenu(navController: NavController){
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+fun TopBarMenu(scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
     Box(
         modifier = Modifier.background(
             Brush.verticalGradient(

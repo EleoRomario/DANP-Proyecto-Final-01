@@ -107,7 +107,7 @@ fun HomeDepBodyContent(navController: NavController){
             departamentos(navController)
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
             categorias(navController)
-            Spacer(modifier = Modifier.height(150.dp))
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }

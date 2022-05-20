@@ -51,7 +51,9 @@ fun Categories(category:String?, navController: NavController){
     var isSelected by remember{
         mutableStateOf(false)
     }
-    Column() {
+    Column(
+        modifier = Modifier.padding(bottom = 100.dp),
+    ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -98,7 +100,6 @@ fun Categories(category:String?, navController: NavController){
             }
         }
         ListCardsCategory(category, navController)
-        Spacer(modifier = Modifier.height(100.dp))
     }
 }
 @Composable
@@ -121,5 +122,5 @@ fun ListCardsCategory(category : String?, navController: NavController){
 fun CategoryDefaultPreview() {
     val navController = rememberNavController()
     //CardDepartameto()
-    CategoryDestinosScreen(navController,"extremo", )
+    CategoryDestinosScreen(navController,"aventura", )
 }

@@ -120,7 +120,7 @@ fun CardDep(title:String, img:Int, navController: NavController, code:String){
         )
         Text(title, modifier = Modifier
             .align(Alignment.BottomCenter)
-            .padding(bottom = 10.dp), fontSize = 20.sp, color = Color.White)
+            .padding(bottom = 10.dp), fontSize = 15.sp, color = Color.White)
     }
 }
 

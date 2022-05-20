@@ -311,7 +311,7 @@ val destinosList: List<DestinosData> = listOf(
         "Cueva De Pikimachay",
         "cultural",
         R.drawable.cuevapikimachay,
-        "La cueva de Pikimachay se sitúa al norte de Ayacucho a 2 850 msnm. y a 24 minutos de la ciudad. Es una cueva que tiene aproximadamente 24 m de ancho y doce de altura; esta al centro del cerro de Allqowillka, donde en 1969 el arqueologo norteamericano Richard Mc Neish, con el Proyecto Arqueologico Botanico \"Peabody\", encontro restos con una antiguedad de 20 mil años. En esta cueva, se han encontrado instrumentos líticos del paleolítico andino y restos óseos de animales.",
+        "La cueva de Pikimachay se sitúa al norte de Ayacucho a 2 850 msnm. y a 24 minutos de la ciudad. Es una cueva que tiene aproximadamente 24 m de ancho y doce de altura; esta al centro del cerro de Allqowillka, donde en 1969 el arqueologo norteamericano Richard Mc Neish, con el Proyecto Arqueologico Botanico Peabody, encontro restos con una antiguedad de 20 mil años. En esta cueva, se han encontrado instrumentos líticos del paleolítico andino y restos óseos de animales.",
         -13.0384816,-74.2308791
     ),
     DestinosData(
@@ -324,7 +324,7 @@ val destinosList: List<DestinosData> = listOf(
         -13.0814255,-74.2728652
     ),
     DestinosData(
-        "cajarmarca",
+        "cajamarca",
         "ca_01",
         "Complejo Arqueológico de Cumbemayo",
         "cultural",
@@ -334,7 +334,7 @@ val destinosList: List<DestinosData> = listOf(
     ),
 
     DestinosData(
-        "cajarmarca",
+        "cajamarca",
         "ca_02",
         "Complejo Turístico Baños del Inca",
         "cultural",
@@ -344,7 +344,7 @@ val destinosList: List<DestinosData> = listOf(
     ),
 
     DestinosData(
-        "cajarmarca",
+        "cajamarca",
         "ca_03",
         "Ventanillas de Combayo",
         "cultural",
