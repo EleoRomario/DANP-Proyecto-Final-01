@@ -76,13 +76,11 @@ fun listLugaresBodyContent(title:String, code: String?, navController: NavContro
             mutableStateOf(TextFieldValue(""))
         }
         Column(
-            Modifier.padding(bottom = 100.dp)
+            Modifier.padding(bottom = 75.dp)
         ) {
 
-            Spacer( modifier = Modifier.padding(vertical = 10.dp))
-
             Text("Destinos Turisticos", fontSize = 20.sp, color = Primary)
-            Spacer( modifier = Modifier.padding(vertical = 10.dp))
+            Spacer( modifier = Modifier.padding(vertical = 5.dp))
             cardsLugaresTuristicos(title,code, navController)
         }
     }
