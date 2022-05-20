@@ -50,7 +50,7 @@ fun DetalleLugarTuristicoScreen(navController: NavController, departamento: Stri
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController)},
         bottomBar = {
-            BottomBarNavegation(3,navController)
+            BottomBarNavegation(-1,navController)
         },
     ){
         LugarBodyContent(departamento, destino)

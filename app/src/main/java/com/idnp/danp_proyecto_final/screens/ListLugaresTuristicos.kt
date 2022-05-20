@@ -58,7 +58,7 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
             TopBarDepBack(departamento.title,scope,scaffoldState,navController)
         },
         bottomBar = {
-            BottomBarNavegation(3,navController)
+            BottomBarNavegation(-1,navController)
         },
 
 
