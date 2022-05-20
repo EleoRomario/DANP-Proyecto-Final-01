@@ -190,51 +190,6 @@ fun DetalleContent(code:String?, navController: NavController){
     }
 }
 
-@Composable
-fun modal(navController: NavController){
-    Column(
-        Modifier
-            .background(color = Primary)
-            .fillMaxHeight()
-    ) {
-        Text(text = "Perú", fontSize = 25.sp ,color= Color.White,
-            modifier = Modifier
-                .padding(30.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        LazyColumn(
-            modifier = Modifier
-                .padding(20.dp)
-        ){
-            items(departamentosList) { departamento ->
-                Card(modifier = Modifier
-                    .height(70.dp)
-                    .padding(10.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable {
-                        navController.navigate(
-                            route = AppScreens.DetalleDepartamento.route + "/" + departamento.code
-                        )
-                    },
-                    backgroundColor = PrimaryAlpha
-                ) {
-                    Image(painter = painterResource(id = departamento.imgUri), contentDescription = "",
-                            modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Box(modifier = Modifier.background(PrimaryAlpha).fillMaxSize())
-                    Text(text = departamento.title,
-                        Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

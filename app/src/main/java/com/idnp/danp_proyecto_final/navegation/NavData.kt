@@ -17,16 +17,21 @@ val navList: List<NavData> = listOf(
     NavData(
         "home",
         R.drawable.ic_home,
-        "AppScreens.ListDepartamentos.route",
+        "AppScreens.HomeDepartamentos.route",
     ),
     NavData(
         "destinos",
         R.drawable.ic_compass,
+        "AppScreens.ListDepartamentos.route",
+    ),
+    NavData(
+        "search",
+        R.drawable.ic_categori,
         "AppScreens.GridDepartamentos.route",
     ),
     NavData(
         "search",
-        R.drawable.ic_search,
+        R.drawable.ic_search_menu,
         "AppScreens.GridDepartamentos.route",
     ),
 )
