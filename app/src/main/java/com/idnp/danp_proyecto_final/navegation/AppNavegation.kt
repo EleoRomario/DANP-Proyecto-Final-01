@@ -14,15 +14,22 @@ fun AppNavigation (){
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AppScreens.ListDepartamentos.route
+        startDestination = AppScreens.HomeDepartamentos.route
     ){
 
-        composable(route = AppScreens.ListDepartamentos.route ){
+        composable(route = AppScreens.HomeDepartamentos.route ){
+            HomeDepartamentosScreen(navController)
+        }
+
+        composable(route = AppScreens.ListDepartamentos.route){
             ListDepartamentosScreen(navController)
         }
 
-        composable(route = AppScreens.GridDepartamentos.route){
-            GridDepartamentosScreen(navController)
+        composable(route = AppScreens.CategoryDestinos.route + "/{category}", arguments = listOf(
+            navArgument(name = "category"){
+                type = NavType.StringType
+            })){
+            CategoryDestinosScreen(navController, it.arguments?.getString("category"))
         }
 
         composable(route = AppScreens.DetalleDepartamento.route + "/{departamento}", arguments = listOf(
@@ -51,6 +58,10 @@ fun AppNavigation (){
             )
         ){
             DetalleLugarTuristicoScreen(navController,it.arguments?.getString("departamento"),it.arguments?.getString("destino"))
+        }
+
+        composable(route = AppScreens.SearchDestino.route ){
+            SearchDestinosScreen(navController)
         }
     }
 }

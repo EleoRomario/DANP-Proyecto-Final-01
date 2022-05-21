@@ -52,38 +52,16 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
         it.code == code
     }
     Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    },
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_1),
-                            contentDescription = "back",
-                        )
-
-                    }
-                },
-                title = { Text(departamento.title, color = Primary, fontSize = 25.sp) },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                scaffoldState.drawerState.open()
-                            }
-                        }) {
-                        Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
-                    }
-
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
-
-                )
-        },
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)}
+        drawerContent = { modal(navController)},
+        topBar = {
+            TopBarDepBack(departamento.title,scope,scaffoldState,navController)
+        },
+        bottomBar = {
+            BottomBarNavegation(-1,navController)
+        },
+
+
     ){
         listLugaresBodyContent(departamento.title,code, navController)
     }
@@ -92,23 +70,24 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
 @Composable
 fun listLugaresBodyContent(title:String, code: String?, navController: NavController){
     Column(modifier = Modifier
-        .padding(horizontal = 30.dp)) {
+        .padding(horizontal = 30.dp)
+    ) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
-        Column() {
-
-            Spacer( modifier = Modifier.padding(vertical = 10.dp))
+        Column(
+            Modifier.padding(bottom = 75.dp)
+        ) {
 
             Text("Destinos Turisticos", fontSize = 20.sp, color = Primary)
-            Spacer( modifier = Modifier.padding(vertical = 10.dp))
+            Spacer( modifier = Modifier.padding(vertical = 5.dp))
             cardsLugaresTuristicos(title,code, navController)
         }
     }
 }
 
 @Composable
-fun cardsLugaresTuristicos(title: String,code: String?, navController: NavController){
+fun cardsLugaresTuristicos(title: String, code: String?, navController: NavController){
     val destinos = destinosList.filter{
         it.codeDep == code
     }
@@ -119,84 +98,6 @@ fun cardsLugaresTuristicos(title: String,code: String?, navController: NavContro
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, code: String?, navController: NavController){
-    var isLiked by remember{
-        mutableStateOf(false)
-    }
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(0.1.dp, color = Color.LightGray),
-        backgroundColor = Color.White,
-        modifier = Modifier.padding(vertical = 10.dp)
-            .clickable {
-                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${codeDep}/${code}")
-            }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(imgUri),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(100.dp, 110.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Box(){
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(110.dp),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Text(title, fontSize = 15.sp, color = Primary,
-                            modifier = Modifier.weight(3f),
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Image(
-                            imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
-                            contentDescription = "favorite",
-                            modifier = Modifier.weight(1f).padding(top = 10.dp)
-                                .clickable {
-                                    isLiked = !isLiked
-                                }
-
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(dep, color = TextAlt, fontSize = 12.sp)
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_star), contentDescription = "calification")
-                        Text(text = "4.5")
-
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
