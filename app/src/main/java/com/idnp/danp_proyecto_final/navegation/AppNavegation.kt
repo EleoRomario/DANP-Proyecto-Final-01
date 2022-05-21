@@ -59,5 +59,9 @@ fun AppNavigation (){
         ){
             DetalleLugarTuristicoScreen(navController,it.arguments?.getString("departamento"),it.arguments?.getString("destino"))
         }
+
+        composable(route = AppScreens.SearchDestino.route ){
+            SearchDestinosScreen(navController)
+        }
     }
 }

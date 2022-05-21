@@ -67,6 +67,36 @@ fun TopBarBack(navController: NavController){
         title = { Text("Perú", fontSize = 25.sp) },
     )
 }
+@Composable
+fun TopBarBackMenu(scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
+    CenterAlignedTopAppBar(
+        navigationIcon = {
+            IconButton(onClick = {
+                navController.popBackStack()
+            },
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_1),
+                    contentDescription = "back",
+                )
+
+            }
+        },
+        title = { Text("Perú", fontSize = 25.sp) },
+        actions = {
+            IconButton(
+                onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }) {
+                Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
+            }
+
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
+    )
+}
 
 @Composable
 fun TopBarDepBack(title:String,scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){

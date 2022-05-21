@@ -27,5 +27,11 @@ val navList: List<NavData> = listOf(
         "Categorias",
         R.drawable.ic_categori,
         AppScreens.CategoryDestinos.route + "/cultural"
+    ),
+    NavData(
+        3,
+        "Categorias",
+        R.drawable.ic_search_menu,
+        AppScreens.SearchDestino.route
     )
 )

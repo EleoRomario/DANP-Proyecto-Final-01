@@ -7,4 +7,5 @@ sealed class AppScreens(val route:String){
     object DetalleDepartamento: AppScreens("detalle_departamento_screen")
     object ListLugaresTuristico: AppScreens("list_lugares_turistico_screen")
     object DetalleLugarTuristico: AppScreens("detalle_lugar_turistico_screen")
+    object SearchDestino: AppScreens("search_destino_screen")
 }
