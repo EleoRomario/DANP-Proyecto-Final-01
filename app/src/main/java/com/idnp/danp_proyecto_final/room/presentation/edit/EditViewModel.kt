@@ -1,5 +1,7 @@
 package com.idnp.danp_proyecto_final.room.presentation.edit
 
+import android.net.Uri
+import android.provider.MediaStore.Images.Media.getBitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -9,6 +11,7 @@ import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.domain.use_cases.GetDepartamento
 import com.idnp.danp_proyecto_final.room.domain.use_cases.InsertDepartamento
+import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,8 +31,8 @@ class EditViewModel @Inject constructor(
     private val _departamentoDescription = mutableStateOf(TextFieldState())
     val departamentoDescription: State<TextFieldState> = _departamentoDescription
 
-    private val _departamentoCode = mutableStateOf(TextFieldState())
-    val departamentoCode: State<TextFieldState> = _departamentoCode
+    private val _departamentoImage = mutableStateOf(ImageState())
+    val departamentoImage: State<ImageState> = _departamentoImage
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -45,11 +48,11 @@ class EditViewModel @Inject constructor(
                         _departamentoTitle.value = departamentoTitle.value.copy(
                             text = departamento.title
                         )
-                        _departamentoCode.value = departamentoCode.value.copy(
-                            text = departamento.code.toString()
-                        )
                         _departamentoDescription.value = departamentoDescription.value.copy(
                             text = departamento.description
+                        )
+                        _departamentoImage.value = departamentoImage.value.copy(
+                            img = departamento.image
                         )
                     }
                 }
@@ -59,30 +62,29 @@ class EditViewModel @Inject constructor(
 
     fun onEvent(event: EditEvent) {
        when (event) {
-           is EditEvent.EnteredName -> {
+           is EditEvent.EnteredTitle -> {
                _departamentoTitle.value = departamentoTitle.value.copy(
                    text = event.value
                )
            }
-           is EditEvent.EnteredLastName -> {
+           is EditEvent.EnteredDescription -> {
                _departamentoDescription.value = departamentoDescription.value.copy(
                    text = event.value
                )
            }
-           is EditEvent.EnteredAge -> {
-               _departamentoCode.value = departamentoCode.value.copy(
-                   text = event.value
+           is EditEvent.EnteredImage -> {
+               _departamentoImage.value = departamentoImage.value.copy(
+                   img = event.value
                )
            }
-           EditEvent.Insertdepartamento -> {
+           EditEvent.InsertDepartamento -> {
                viewModelScope.launch {
                    insertdepartamento(
                        Departamento(
+                           id = currentDepartamentoId,
                            title = departamentoTitle.value.text,
                            description = departamentoDescription.value.text,
-                           code = departamentoCode.value.text,
-                           imgUri = R.drawable.amazonas,
-                           id = currentDepartamentoId
+                           image = departamentoImage.value.img
                        )
                    )
                    _eventFlow.emit(UiEvent.SaveDepartamento)

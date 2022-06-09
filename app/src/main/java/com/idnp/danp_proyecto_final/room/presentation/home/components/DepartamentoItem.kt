@@ -38,11 +38,6 @@ fun DepartamentoItem(
                     text = "${departamento.title}",
                     style = MaterialTheme.typography.h6
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = departamento.code.toString(),
-                    style = MaterialTheme.typography.caption.copy(color = Color.DarkGray)
-                )
             }
             Row {
                 IconButton(onClick = onEditDepartamento) {
@@ -68,7 +63,11 @@ fun DepartamentoItem(
 @Composable
 fun PreviewdepartamentoItem() {
         DepartamentoItem(
-            departamento = Departamento(title = "Arequipa", code = "arequipa", imgUri = R.drawable.amazonas, description = "Hola"),
+            departamento = Departamento(
+                title = "Arequipa",
+                description = "hola",
+                image = "R.drawable.amazonas"
+            ),
             onEditDepartamento = {},
             onDeleteDepartamento = {}
         )

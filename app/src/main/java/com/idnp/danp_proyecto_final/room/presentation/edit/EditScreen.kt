@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoImage
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputText
 import kotlinx.coroutines.flow.collectLatest
 
@@ -21,9 +22,9 @@ fun EditScreen(
     navController: NavController,
     viewModel: EditViewModel = hiltViewModel()
 ) {
-    val nameState = viewModel.departamentoTitle.value
-    val lastNameState = viewModel.departamentoDescription.value
-    val ageState = viewModel.departamentoCode.value
+    val titleState = viewModel.departamentoTitle.value
+    val descriptionState = viewModel.departamentoDescription.value
+    val imageState = viewModel.departamentoImage.value
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -43,15 +44,15 @@ fun EditScreen(
         },
         content = {
             EditContent(
-                title = nameState.text,
-                description = lastNameState.text,
-                code = ageState.text,
+                title = titleState.text,
+                description = descriptionState.text,
+                image = imageState.img,
                 onEvent = { viewModel.onEvent(it) }
             )
         },
         bottomBar = {
             EditBottomBar(
-                onInsertdepartamento = { viewModel.onEvent(EditEvent.Insertdepartamento) }
+                onInsertdepartamento = { viewModel.onEvent(EditEvent.InsertDepartamento) }
             )
         }
     )
@@ -77,7 +78,7 @@ fun EditTopBar(topAppBarText: String) {
 fun EditContent(
     title: String,
     description: String,
-    code: String,
+    image: String,
     onEvent: (EditEvent) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -85,17 +86,16 @@ fun EditContent(
         departamentoInputText(
             text = title,
             hint = stringResource(id = R.string.title),
-            onTextChange = { onEvent(EditEvent.EnteredName(it)) }
+            onTextChange = { onEvent(EditEvent.EnteredTitle(it)) }
         )
         departamentoInputText(
             text = description,
             hint = stringResource(id = R.string.description),
-            onTextChange = { onEvent(EditEvent.EnteredLastName(it)) }
+            onTextChange = { onEvent(EditEvent.EnteredDescription(it)) }
         )
-        departamentoInputText(
-            text = code,
-            hint = stringResource(id = R.string.code),
-            onTextChange = { onEvent(EditEvent.EnteredAge(it)) }
+        departamentoImage(
+            image = image,
+            onImageChange = { onEvent(EditEvent.EnteredImage(it)) }
         )
     }
 }
@@ -129,7 +129,7 @@ fun PreviewAddEditdepartamentoContent() {
         EditContent(
             title = "Ada",
             description = "Smith",
-            code = "20",
+            image = "amazonas",
             onEvent = { }
         )
 }
