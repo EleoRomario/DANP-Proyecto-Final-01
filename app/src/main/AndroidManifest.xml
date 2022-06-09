@@ -5,6 +5,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".TurismoApp"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -18,11 +19,21 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDAnTf_cUmu4oc8vEu9ZHcKvFdTfRHIVAQ"/>
 
-        <activity
+        <!--<activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DANPProyectoFinal">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+        <activity
+            android:name=".room.presentation.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
