@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DANP-Proyecto-Final</string>
+    <string name="departamentos">Departamentos</string>
+    <string name="add_departamento">Add Departamento</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="image">Image</string>
 </resources>
