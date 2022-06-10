@@ -23,7 +23,7 @@ fun departamentoInputText(
     text: String,
     hint: String,
     modifier: Modifier = Modifier,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -62,6 +62,6 @@ fun PreviewdepartamentoInputText() {
         departamentoInputText(
             text = "Karol",
             hint = "Name",
-            onTextChange = {}
+            onTextChange = {},
         )
 }

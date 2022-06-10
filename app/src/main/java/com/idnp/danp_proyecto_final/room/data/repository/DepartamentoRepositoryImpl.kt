@@ -24,4 +24,5 @@ class DepartamentoRepositoryImpl @Inject constructor(
     override suspend fun deleteDepartamento(departamento: Departamento) {
         dao.deleteDepartamento(departamento)
     }
+
 }

@@ -1,4 +1,4 @@
-package com.idnp.danp_proyecto_final.room.presentation.home
+package com.idnp.danp_proyecto_final.room.presentation.home.destinos
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,13 +15,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.presentation.Screen
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeEvent
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeViewModel
 import com.idnp.danp_proyecto_final.room.presentation.home.components.DepartamentoItem
-import com.idnp.danp_proyecto_final.R
+
 
 @Composable
-fun HomeScreen(
+fun DestinoScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -29,26 +32,21 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeTopBar()
+            DestinoTopBar()
         },
         floatingActionButton = {
-            HomeFab(
+            DestinoFab(
                 onFabClicked = { navController.navigate(Screen.Edit.route) }
             )
         },
         content = { innerPadding ->
-            HomeContent(
+            DestinoContent(
                 modifier = Modifier.padding(innerPadding),
                 onDeletedepartamento = { viewModel.onEvent(HomeEvent.Deletedepartamento(it)) },
                 onEditdepartamento = {
                     navController.navigate(
                         route = Screen.Edit.passId(it)
                     )
-                },
-                onDestinos = {
-                             navController.navigate(
-                                 route = Screen.DestinoHome.passId(it)
-                             )
                 },
                 departamentos = state.departamentos
             )
@@ -57,13 +55,13 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeTopBar(
+fun DestinoTopBar(
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(id = R.string.departamentos),
+                text = stringResource(id = R.string.destinos),
                 textAlign = TextAlign.Center,
                 modifier = modifier
                     .fillMaxSize()
@@ -75,11 +73,10 @@ fun HomeTopBar(
 }
 
 @Composable
-fun HomeContent(
+fun DestinoContent(
     modifier: Modifier = Modifier,
     onDeletedepartamento: (departamento: Departamento) -> Unit,
     onEditdepartamento: (id: Int?) -> Unit,
-    onDestinos: (id: Int?) -> Unit,
     departamentos: List<Departamento> = emptyList()
 ) {
     Surface(
@@ -88,19 +85,14 @@ fun HomeContent(
     ) {
         LazyColumn {
             items(departamentos) { departamento ->
-                DepartamentoItem(
-                    departamento = departamento,
-                    onEditDepartamento = { onEditdepartamento(departamento.id) },
-                    onDeleteDepartamento = { onDeletedepartamento(departamento) },
-                    onDestinos = {onDestinos(departamento.id)}
-                )
+
             }
         }
     }
 }
 
 @Composable
-fun HomeFab(
+fun DestinoFab(
     modifier: Modifier = Modifier,
     onFabClicked: () -> Unit = {  }
 ) {
@@ -111,25 +103,24 @@ fun HomeFab(
             .widthIn(min = 52.dp),
         backgroundColor = MaterialTheme.colors.primary
     ) {
-        Icon(imageVector = Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_departamento))
+        Icon(imageVector = Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_destino))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoContent() {
-        HomeContent(onDeletedepartamento = {}, onEditdepartamento = {}, onDestinos = {})
+fun PreviewDestinoContent() {
+    DestinoContent(onDeletedepartamento = {}, onEditdepartamento = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoFab() {
-        HomeFab()
+fun PreviewDestinoFab() {
+    DestinoFab()
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoTopBar() {
-        HomeTopBar()
+fun PreviewDestinoTopBar() {
+    DestinoTopBar()
 }
-

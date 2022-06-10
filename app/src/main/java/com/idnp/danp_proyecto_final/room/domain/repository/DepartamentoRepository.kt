@@ -11,4 +11,5 @@ interface DepartamentoRepository {
     suspend fun insertDepartamento(departamento: Departamento)
 
     suspend fun deleteDepartamento(departamento: Departamento)
+
 }

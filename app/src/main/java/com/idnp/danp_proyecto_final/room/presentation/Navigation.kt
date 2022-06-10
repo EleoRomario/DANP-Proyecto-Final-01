@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditScreen
 import com.idnp.danp_proyecto_final.room.presentation.home.HomeScreen
+import com.idnp.danp_proyecto_final.room.presentation.home.destinos.DestinoScreen
 
 @Composable
 fun Navigation() {
@@ -33,6 +34,10 @@ fun Navigation() {
             )
         ) {
             EditScreen(navController = navController)
+        }
+        
+        composable(route = Screen.DestinoHome.route){
+            DestinoScreen(navController = navController)
         }
     }
 }

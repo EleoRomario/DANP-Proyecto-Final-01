@@ -7,22 +7,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.idnp.danp_proyecto_final.R
-import com.idnp.danp_proyecto_final.room.domain.model.Departamento
+import com.idnp.danp_proyecto_final.room.domain.model.Destino
+
 
 @Composable
-fun DepartamentoItem(
+fun DestinoItem(
     modifier: Modifier = Modifier,
-    departamento: Departamento,
-    onEditDepartamento: () -> Unit,
-    onDeleteDepartamento: () -> Unit,
-    onDestinos: () -> Unit
+    destino: Destino,
+    onEditDestino: () -> Unit,
+    onDeleteDestino: () -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -37,30 +35,23 @@ fun DepartamentoItem(
         ) {
             Column(verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = "${departamento.title}",
+                    text = "${destino.title}",
                     style = MaterialTheme.typography.h6
                 )
             }
             Row {
-                IconButton(onClick = onEditDepartamento) {
+                IconButton(onClick = onEditDestino) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = null,
                         tint = Color.Green
                     )
                 }
-                IconButton(onClick = onDeleteDepartamento) {
+                IconButton(onClick = onDeleteDestino) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         contentDescription = null,
                         tint = Color.Red
-                    )
-                }
-                IconButton(onClick = onDestinos){
-                    Icon(
-                        imageVector = Icons.Filled.List,
-                        contentDescription = null,
-                        tint = Color.Cyan
                     )
                 }
             }
@@ -70,15 +61,18 @@ fun DepartamentoItem(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoItem() {
-        DepartamentoItem(
-            departamento = Departamento(
-                title = "Arequipa",
-                description = "hola",
-                image = "R.drawable.amazonas"
-            ),
-            onEditDepartamento = {},
-            onDeleteDepartamento = {},
-            onDestinos = {}
-        )
+fun PreviewDestinoItem() {
+    DestinoItem(
+        destino = Destino(
+            codeDep = 1,
+            title = "Arequipa",
+            description = "hola",
+            image = "R.drawable.amazonas",
+            latitud = 12.5555,
+            longitud = 12.5555,
+            category = "aventura"
+        ),
+        onEditDestino = {},
+        onDeleteDestino = {}
+    )
 }

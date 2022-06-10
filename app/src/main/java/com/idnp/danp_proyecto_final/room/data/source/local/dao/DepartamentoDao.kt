@@ -17,4 +17,6 @@ interface DepartamentoDao {
 
     @Delete
     suspend fun deleteDepartamento(departamento: Departamento)
+
+
 }
