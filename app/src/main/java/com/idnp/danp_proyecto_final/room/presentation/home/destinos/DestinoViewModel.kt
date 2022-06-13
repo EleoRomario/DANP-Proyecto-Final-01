@@ -5,11 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idnp.danp_proyecto_final.room.domain.use_cases.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class DestinoViewModel @Inject constructor(
     private val deleteDestino: DeleteDestino,
     getDestinos: GetDestinos

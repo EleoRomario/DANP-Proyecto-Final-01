@@ -17,16 +17,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
+import com.idnp.danp_proyecto_final.room.domain.model.Destino
 import com.idnp.danp_proyecto_final.room.presentation.Screen
 import com.idnp.danp_proyecto_final.room.presentation.home.HomeEvent
 import com.idnp.danp_proyecto_final.room.presentation.home.HomeViewModel
 import com.idnp.danp_proyecto_final.room.presentation.home.components.DepartamentoItem
+import com.idnp.danp_proyecto_final.room.presentation.home.components.DestinoItem
 
 
 @Composable
 fun DestinoScreen(
     navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: DestinoViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
 
@@ -36,19 +38,19 @@ fun DestinoScreen(
         },
         floatingActionButton = {
             DestinoFab(
-                onFabClicked = { navController.navigate(Screen.Edit.route) }
+                onFabClicked = { navController.navigate(Screen.DestinoEdit.route) }
             )
         },
         content = { innerPadding ->
             DestinoContent(
                 modifier = Modifier.padding(innerPadding),
-                onDeletedepartamento = { viewModel.onEvent(HomeEvent.Deletedepartamento(it)) },
-                onEditdepartamento = {
+                onDeletedestino = { viewModel.onEvent(DestinoEvent.DeleteDestino(it)) },
+                onEditdestino = {
                     navController.navigate(
-                        route = Screen.Edit.passId(it)
+                        route = Screen.DestinoEdit.passId(it)
                     )
                 },
-                departamentos = state.departamentos
+                destinos = state.destinos
             )
         }
     )
@@ -75,16 +77,21 @@ fun DestinoTopBar(
 @Composable
 fun DestinoContent(
     modifier: Modifier = Modifier,
-    onDeletedepartamento: (departamento: Departamento) -> Unit,
-    onEditdepartamento: (id: Int?) -> Unit,
-    departamentos: List<Departamento> = emptyList()
+    onDeletedestino: (destino: Destino) -> Unit,
+    onEditdestino: (id: Int?) -> Unit,
+    destinos: List<Destino> = emptyList()
 ) {
     Surface(
         color = MaterialTheme.colors.surface,
         modifier = modifier
     ) {
         LazyColumn {
-            items(departamentos) { departamento ->
+            items(destinos) { destino ->
+                DestinoItem(
+                    destino = destino,
+                    onEditDestino = { onEditdestino(destino.id) },
+                    onDeleteDestino = { onDeletedestino(destino)}
+                )
 
             }
         }
@@ -110,7 +117,7 @@ fun DestinoFab(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDestinoContent() {
-    DestinoContent(onDeletedepartamento = {}, onEditdepartamento = {})
+    DestinoContent(onDeletedestino = {}, onEditdestino = {})
 }
 
 @Preview(showBackground = true)

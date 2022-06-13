@@ -16,6 +16,7 @@ import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoImage
+import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputDouble
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputText
 import kotlinx.coroutines.flow.collectLatest
 
@@ -53,8 +54,8 @@ fun DestinoEditScreen(
                 description = descriptionState.text,
                 image = imageState.img,
                 category = categoyState.text,
-                latitud = latitudState.text.toDouble(),
-                longitud = longitudState.text.toDouble(),
+                latitud = latitudState.text,
+                longitud = longitudState.text,
                 onEvent = { viewModel.onEvent(it) }
             )
         },
@@ -109,13 +110,13 @@ fun EditContent(
             hint = stringResource(id = R.string.destino_category),
             onTextChange = { onEvent(DestinoEditEvent.EnteredCategory(it)) }
         )
-        departamentoInputText(
-            text = latitud.toString(),
+        departamentoInputDouble(
+            numero = latitud,
             hint = stringResource(id = R.string.destino_latitud),
             onTextChange = { onEvent(DestinoEditEvent.EnteredLatitud(it.toDouble())) }
         )
-        departamentoInputText(
-            text = longitud.toString(),
+        departamentoInputDouble(
+            numero = longitud,
             hint = stringResource(id = R.string.destino_longitud),
             onTextChange = { onEvent(DestinoEditEvent.EnteredLongitud(it.toDouble())) }
         )

@@ -42,11 +42,18 @@ fun DepartamentoItem(
                 )
             }
             Row {
+                IconButton(onClick = onDestinos){
+                    Icon(
+                        imageVector = Icons.Filled.List,
+                        contentDescription = null,
+                        tint = Color.Cyan
+                    )
+                }
                 IconButton(onClick = onEditDepartamento) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = null,
-                        tint = Color.Green
+                        tint = Color.Cyan
                     )
                 }
                 IconButton(onClick = onDeleteDepartamento) {
@@ -56,13 +63,7 @@ fun DepartamentoItem(
                         tint = Color.Red
                     )
                 }
-                IconButton(onClick = onDestinos){
-                    Icon(
-                        imageVector = Icons.Filled.List,
-                        contentDescription = null,
-                        tint = Color.Cyan
-                    )
-                }
+
             }
         }
     }

@@ -14,7 +14,7 @@ class DestinoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getDestinoById(id: Int): Destino? {
-        return dao.getDestinosById(id)
+        return dao.getDestinoById(id)
     }
 
     override suspend fun insertDestino(destino: Destino) {

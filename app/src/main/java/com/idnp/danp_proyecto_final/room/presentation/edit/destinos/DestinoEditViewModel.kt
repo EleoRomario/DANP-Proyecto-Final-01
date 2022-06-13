@@ -11,6 +11,7 @@ import com.idnp.danp_proyecto_final.room.domain.use_cases.GetDepartamento
 import com.idnp.danp_proyecto_final.room.domain.use_cases.GetDestino
 import com.idnp.danp_proyecto_final.room.domain.use_cases.InsertDepartamento
 import com.idnp.danp_proyecto_final.room.domain.use_cases.InsertDestino
+import com.idnp.danp_proyecto_final.room.presentation.edit.DoubleFieldState
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
 import com.idnp.danp_proyecto_final.room.presentation.edit.ImageState
 import com.idnp.danp_proyecto_final.room.presentation.edit.TextFieldState
@@ -38,17 +39,16 @@ class DestinoEditViewModel @Inject constructor(
     private val _destinoCategory = mutableStateOf(TextFieldState())
     val destinoCategory: State<TextFieldState> = _destinoCategory
 
-    private val _destinoLatitud = mutableStateOf(TextFieldState())
-    val destinoLatitud: State<TextFieldState> = _destinoLatitud
+    private val _destinoLatitud = mutableStateOf(DoubleFieldState())
+    val destinoLatitud: State<DoubleFieldState> = _destinoLatitud
 
-    private val _destinoLongitud = mutableStateOf(TextFieldState())
-    val destinoLongitud: State<TextFieldState> = _destinoLongitud
+    private val _destinoLongitud = mutableStateOf(DoubleFieldState())
+    val destinoLongitud: State<DoubleFieldState> = _destinoLongitud
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var currentDestinoId: Int? = null
-    private var currentDespartamentoId: Int = -1
 
     init {
         savedStateHandle.get<Int>("destinoId")?.let { destinoId ->
@@ -69,10 +69,10 @@ class DestinoEditViewModel @Inject constructor(
                             text = destino.category
                         )
                         _destinoLatitud.value = destinoLatitud.value.copy(
-                            text = destino.latitud.toString()
+                            text = destino.latitud
                         )
                         _destinoLongitud.value = destinoLongitud.value.copy(
-                            text = destino.longitud.toString()
+                            text = destino.longitud
                         )
                     }
                 }
@@ -104,12 +104,12 @@ class DestinoEditViewModel @Inject constructor(
             }
             is DestinoEditEvent.EnteredLatitud -> {
                 _destinoLatitud.value = destinoLatitud.value.copy(
-                    text = event.value.toString()
+                    text = event.value
                 )
             }
             is DestinoEditEvent.EnteredLongitud -> {
                 _destinoLongitud.value = destinoLongitud.value.copy(
-                    text = event.value.toString()
+                    text = event.value
                 )
             }
             DestinoEditEvent.InsertDestino -> {
@@ -117,7 +117,7 @@ class DestinoEditViewModel @Inject constructor(
                     insertDestino(
                         Destino(
                             id = currentDestinoId,
-                            codeDep = currentDespartamentoId,
+                            codeDep = 1,
                             title = destinoTitle.value.text,
                             description = destinoDescription.value.text,
                             image = destinoImage.value.img,

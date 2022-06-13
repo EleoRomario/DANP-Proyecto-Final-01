@@ -10,7 +10,7 @@ interface DestinoDao {
     fun getDestinos(): Flow<List<Destino>>
 
     @Query("SELECT * FROM Destino WHERE id = :id")
-    suspend fun getDestinosById(id: Int): Destino?
+    suspend fun getDestinoById(id: Int): Destino?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDestino(destino: Destino)
