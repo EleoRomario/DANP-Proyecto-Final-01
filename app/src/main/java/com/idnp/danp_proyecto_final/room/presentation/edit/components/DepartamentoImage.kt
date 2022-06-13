@@ -22,7 +22,7 @@ fun departamentoImage(
 ) {
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
 
-    if(image != null)selectedImage=Uri.parse(image)
+
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
         selectedImage = uri
