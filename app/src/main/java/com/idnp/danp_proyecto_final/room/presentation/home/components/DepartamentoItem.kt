@@ -15,11 +15,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
+import com.idnp.danp_proyecto_final.room.domain.model.Destino
+import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
 
 @Composable
 fun DepartamentoItem(
     modifier: Modifier = Modifier,
-    departamento: Departamento,
+    departamento: DepartamentoWithDestinos,
     onEditDepartamento: () -> Unit,
     onDeleteDepartamento: () -> Unit,
     onDestinos: () -> Unit
@@ -37,7 +39,7 @@ fun DepartamentoItem(
         ) {
             Column(verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = "${departamento.title}",
+                    text = "${departamento.departamento.title}",
                     style = MaterialTheme.typography.h6
                 )
             }
@@ -72,14 +74,17 @@ fun DepartamentoItem(
 @Preview(showBackground = true)
 @Composable
 fun PreviewdepartamentoItem() {
-        DepartamentoItem(
-            departamento = Departamento(
-                title = "Arequipa",
-                description = "hola",
-                image = "R.drawable.amazonas"
+        /*DepartamentoItem(
+            departamento = DepartamentoWithDestinos(
+                departamento = Departamento(
+                    title = "Arequippa",
+                    description = "Hola",
+                    image = "imagen"
+                ),
+                destinos = ""
             ),
             onEditDepartamento = {},
             onDeleteDepartamento = {},
             onDestinos = {}
-        )
+        )*/
 }

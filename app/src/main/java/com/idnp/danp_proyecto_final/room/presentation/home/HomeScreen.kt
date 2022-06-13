@@ -19,6 +19,7 @@ import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.presentation.Screen
 import com.idnp.danp_proyecto_final.room.presentation.home.components.DepartamentoItem
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
 
 @Composable
 fun HomeScreen(
@@ -39,7 +40,7 @@ fun HomeScreen(
         content = { innerPadding ->
             HomeContent(
                 modifier = Modifier.padding(innerPadding),
-                onDeletedepartamento = { viewModel.onEvent(HomeEvent.Deletedepartamento(it)) },
+                onDeletedepartamento = { viewModel.onEvent(HomeEvent.Deletedepartamento(it.departamento)) },
                 onEditdepartamento = {
                     navController.navigate(
                         route = Screen.Edit.passId(it)
@@ -77,10 +78,10 @@ fun HomeTopBar(
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    onDeletedepartamento: (departamento: Departamento) -> Unit,
+    onDeletedepartamento: (departamentoWithDestinos: DepartamentoWithDestinos) -> Unit,
     onEditdepartamento: (id: Int?) -> Unit,
     onDestinos: (id: Int?) -> Unit,
-    departamentos: List<Departamento> = emptyList()
+    departamentos: List<DepartamentoWithDestinos> = emptyList()
 ) {
     Surface(
         color = MaterialTheme.colors.surface,
@@ -90,9 +91,9 @@ fun HomeContent(
             items(departamentos) { departamento ->
                 DepartamentoItem(
                     departamento = departamento,
-                    onEditDepartamento = { onEditdepartamento(departamento.id) },
+                    onEditDepartamento = { onEditdepartamento(departamento.departamento.id) },
                     onDeleteDepartamento = { onDeletedepartamento(departamento) },
-                    onDestinos = {onDestinos(departamento.id)}
+                    onDestinos = {onDestinos(departamento.departamento.id)}
                 )
             }
         }

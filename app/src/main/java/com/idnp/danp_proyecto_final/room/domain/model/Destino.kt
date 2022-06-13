@@ -1,16 +1,9 @@
 package com.idnp.danp_proyecto_final.room.domain.model
 
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity(
-    foreignKeys = [
-        ForeignKey(entity = Departamento::class, parentColumns = ["id"], childColumns = ["codeDep"] )
-    ]
-)
+@Entity
 data class Destino (
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     @ColumnInfo(name = "codeDep")@NonNull val codeDep:Int,
