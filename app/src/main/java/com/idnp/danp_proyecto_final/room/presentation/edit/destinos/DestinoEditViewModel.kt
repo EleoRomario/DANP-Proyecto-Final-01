@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.edit.destinos
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -49,6 +50,7 @@ class DestinoEditViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var currentDestinoId: Int? = null
+    val codeDep:Int? = savedStateHandle.get<Int>("departamentoId")
 
     init {
         savedStateHandle.get<Int>("destinoId")?.let { destinoId ->
@@ -117,13 +119,13 @@ class DestinoEditViewModel @Inject constructor(
                     insertDestino(
                         Destino(
                             id = currentDestinoId,
-                            codeDep = 1,
+                            codeDep = codeDep,
                             title = destinoTitle.value.text,
                             description = destinoDescription.value.text,
                             image = destinoImage.value.img,
                             category = destinoCategory.value.text,
-                            latitud = destinoLatitud.value.text.toDouble(),
-                            longitud = destinoLongitud.value.text.toDouble()
+                            latitud = destinoLatitud.value.text,
+                            longitud = destinoLongitud.value.text
                         )
                     )
                     _eventFlow.emit(UiEvent.SaveDestino)

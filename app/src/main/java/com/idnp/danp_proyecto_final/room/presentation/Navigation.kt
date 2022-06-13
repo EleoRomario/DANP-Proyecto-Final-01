@@ -37,12 +37,27 @@ fun Navigation() {
             EditScreen(navController = navController)
         }
         
-        composable(route = Screen.DestinoHome.route){
-            DestinoScreen(navController = navController)
+        composable(route = Screen.DestinoHome.route,
+            arguments = listOf(
+            navArgument(
+                name = "departamentoId"
+            ) {
+                type = NavType.IntType
+                defaultValue = -1
+            }
+        )
+        ){
+            DestinoScreen(navController = navController,  it.arguments?.getInt("departamentoId"))
         }
         composable(
             route = Screen.DestinoEdit.route,
             arguments = listOf(
+                navArgument(
+                    name = "destinoId"
+                ) {
+                    type = NavType.IntType
+                    defaultValue = -1
+                },
                 navArgument(
                     name = "departamentoId"
                 ) {

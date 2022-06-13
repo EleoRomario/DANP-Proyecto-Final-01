@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DestinoRepository {
 
-    fun getDestinos(): Flow<List<Destino>>
+    fun getDestinos(id: Int): Flow<List<Destino>>
 
     suspend fun getDestinoById(id: Int): Destino?
 

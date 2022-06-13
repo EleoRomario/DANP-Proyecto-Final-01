@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.edit.destinos
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -31,6 +32,8 @@ fun DestinoEditScreen(
     val categoyState = viewModel.destinoCategory.value
     val latitudState = viewModel.destinoLatitud.value
     val longitudState = viewModel.destinoLongitud.value
+
+    Log.d("DEP","CurrentcodeDep"+viewModel.codeDep)
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->

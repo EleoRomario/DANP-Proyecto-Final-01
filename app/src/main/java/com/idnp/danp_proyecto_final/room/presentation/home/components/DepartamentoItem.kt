@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.home.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +27,7 @@ fun DepartamentoItem(
     onDeleteDepartamento: () -> Unit,
     onDestinos: () -> Unit
 ) {
+    Log.d("DEP","ItemDep"+departamento.departamento.id)
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -41,6 +43,10 @@ fun DepartamentoItem(
                 Text(
                     text = "${departamento.departamento.title}",
                     style = MaterialTheme.typography.h6
+                )
+                Text(
+                    text = "destinos: ${departamento.destinos.size}",
+                    style = MaterialTheme.typography.subtitle2
                 )
             }
             Row {

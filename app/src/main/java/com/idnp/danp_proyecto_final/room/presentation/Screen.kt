@@ -12,9 +12,9 @@ sealed class Screen(val route: String) {
             return "destinos?departamentoId=$departamentoId"
         }
     }
-    object DestinoEdit: Screen("destinoedit?destinoId={destinoId}"){
-        fun passId(destinoId: Int?): String{
-            return "destinoedit?destinoId=$destinoId"
+    object DestinoEdit: Screen("destinoedit?departamentoId={departamentoId}?destinoId={destinoId}"){
+        fun passId(departamentoId: Int?, destinoId: Int?): String{
+            return "destinoedit?departamentoId=$departamentoId?destinoId=$destinoId"
         }
     }
 }

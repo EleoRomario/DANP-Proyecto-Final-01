@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DestinoDao {
-    @Query("SELECT * FROM Destino")
-    fun getDestinos(): Flow<List<Destino>>
+    @Query("SELECT * FROM Destino WHERE codeDep = :id")
+    fun getDestinos(id: Int): Flow<List<Destino>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDestino(destino: Destino)

@@ -6,7 +6,7 @@ import androidx.room.*
 @Entity
 data class Destino (
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
-    @ColumnInfo(name = "codeDep")@NonNull val codeDep:Int,
+    @ColumnInfo(name = "codeDep")@NonNull val codeDep:Int?,
     val title:String,
     val category:String,
     val image: String,

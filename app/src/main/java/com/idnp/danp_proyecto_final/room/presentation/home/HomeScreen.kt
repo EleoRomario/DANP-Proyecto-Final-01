@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -89,6 +90,7 @@ fun HomeContent(
     ) {
         LazyColumn {
             items(departamentos) { departamento ->
+                Log.d("DEP","codeDep"+departamento.departamento.id)
                 DepartamentoItem(
                     departamento = departamento,
                     onEditDepartamento = { onEditdepartamento(departamento.departamento.id) },

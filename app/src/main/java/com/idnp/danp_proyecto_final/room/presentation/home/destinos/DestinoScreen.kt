@@ -28,6 +28,7 @@ import com.idnp.danp_proyecto_final.room.presentation.home.components.DestinoIte
 @Composable
 fun DestinoScreen(
     navController: NavController,
+    departamentoId: Int?,
     viewModel: DestinoViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
@@ -38,7 +39,12 @@ fun DestinoScreen(
         },
         floatingActionButton = {
             DestinoFab(
-                onFabClicked = { navController.navigate(Screen.DestinoEdit.route) }
+                departamento = departamentoId,
+                onFabClicked = {
+                    navController.navigate(
+                        route = Screen.DestinoEdit.passId(it,-1)
+                    )
+                }
             )
         },
         content = { innerPadding ->
@@ -47,7 +53,7 @@ fun DestinoScreen(
                 onDeletedestino = { viewModel.onEvent(DestinoEvent.DeleteDestino(it)) },
                 onEditdestino = {
                     navController.navigate(
-                        route = Screen.DestinoEdit.passId(it)
+                        route = Screen.DestinoEdit.passId(departamentoId,it)
                     )
                 },
                 destinos = state.destinos
@@ -101,10 +107,11 @@ fun DestinoContent(
 @Composable
 fun DestinoFab(
     modifier: Modifier = Modifier,
-    onFabClicked: () -> Unit = {  }
+    departamento: Int?,
+    onFabClicked: (id: Int?) -> Unit
 ) {
     FloatingActionButton(
-        onClick = onFabClicked,
+        onClick = { onFabClicked(departamento) },
         modifier = modifier
             .height(52.dp)
             .widthIn(min = 52.dp),
@@ -123,7 +130,7 @@ fun PreviewDestinoContent() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewDestinoFab() {
-    DestinoFab()
+    //DestinoFab()
 }
 
 @Preview(showBackground = true)

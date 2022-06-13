@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetDestinos @Inject constructor(
     private val repository: DestinoRepository
 ) {
-    operator fun invoke(): Flow<List<Destino>> {
-        return  repository.getDestinos()
+    operator fun invoke(id: Int): Flow<List<Destino>> {
+        return  repository.getDestinos(id)
     }
 }

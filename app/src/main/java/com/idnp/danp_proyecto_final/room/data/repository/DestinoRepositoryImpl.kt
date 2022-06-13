@@ -9,8 +9,8 @@ import javax.inject.Inject
 class DestinoRepositoryImpl @Inject constructor(
     private val dao: DestinoDao
 ) : DestinoRepository{
-    override fun getDestinos(): Flow<List<Destino>> {
-        return dao.getDestinos()
+    override fun getDestinos(id: Int): Flow<List<Destino>> {
+        return dao.getDestinos(id)
     }
 
     override suspend fun getDestinoById(id: Int): Destino? {
