@@ -1,6 +1,5 @@
 package com.idnp.danp_proyecto_final.room.presentation.home.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,26 +7,21 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.idnp.danp_proyecto_final.R
-import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.domain.model.Destino
-import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
+
 
 @Composable
-fun DepartamentoItem(
+fun DestinoItem(
     modifier: Modifier = Modifier,
-    departamento: DepartamentoWithDestinos,
-    onEditDepartamento: () -> Unit,
-    onDeleteDepartamento: () -> Unit,
-    onDestinos: () -> Unit
+    destino: Destino,
+    onEditDestino: () -> Unit,
+    onDeleteDestino: () -> Unit,
 ) {
-    Log.d("DEP","ItemDep"+departamento.departamento.id)
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -41,37 +35,25 @@ fun DepartamentoItem(
         ) {
             Column(verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = "${departamento.departamento.title}",
+                    text = "${destino.title}",
                     style = MaterialTheme.typography.h6
-                )
-                Text(
-                    text = "destinos: ${departamento.destinos.size}",
-                    style = MaterialTheme.typography.subtitle2
                 )
             }
             Row {
-                IconButton(onClick = onDestinos){
-                    Icon(
-                        imageVector = Icons.Filled.List,
-                        contentDescription = null,
-                        tint = Color.Cyan
-                    )
-                }
-                IconButton(onClick = onEditDepartamento) {
+                IconButton(onClick = onEditDestino) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = null,
-                        tint = Color.Cyan
+                        tint = Color.Green
                     )
                 }
-                IconButton(onClick = onDeleteDepartamento) {
+                IconButton(onClick = onDeleteDestino) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         contentDescription = null,
                         tint = Color.Red
                     )
                 }
-
             }
         }
     }
@@ -79,18 +61,18 @@ fun DepartamentoItem(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoItem() {
-        /*DepartamentoItem(
-            departamento = DepartamentoWithDestinos(
-                departamento = Departamento(
-                    title = "Arequippa",
-                    description = "Hola",
-                    image = "imagen"
-                ),
-                destinos = ""
-            ),
-            onEditDepartamento = {},
-            onDeleteDepartamento = {},
-            onDestinos = {}
-        )*/
+fun PreviewDestinoItem() {
+    DestinoItem(
+        destino = Destino(
+            codeDep = 1,
+            title = "Arequipa",
+            description = "hola",
+            image = "R.drawable.amazonas",
+            latitud = 12.5555,
+            longitud = 12.5555,
+            category = "aventura"
+        ),
+        onEditDestino = {},
+        onDeleteDestino = {}
+    )
 }

@@ -4,23 +4,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.idnp.danp_proyecto_final.R
 
 @Composable
-fun departamentoInputText(
-    text: String,
+fun departamentoInputDouble(
+    numero: Double,
     hint: String,
     modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit,
@@ -42,7 +42,8 @@ fun departamentoInputText(
             color = Color(0xFF45464F)
         )
         BasicTextField(
-            value = text,
+            value = numero.toString(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = onTextChange,
             modifier = Modifier.baselineHeight(28.dp),
             textStyle = TextStyle(
@@ -58,10 +59,10 @@ fun departamentoInputText(
 
 @Preview
 @Composable
-fun PreviewdepartamentoInputText() {
-        departamentoInputText(
-            text = "Karol",
-            hint = "Name",
-            onTextChange = {},
-        )
+fun PreviewInputDouble() {
+    departamentoInputDouble(
+        numero = 15.2222,
+        hint = "Name",
+        onTextChange = {},
+    )
 }

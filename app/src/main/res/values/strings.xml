@@ -5,4 +5,13 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="image">Image</string>
+
+    <string name="destinos">Destinos</string>
+    <string name="add_destino">Add Destino</string>
+    <string name="destino_title">Title</string>
+    <string name="destino_description">Description</string>
+    <string name="destino_image">Image</string>
+    <string name="destino_category">Category</string>
+    <string name="destino_latitud">Latitud</string>
+    <string name="destino_longitud">Longitud</string>
 </resources>

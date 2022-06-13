@@ -2,6 +2,7 @@ package com.idnp.danp_proyecto_final.room.data.repository
 
 import com.idnp.danp_proyecto_final.room.data.source.local.dao.DepartamentoDao
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
+import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
 import com.idnp.danp_proyecto_final.room.domain.repository.DepartamentoRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -11,6 +12,10 @@ class DepartamentoRepositoryImpl @Inject constructor(
 ): DepartamentoRepository {
     override fun getDepartamentos(): Flow<List<Departamento>> {
         return dao.getDepartamentos()
+    }
+
+    override fun getDestinosWithDepartamentos(): Flow<List<DepartamentoWithDestinos>> {
+        return dao.getDestinosWithDepartamentos()
     }
 
     override suspend fun getDepartamentoById(id: Int): Departamento? {
@@ -24,4 +29,5 @@ class DepartamentoRepositoryImpl @Inject constructor(
     override suspend fun deleteDepartamento(departamento: Departamento) {
         dao.deleteDepartamento(departamento)
     }
+
 }

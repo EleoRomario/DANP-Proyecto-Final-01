@@ -1,6 +1,5 @@
-package com.idnp.danp_proyecto_final.room.presentation.home
+package com.idnp.danp_proyecto_final.room.presentation.home.destinos
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,56 +15,61 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.idnp.danp_proyecto_final.room.domain.model.Departamento
-import com.idnp.danp_proyecto_final.room.presentation.Screen
-import com.idnp.danp_proyecto_final.room.presentation.home.components.DepartamentoItem
 import com.idnp.danp_proyecto_final.R
-import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
+import com.idnp.danp_proyecto_final.room.domain.model.Departamento
+import com.idnp.danp_proyecto_final.room.domain.model.Destino
+import com.idnp.danp_proyecto_final.room.presentation.Screen
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeEvent
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeViewModel
+import com.idnp.danp_proyecto_final.room.presentation.home.components.DepartamentoItem
+import com.idnp.danp_proyecto_final.room.presentation.home.components.DestinoItem
+
 
 @Composable
-fun HomeScreen(
+fun DestinoScreen(
     navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    departamentoId: Int?,
+    viewModel: DestinoViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
 
     Scaffold(
         topBar = {
-            HomeTopBar()
+            DestinoTopBar()
         },
         floatingActionButton = {
-            HomeFab(
-                onFabClicked = { navController.navigate(Screen.Edit.route) }
+            DestinoFab(
+                departamento = departamentoId,
+                onFabClicked = {
+                    navController.navigate(
+                        route = Screen.DestinoEdit.passId(it,-1)
+                    )
+                }
             )
         },
         content = { innerPadding ->
-            HomeContent(
+            DestinoContent(
                 modifier = Modifier.padding(innerPadding),
-                onDeletedepartamento = { viewModel.onEvent(HomeEvent.Deletedepartamento(it.departamento)) },
-                onEditdepartamento = {
+                onDeletedestino = { viewModel.onEvent(DestinoEvent.DeleteDestino(it)) },
+                onEditdestino = {
                     navController.navigate(
-                        route = Screen.Edit.passId(it)
+                        route = Screen.DestinoEdit.passId(departamentoId,it)
                     )
                 },
-                onDestinos = {
-                             navController.navigate(
-                                 route = Screen.DestinoHome.passId(it)
-                             )
-                },
-                departamentos = state.departamentos
+                destinos = state.destinos
             )
         }
     )
 }
 
 @Composable
-fun HomeTopBar(
+fun DestinoTopBar(
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(id = R.string.departamentos),
+                text = stringResource(id = R.string.destinos),
                 textAlign = TextAlign.Center,
                 modifier = modifier
                     .fillMaxSize()
@@ -77,62 +81,60 @@ fun HomeTopBar(
 }
 
 @Composable
-fun HomeContent(
+fun DestinoContent(
     modifier: Modifier = Modifier,
-    onDeletedepartamento: (departamentoWithDestinos: DepartamentoWithDestinos) -> Unit,
-    onEditdepartamento: (id: Int?) -> Unit,
-    onDestinos: (id: Int?) -> Unit,
-    departamentos: List<DepartamentoWithDestinos> = emptyList()
+    onDeletedestino: (destino: Destino) -> Unit,
+    onEditdestino: (id: Int?) -> Unit,
+    destinos: List<Destino> = emptyList()
 ) {
     Surface(
         color = MaterialTheme.colors.surface,
         modifier = modifier
     ) {
         LazyColumn {
-            items(departamentos) { departamento ->
-                Log.d("DEP","codeDep"+departamento.departamento.id)
-                DepartamentoItem(
-                    departamento = departamento,
-                    onEditDepartamento = { onEditdepartamento(departamento.departamento.id) },
-                    onDeleteDepartamento = { onDeletedepartamento(departamento) },
-                    onDestinos = {onDestinos(departamento.departamento.id)}
+            items(destinos) { destino ->
+                DestinoItem(
+                    destino = destino,
+                    onEditDestino = { onEditdestino(destino.id) },
+                    onDeleteDestino = { onDeletedestino(destino)}
                 )
+
             }
         }
     }
 }
 
 @Composable
-fun HomeFab(
+fun DestinoFab(
     modifier: Modifier = Modifier,
-    onFabClicked: () -> Unit = {  }
+    departamento: Int?,
+    onFabClicked: (id: Int?) -> Unit
 ) {
     FloatingActionButton(
-        onClick = onFabClicked,
+        onClick = { onFabClicked(departamento) },
         modifier = modifier
             .height(52.dp)
             .widthIn(min = 52.dp),
         backgroundColor = MaterialTheme.colors.primary
     ) {
-        Icon(imageVector = Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_departamento))
+        Icon(imageVector = Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_destino))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoContent() {
-        HomeContent(onDeletedepartamento = {}, onEditdepartamento = {}, onDestinos = {})
+fun PreviewDestinoContent() {
+    DestinoContent(onDeletedestino = {}, onEditdestino = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoFab() {
-        HomeFab()
+fun PreviewDestinoFab() {
+    //DestinoFab()
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewdepartamentoTopBar() {
-        HomeTopBar()
+fun PreviewDestinoTopBar() {
+    DestinoTopBar()
 }
-
