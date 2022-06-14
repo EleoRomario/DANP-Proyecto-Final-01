@@ -7,12 +7,14 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,30 +32,16 @@ fun departamentoInputDouble(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
     ) {
-        Text(
-            text = hint,
-            modifier = Modifier.baselineHeight(28.dp),
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                lineHeight = 16.sp,
-                letterSpacing = 0.4.sp
-            ),
-            color = Color(0xFF45464F)
-        )
-        BasicTextField(
+        OutlinedTextField(
             value = numero.toString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(text = hint) },
             onValueChange = onTextChange,
-            modifier = Modifier.baselineHeight(28.dp),
-            textStyle = TextStyle(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                lineHeight = 24.sp,
-                letterSpacing = 0.15.sp
-            )
+            modifier = modifier.fillMaxWidth(),
+            keyboardOptions  = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next,
+            ),
         )
-        Divider(modifier = Modifier.padding(top = 10.dp))
     }
 }
 

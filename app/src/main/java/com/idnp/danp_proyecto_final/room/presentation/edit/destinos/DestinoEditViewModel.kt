@@ -97,7 +97,7 @@ class DestinoEditViewModel @Inject constructor(
             }
             is DestinoEditEvent.EnteredImage -> {
                 _destinoImage.value = destinoImage.value.copy(
-                    img = event.value.toUri()
+                    img = event.value
                 )
             }
             is DestinoEditEvent.EnteredCategory -> {

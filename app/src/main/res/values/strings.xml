@@ -1,7 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">DANP-Proyecto-Final</string>
     <string name="departamentos">Departamentos</string>
     <string name="add_departamento">Add Departamento</string>
+    <string name="save_departamento">Save Departamento</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="image">Image</string>
@@ -14,4 +15,5 @@
     <string name="destino_category">Category</string>
     <string name="destino_latitud">Latitud</string>
     <string name="destino_longitud">Longitud</string>
+    <string name="save_destino">Save Destino</string>
 </resources>

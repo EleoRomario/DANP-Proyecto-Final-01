@@ -112,7 +112,7 @@ fun EditBottomBar(
             .padding(horizontal = 10.dp, vertical = 14.dp),
         onClick = { onInsertdepartamento() }
     ) {
-        Text(text = stringResource(id = R.string.add_departamento))
+        Text(text = stringResource(id = R.string.save_departamento))
     }
 }
 
