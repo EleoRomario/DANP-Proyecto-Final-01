@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idnp.danp_proyecto_final.R
@@ -55,7 +56,7 @@ fun DestinoEditScreen(
             EditContent(
                 title = titleState.text,
                 description = descriptionState.text,
-                image = imageState.img,
+                image = imageState.img.toString(),
                 category = categoyState.text,
                 latitud = latitudState.text,
                 longitud = longitudState.text,
@@ -124,8 +125,8 @@ fun EditContent(
             onTextChange = { onEvent(DestinoEditEvent.EnteredLongitud(it.toDouble())) }
         )
         departamentoImage(
-            image = image,
-            onImageChange = { onEvent(DestinoEditEvent.EnteredImage(it)) }
+            image = image.toUri(),
+            onImageChange = { onEvent(DestinoEditEvent.EnteredImage(it.toString())) }
         )
     }
 }

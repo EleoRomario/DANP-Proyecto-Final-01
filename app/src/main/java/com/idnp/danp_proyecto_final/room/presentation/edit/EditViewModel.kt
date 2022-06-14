@@ -4,6 +4,7 @@ import android.net.Uri
 import android.provider.MediaStore.Images.Media.getBitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,7 +53,7 @@ class EditViewModel @Inject constructor(
                             text = departamento.description
                         )
                         _departamentoImage.value = departamentoImage.value.copy(
-                            img = departamento.image
+                            img = departamento.image.toUri()
                         )
                     }
                 }
@@ -84,7 +85,7 @@ class EditViewModel @Inject constructor(
                            id = currentDepartamentoId,
                            title = departamentoTitle.value.text,
                            description = departamentoDescription.value.text,
-                           image = departamentoImage.value.img
+                           image = departamentoImage.value.img.toString()
                        )
                    )
                    _eventFlow.emit(UiEvent.SaveDepartamento)
