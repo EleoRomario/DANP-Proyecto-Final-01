@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.edit.destinos
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
-import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoImage
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputDouble
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputText
@@ -56,10 +56,10 @@ fun DestinoEditScreen(
             EditContent(
                 title = titleState.text,
                 description = descriptionState.text,
-                image = imageState.img.toString(),
+                image = imageState.img,
                 category = categoyState.text,
-                latitud = latitudState.text,
-                longitud = longitudState.text,
+                latitud = latitudState.text.toDouble(),
+                longitud = longitudState.text.toDouble(),
                 onEvent = { viewModel.onEvent(it) }
             )
         },
@@ -91,7 +91,7 @@ fun DestinoEditTopBar(topAppBarText: String) {
 fun EditContent(
     title: String,
     description: String,
-    image: String,
+    image: Uri,
     category: String,
     latitud: Double,
     longitud: Double,
@@ -125,8 +125,8 @@ fun EditContent(
             onTextChange = { onEvent(DestinoEditEvent.EnteredLongitud(it.toDouble())) }
         )
         departamentoImage(
-            image = image.toUri(),
-            onImageChange = { onEvent(DestinoEditEvent.EnteredImage(it.toString())) }
+            image = image,
+            onImageChange = { onEvent(DestinoEditEvent.EnteredImage(it)) }
         )
     }
 }
@@ -142,7 +142,7 @@ fun DestinoEditBottomBar(
             .padding(horizontal = 10.dp, vertical = 14.dp),
         onClick = { onInsertDestino() }
     ) {
-        Text(text = stringResource(id = R.string.add_destino))
+        Text(text = stringResource(id = R.string.save_destino))
     }
 }
 
@@ -160,7 +160,7 @@ fun PreviewAddEditDestinoContent() {
     EditContent(
         title = "Ada",
         description = "Smith",
-        image = "amazonas",
+        image = Uri.parse(""),
         category = "cultural",
         latitud = 12.5555,
         longitud = 512.25555,
