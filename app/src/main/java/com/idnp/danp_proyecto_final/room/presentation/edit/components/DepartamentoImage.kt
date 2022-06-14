@@ -12,30 +12,55 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.google.android.gms.tasks.Continuation
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
 
 @Composable
 fun departamentoImage(
-    image: String,
-    onImageChange: (String) -> Unit
+    image: Uri,
+    onImageChange: (Uri) -> Unit,
 ) {
-    var selectedImage by remember { mutableStateOf<Uri?>(null) }
 
+    var mStorage: StorageReference
+    var selectedImage by remember { mutableStateOf<Uri?>(null) }
 
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
         selectedImage = uri
     }
 
-    ContentDepartamentoImage(selectedImage) {
+    ContentDepartamentoImage(image, selectedImage) {
         launcher.launch("image/*")
     }
-    onImageChange(selectedImage.toString())
-    Log.d("IMAGE", "selectedImage"+selectedImage+">image"+image)
+    mStorage = FirebaseStorage.getInstance().getReference()
+
+    val filePath: StorageReference = mStorage.child("fotos").child(selectedImage.toString())
+    val image = selectedImage?.let {
+        filePath.putFile(it)
+    }
+    val urlImage = image?.continueWithTask { img ->
+        if(!img.isSuccessful){
+            img.exception?.let{
+                throw  it
+            }
+        }
+        filePath.downloadUrl
+    }?.addOnCompleteListener{ img ->
+        if(img.isSuccessful){
+            val downloadUri = img.result
+            onImageChange(downloadUri)
+            Log.d("IMAGE", ">>" + downloadUri)
+        }
+    }
 }
 @Composable
 private  fun ContentDepartamentoImage(
+    image: Uri,
     selectedImage: Uri? = null,
     onImageClick: () -> Unit
 ){
@@ -51,9 +76,8 @@ private  fun ContentDepartamentoImage(
             OutlinedButton(onClick = onImageClick) {
                 Text(text = "Seleccionar Imagen")
             }
-            if (selectedImage != null)
                 Image(painter = rememberImagePainter(
-                    data = selectedImage,
+                    data = if(selectedImage != null) selectedImage else {if(image !=null) image else "none"},
                     builder = {
                         placeholder(R.drawable.placeholder)
 
@@ -67,5 +91,5 @@ private  fun ContentDepartamentoImage(
 @Preview
 @Composable
 fun PreviewdepartamentoImage() {
-    departamentoImage("arequipa", onImageChange = {})
+    //departamentoImage("arequipa", onImageChange = {})
 }

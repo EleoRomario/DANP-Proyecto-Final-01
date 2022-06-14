@@ -3,6 +3,7 @@ package com.idnp.danp_proyecto_final.room.presentation.edit.destinos
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -65,7 +66,7 @@ class DestinoEditViewModel @Inject constructor(
                             text = destino.description
                         )
                         _destinoImage.value = destinoImage.value.copy(
-                            img = destino.image
+                            img = destino.image.toUri()
                         )
                         _destinoCategory.value = destinoCategory.value.copy(
                             text = destino.category
@@ -96,7 +97,7 @@ class DestinoEditViewModel @Inject constructor(
             }
             is DestinoEditEvent.EnteredImage -> {
                 _destinoImage.value = destinoImage.value.copy(
-                    img = event.value
+                    img = event.value.toUri()
                 )
             }
             is DestinoEditEvent.EnteredCategory -> {
@@ -122,7 +123,7 @@ class DestinoEditViewModel @Inject constructor(
                             codeDep = codeDep,
                             title = destinoTitle.value.text,
                             description = destinoDescription.value.text,
-                            image = destinoImage.value.img,
+                            image = destinoImage.value.img.toString(),
                             category = destinoCategory.value.text,
                             latitud = destinoLatitud.value.text,
                             longitud = destinoLongitud.value.text

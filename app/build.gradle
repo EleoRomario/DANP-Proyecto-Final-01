@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -99,6 +99,10 @@ dependencies {
 
     //Image
     implementation("io.coil-kt:coil-compose:1.4.0")
+
+    //Firebase
+    implementation "com.google.firebase:firebase-storage:20.0.1"
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
 
 
 }

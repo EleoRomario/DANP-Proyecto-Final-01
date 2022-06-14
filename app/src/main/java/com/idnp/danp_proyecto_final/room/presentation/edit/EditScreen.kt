@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.room.presentation.edit
 
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -78,7 +79,7 @@ fun EditTopBar(topAppBarText: String) {
 fun EditContent(
     title: String,
     description: String,
-    image: String,
+    image: Uri,
     onEvent: (EditEvent) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -129,7 +130,7 @@ fun PreviewAddEditdepartamentoContent() {
         EditContent(
             title = "Ada",
             description = "Smith",
-            image = "amazonas",
+            image = Uri.parse(""),
             onEvent = { }
         )
 }
