@@ -80,17 +80,17 @@ fun DepartamentoItem(
 @Preview(showBackground = true)
 @Composable
 fun PreviewdepartamentoItem() {
-        /*DepartamentoItem(
+        DepartamentoItem(
             departamento = DepartamentoWithDestinos(
                 departamento = Departamento(
                     title = "Arequippa",
                     description = "Hola",
                     image = "imagen"
                 ),
-                destinos = ""
+                destinos = emptyList()
             ),
             onEditDepartamento = {},
             onDeleteDepartamento = {},
             onDestinos = {}
-        )*/
+        )
 }

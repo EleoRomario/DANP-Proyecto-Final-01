@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
+import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoDropdown
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoImage
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputDouble
 import com.idnp.danp_proyecto_final.room.presentation.edit.components.departamentoInputText
@@ -109,11 +110,16 @@ fun EditContent(
             hint = stringResource(id = R.string.destino_description),
             onTextChange = { onEvent(DestinoEditEvent.EnteredDescription(it)) }
         )
-        departamentoInputText(
+        departamentoDropdown(
+            text = category,
+            hint = stringResource(id = R.string.destino_category),
+            onTextChange = { onEvent(DestinoEditEvent.EnteredCategory(it))}
+        )
+        /*departamentoInputText(
             text = category,
             hint = stringResource(id = R.string.destino_category),
             onTextChange = { onEvent(DestinoEditEvent.EnteredCategory(it)) }
-        )
+        )*/
         departamentoInputDouble(
             numero = latitud,
             hint = stringResource(id = R.string.destino_latitud),
