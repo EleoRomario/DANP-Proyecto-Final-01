@@ -26,7 +26,7 @@ fun departamentoImage(
     onImageChange: (Uri) -> Unit,
 ) {
 
-    var mStorage: StorageReference
+    //var mStorage: StorageReference
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
 
 
@@ -37,7 +37,8 @@ fun departamentoImage(
     ContentDepartamentoImage(image, selectedImage) {
         launcher.launch("image/*")
     }
-    mStorage = FirebaseStorage.getInstance().getReference()
+    selectedImage?.let { onImageChange(it) }
+    /*mStorage = FirebaseStorage.getInstance().getReference()
     val filePath: StorageReference = mStorage.child("fotos").child(selectedImage.toString().substringAfterLast("/"))
     val image = selectedImage?.let {
         filePath.putFile(it)
@@ -55,7 +56,7 @@ fun departamentoImage(
             onImageChange(downloadUri)
             Log.d("IMAGE", ">>" + downloadUri)
         }
-    }
+    }*/
 }
 @Composable
 private  fun ContentDepartamentoImage(

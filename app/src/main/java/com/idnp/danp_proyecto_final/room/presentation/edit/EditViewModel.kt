@@ -9,6 +9,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.domain.use_cases.GetDepartamento
@@ -63,6 +65,9 @@ class EditViewModel @Inject constructor(
     }
 
     fun onEvent(event: EditEvent) {
+        val mStorage: StorageReference
+        val selectedImage = departamentoImage.value.img
+
        when (event) {
            is EditEvent.EnteredTitle -> {
                _departamentoTitle.value = departamentoTitle.value.copy(
@@ -80,18 +85,37 @@ class EditViewModel @Inject constructor(
                )
            }
            EditEvent.InsertDepartamento -> {
-               viewModelScope.launch {
-                   insertdepartamento(
-                       Departamento(
-                           id = currentDepartamentoId,
-                           title = departamentoTitle.value.text,
-                           description = departamentoDescription.value.text,
-                           image = departamentoImage.value.img.toString()
-                       )
-                   )
-                   _eventFlow.emit(UiEvent.SaveDepartamento)
+               mStorage = FirebaseStorage.getInstance().getReference()
+               val filePath: StorageReference = mStorage.child("fotos").child(selectedImage.toString().substringAfterLast("/"))
+               val image = selectedImage.let {
+                   filePath.putFile(it)
                }
-               Log.d("PRUEBA","->"+departamentoImage.value.img)
+               val urlImage = image.continueWithTask { img ->
+                   if(!img.isSuccessful){
+                       img.exception?.let{
+                           throw  it
+                       }
+                   }
+                   filePath.downloadUrl
+               }.addOnCompleteListener{ img ->
+                   if(img.isSuccessful){
+                       val downloadUri = img.result
+                       Log.d("IMAGE", ">>" + downloadUri)
+                       viewModelScope.launch {
+                           insertdepartamento(
+                               Departamento(
+                                   id = currentDepartamentoId,
+                                   title = departamentoTitle.value.text,
+                                   description = departamentoDescription.value.text,
+                                   image = downloadUri.toString()
+                               )
+                           )
+                           _eventFlow.emit(UiEvent.SaveDepartamento)
+                       }
+                   }
+               }
+
+
            }
        }
     }

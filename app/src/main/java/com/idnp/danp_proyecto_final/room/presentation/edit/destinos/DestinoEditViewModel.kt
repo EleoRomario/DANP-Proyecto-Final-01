@@ -7,6 +7,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.idnp.danp_proyecto_final.room.domain.model.Departamento
 import com.idnp.danp_proyecto_final.room.domain.model.Destino
 import com.idnp.danp_proyecto_final.room.domain.use_cases.GetDepartamento
@@ -84,6 +86,8 @@ class DestinoEditViewModel @Inject constructor(
     }
 
     fun onEvent(event: DestinoEditEvent) {
+        val mStorage: StorageReference
+        val selectedImage = destinoImage.value.img
         when (event) {
             is DestinoEditEvent.EnteredTitle -> {
                 _destinoTitle.value = destinoTitle.value.copy(
@@ -116,20 +120,41 @@ class DestinoEditViewModel @Inject constructor(
                 )
             }
             DestinoEditEvent.InsertDestino -> {
-                viewModelScope.launch {
-                    insertDestino(
-                        Destino(
-                            id = currentDestinoId,
-                            codeDep = codeDep,
-                            title = destinoTitle.value.text,
-                            description = destinoDescription.value.text,
-                            image = destinoImage.value.img.toString(),
-                            category = destinoCategory.value.text,
-                            latitud = destinoLatitud.value.text,
-                            longitud = destinoLongitud.value.text
-                        )
-                    )
-                    _eventFlow.emit(UiEvent.SaveDestino)
+                mStorage = FirebaseStorage.getInstance().getReference()
+                val filePath: StorageReference =
+                    mStorage.child("fotos").child(selectedImage.toString().substringAfterLast("/"))
+                val image = selectedImage.let {
+                    filePath.putFile(it)
+                }
+                val urlImage = image.continueWithTask { img ->
+                    if (!img.isSuccessful) {
+                        img.exception?.let {
+                            throw  it
+                        }
+                    }
+                    filePath.downloadUrl
+                }.addOnCompleteListener { img ->
+                    if (img.isSuccessful) {
+                        val downloadUri = img.result
+                        Log.d("IMAGE", ">>" + downloadUri)
+                        viewModelScope.launch {
+                            viewModelScope.launch {
+                                insertDestino(
+                                    Destino(
+                                        id = currentDestinoId,
+                                        codeDep = codeDep,
+                                        title = destinoTitle.value.text,
+                                        description = destinoDescription.value.text,
+                                        image = downloadUri.toString(),
+                                        category = destinoCategory.value.text,
+                                        latitud = destinoLatitud.value.text,
+                                        longitud = destinoLongitud.value.text
+                                    )
+                                )
+                                _eventFlow.emit(UiEvent.SaveDestino)
+                            }
+                        }
+                    }
                 }
             }
         }

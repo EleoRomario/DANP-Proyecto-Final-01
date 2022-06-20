@@ -2,12 +2,14 @@ package com.idnp.danp_proyecto_final.room.presentation.edit.destinos
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -142,11 +144,15 @@ fun DestinoEditBottomBar(
     modifier: Modifier = Modifier,
     onInsertDestino: () -> Unit
 ) {
+    val context = LocalContext.current
     Button(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 14.dp),
-        onClick = { onInsertDestino() }
+        onClick = {
+            onInsertDestino()
+            Toast.makeText(context,"Destino Guardado", Toast.LENGTH_SHORT).show()
+        }
     ) {
         Text(text = stringResource(id = R.string.save_destino))
     }
