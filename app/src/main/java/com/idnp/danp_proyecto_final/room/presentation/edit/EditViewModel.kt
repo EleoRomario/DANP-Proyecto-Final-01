@@ -2,6 +2,7 @@ package com.idnp.danp_proyecto_final.room.presentation.edit
 
 import android.net.Uri
 import android.provider.MediaStore.Images.Media.getBitmap
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
@@ -90,6 +91,7 @@ class EditViewModel @Inject constructor(
                    )
                    _eventFlow.emit(UiEvent.SaveDepartamento)
                }
+               Log.d("PRUEBA","->"+departamentoImage.value.img)
            }
        }
     }

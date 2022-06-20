@@ -38,8 +38,7 @@ fun departamentoImage(
         launcher.launch("image/*")
     }
     mStorage = FirebaseStorage.getInstance().getReference()
-
-    val filePath: StorageReference = mStorage.child("fotos").child(selectedImage.toString())
+    val filePath: StorageReference = mStorage.child("fotos").child(selectedImage.toString().substringAfterLast("/"))
     val image = selectedImage?.let {
         filePath.putFile(it)
     }
