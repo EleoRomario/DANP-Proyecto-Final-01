@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.idnp.danp_proyecto_final.screens.*
+import com.idnp.danp_proyecto_final.screens.login.user.LoginScreen
+import com.idnp.danp_proyecto_final.screens.login.user.RegisterScreen
 
 
 @Composable
@@ -14,8 +16,16 @@ fun AppNavigation (){
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AppScreens.HomeDepartamentos.route
+        startDestination = AppScreens.Login.route
     ){
+
+        composable(route = AppScreens.Login.route ){
+            LoginScreen(navController)
+        }
+
+        composable(route = AppScreens.Register.route ){
+            RegisterScreen(navController)
+        }
 
         composable(route = AppScreens.HomeDepartamentos.route ){
             HomeDepartamentosScreen(navController)
