@@ -11,7 +11,14 @@ class AuthRepository {
 
     fun hasUser(): Boolean = Firebase.auth.currentUser != null
 
-    fun getUserId(): String = Firebase.auth.currentUser?.uid.orEmpty()
+    suspend fun getUser() = withContext(Dispatchers.IO){
+        val user = Firebase.auth.currentUser
+        user?.let {
+            val email = user.email
+            val name = user.displayName
+            val photoUrl = user.photoUrl
+        }
+    }
 
     suspend fun createUser(
         email: String,

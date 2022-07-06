@@ -1,4 +1,4 @@
-package com.idnp.danp_proyecto_final.presentation
+package com.idnp.danp_proyecto_final.presentation.home
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -29,6 +29,7 @@ import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.presentation.TopBarPeru
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
@@ -37,25 +38,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import kotlin.math.absoluteValue
 
-/*
-Eleo
-* */
-
 @Composable
-fun HomeDepartamentosScreen(navController: NavController){
+fun HomeScreen(navController: NavController){
     Scaffold(
         topBar = {
             TopBarPeru()
-        },
-        bottomBar = {
-            BottomBarNavegation(0,navController)
         }
     ) {
         HomeDepBodyContent(navController)
 
     }
 }
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeDepBodyContent(navController: NavController){
     val scrollState = rememberScrollState()
@@ -280,11 +273,9 @@ fun cardCategoria(category:String, img: Int, navController: NavController){
     }
 }
 
-//@Preview(showSystemUi = true)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
-    //CardDepartameto()
-    HomeDepartamentosScreen(navController)
+    HomeScreen(navController)
 }

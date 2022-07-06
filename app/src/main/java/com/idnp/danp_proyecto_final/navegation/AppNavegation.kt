@@ -1,7 +1,6 @@
 package com.idnp.danp_proyecto_final.navegation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.idnp.danp_proyecto_final.presentation.*
+import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.RegisterScreen
@@ -67,11 +67,27 @@ fun AppNavigation (
         }
 
         composable(route = HomeRoutes.Home.name){
-            HomeDepartamentosScreen(navController)
+            HomeScreen(navController)
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         composable(route = AppScreens.HomeDepartamentos.route ){
-            HomeDepartamentosScreen(navController)
+            HomeScreen(navController)
         }
 
         composable(route = AppScreens.ListDepartamentos.route){
