@@ -1,25 +1,37 @@
-package com.idnp.danp_proyecto_final.screens.login.user
+package com.idnp.danp_proyecto_final.presentation.login.user
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,20 +42,38 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.navegation.AppScreens
-import com.idnp.danp_proyecto_final.screens.logoPeru
+import com.idnp.danp_proyecto_final.presentation.logoPeru
 import com.idnp.danp_proyecto_final.ui.theme.ColorLink
 import com.idnp.danp_proyecto_final.ui.theme.Primary
-import androidx.compose.ui.graphics.Shape as Shape1
 
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(
+    loginViewModel: AuthViewModel? = null,
+    onNavToHomePage: () -> Unit,
+    onNavToSignupPage: () ->Unit
+){
+
+    val loginUiState = loginViewModel?.loginUiState
+
+    val isError = loginUiState?.loginError != null
+
+    val context = LocalContext.current
+
+
     Scaffold {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LoginHead()
             Spacer(modifier = Modifier.height(10.dp))
-            LoginForm(navController)
+            LoginForm(
+                onNavToHomePage,
+                onNavToSignupPage,
+                context,
+                loginViewModel,
+                loginUiState,
+                isError
+            )
         }
     }
 }
@@ -72,15 +102,19 @@ fun LoginHead(){
 }
 
 @Composable
-fun LoginForm(navController: NavController){
+fun LoginForm(
+    onNavToHomePage: () -> Unit,
+    onNavToSignupPage: () ->Unit,
+    context: Context,
+    loginViewModel: AuthViewModel?,
+    loginUiState: LoginUiState?,
+    isError: Boolean
+){
     val focusManager = LocalFocusManager.current
-    var email by remember { mutableStateOf("") }
-    var pass by remember { mutableStateOf("") }
 
-    lateinit var auth: FirebaseAuth
-// ...
-// Initialize Firebase Auth
-    auth = Firebase.auth
+    var isPassVisible by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -91,25 +125,54 @@ fun LoginForm(navController: NavController){
     ) {
         Text("Bienvenido", fontSize = 25.sp, color = Primary)
 
+        if(isError){
+            Text(text = loginUiState?.loginError ?: "", color = Color.Red)
+        }
+        
         OutlinedTextField(
-            value = email,
+            value = loginUiState?.emailUser ?: "",
             placeholder = { Text(text = "user@email.com") },
             label = { Text(text = "Email") },
-            onValueChange = { email = it },
+            onValueChange = { loginViewModel?.onUserEmailChange(it) },
             shape = RoundedCornerShape(20.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+            isError = isError,
+            trailingIcon = {
+                if(loginUiState?.emailUser != ""){
+                    IconButton(onClick = {}){
+                        Icon(imageVector = Icons.Filled.Clear, contentDescription = null)
+                    }
+                }
+            }
         )
 
         OutlinedTextField(
-            value = pass,
+            value = loginUiState?.passUser ?: "",
             placeholder = { Text(text = "password") },
             label = { Text(text = "Password") },
-            onValueChange = { pass = it },
+            onValueChange = { loginViewModel?.onUserPassChange(it)},
             shape = RoundedCornerShape(20.dp),
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+            visualTransformation = if(isPassVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            ),
+            isError = isError,
+            trailingIcon = {
+                IconButton(onClick = { isPassVisible = !isPassVisible }) {
+                    Icon(
+                        imageVector = if (isPassVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = null
+                    )
+                }
+            }
         )
 
         Text("Olvide mi contraseña",
@@ -122,7 +185,9 @@ fun LoginForm(navController: NavController){
                 .fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                loginViewModel?.loginUser(context)
+            }) {
             Text(text = "Iniciar Sesion", color = Color.White, modifier = Modifier
                 .padding(
                     start = 12.dp,
@@ -165,13 +230,22 @@ fun LoginForm(navController: NavController){
         Row() {
             Text(text = "¿No tienes cuenta?")
             Spacer(Modifier.width(10.dp))
-            Text("Registrate ahora",color = ColorLink,
-            modifier = Modifier.clickable(
+            ClickableText(
+                text = AnnotatedString("Registrate"),
+                style = TextStyle(color = ColorLink),
                 onClick = {
-                    navController.navigate(route = AppScreens.Register.route)
+                    onNavToSignupPage.invoke()
                 }
-                )
             )
+        }
+
+        if(loginUiState?.isLoading == true){
+            CircularProgressIndicator()
+        }
+        LaunchedEffect(key1 = loginViewModel?.hasUser){
+            if(loginViewModel?.hasUser == true){
+                onNavToHomePage.invoke()
+            }
         }
     }
 }

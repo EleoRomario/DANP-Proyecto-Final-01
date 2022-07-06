@@ -1,4 +1,4 @@
-package com.idnp.danp_proyecto_final.screens.login.user
+package com.idnp.danp_proyecto_final.presentation.login.user
 
 data class LoadingState constructor(
     val status: Status,

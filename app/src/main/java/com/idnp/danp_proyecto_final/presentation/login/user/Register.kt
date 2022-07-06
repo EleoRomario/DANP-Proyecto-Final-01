@@ -1,5 +1,6 @@
-package com.idnp.danp_proyecto_final.screens.login.user
+package com.idnp.danp_proyecto_final.presentation.login.user
 
+import android.content.Context
 import android.util.Patterns
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
@@ -38,38 +40,51 @@ import com.idnp.danp_proyecto_final.ui.theme.Primary
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun RegisterScreen(navController: NavController){
+fun RegisterScreen(
+    loginViewModel: AuthViewModel? = null,
+    onNavToHomePage: () -> Unit,
+    onNavToLoginPage: () -> Unit
+){
+
+    val loginUiState = loginViewModel?.loginUiState
+
+    val isError = loginUiState?.signUpError != null
+
+    val context = LocalContext.current
+
     Scaffold {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LoginHead()
             Spacer(modifier = Modifier.height(10.dp))
-            registerForm(navController)
+            registerForm(
+                onNavToHomePage,
+                onNavToLoginPage,
+                context,
+                loginViewModel,
+                loginUiState,
+                isError
+            )
         }
     }
 }
 @Composable
 fun registerForm(
-    navController: NavController,
-    viewModel: RegisterViewModel = viewModel()
+    onNavToHomePage: () -> Unit,
+    onNavToLoginPage: () ->Unit,
+    context: Context,
+    loginViewModel: AuthViewModel?,
+    loginUiState: LoginUiState?,
+    isError: Boolean
 ){
 
     val focusManager = LocalFocusManager.current
-    var email by remember { mutableStateOf("") }
-    var pass by remember { mutableStateOf("") }
 
-    val isEmailValid by derivedStateOf {
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-    val isPassValid by derivedStateOf {
-        pass.length > 7
-    }
+
     var isPassVisible by remember {
         mutableStateOf(false)
     }
-
-    val state by viewModel.state.collectAsState()
 
     Column(
         modifier = Modifier
@@ -80,11 +95,15 @@ fun registerForm(
     ) {
         Text("Registrarte", fontSize = 25.sp, color = Primary)
 
+        if(isError){
+            Text(text = loginUiState?.signUpError ?: "", color = Color.Red)
+        }
+
         OutlinedTextField(
-            value = email,
+            value = loginUiState?.emailUserSignUp?:"",
             placeholder = { Text(text = "user@email.com") },
             label = { Text(text = "Email") },
-            onValueChange = { email = it },
+            onValueChange = { loginViewModel?.onEmailSignupChange(it) },
             shape = RoundedCornerShape(20.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -93,34 +112,31 @@ fun registerForm(
             keyboardActions = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             ),
-            isError = !isEmailValid,
+            isError = isError,
             trailingIcon = {
-                if(email.isNotBlank()){
-                    IconButton(onClick = {email = ""}){
+                if(loginUiState?.emailUserSignUp != ""){
+                    IconButton(onClick = {}){
                         Icon(imageVector = Icons.Filled.Clear, contentDescription = null)
                     }
                 }
             }
         )
-        if(email.isNotBlank() && !isEmailValid){
-            Text(text = "Ingrese un email correcto", color = Color.Red)
-        }
 
         OutlinedTextField(
-            value = pass,
+            value = loginUiState?.passUserSignup?:"",
             placeholder = { Text(text = "password") },
             label = { Text(text = "Password") },
-            onValueChange = { pass = it },
+            onValueChange = { loginViewModel?.onPassSignupChange(it) },
             shape = RoundedCornerShape(20.dp),
             visualTransformation = if(isPassVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus() }
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
             ),
-            isError = !isPassValid,
+            isError = isError,
             trailingIcon = {
                 IconButton(onClick = { isPassVisible = !isPassVisible }) {
                     Icon(
@@ -130,48 +146,48 @@ fun registerForm(
                 }
             }
         )
-        if(pass.isNotBlank() && !isPassValid){
-            Text("Contraseña mayor a 7 dígitos",color = Color.Red)
-        }
+
+        OutlinedTextField(
+            value = loginUiState?.confirmPassSignup?:"",
+            placeholder = { Text(text = "password") },
+            label = { Text(text = "Confirm Password") },
+            onValueChange = { loginViewModel?.onConfirmPassChange(it) },
+            shape = RoundedCornerShape(20.dp),
+            visualTransformation = if(isPassVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            ),
+            isError = isError,
+            trailingIcon = {
+                IconButton(onClick = { isPassVisible = !isPassVisible }) {
+                    Icon(
+                        imageVector = if (isPassVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = null
+                    )
+                }
+            }
+        )
+
         Button(
-            enabled = isEmailValid && isPassValid,
             modifier = Modifier
                 .fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
             onClick = {
-                viewModel.register(email,pass)
+                loginViewModel?.createUser(context)
             }) {
-            when(state.status) {
-                LoadingState.Status.IDLE -> {
-                    Text(text = "Registrarte", color = Color.White, modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            end = 16.dp,
-                            top = 10.dp,
-                            bottom = 10.dp
-                        )
-                    )
-                }
-                LoadingState.Status.RUNNING -> {
-                    CircularProgressIndicator(
-                        color = Color.White
-                    )
-                }
-                LoadingState.Status.SUCCESS -> {
-                    Text(text = "Usuario Registrado", color = Color.White, modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            end = 16.dp,
-                            top = 10.dp,
-                            bottom = 10.dp
-                        )
-                    )
-                }
-                LoadingState.Status.FAILED -> {
-                    Text(text = state.msg ?: "Error")
-                }
-            }
+            Text(text = "Registrarte", color = Color.White, modifier = Modifier
+                .padding(
+                    start = 12.dp,
+                    end = 16.dp,
+                    top = 10.dp,
+                    bottom = 10.dp
+                )
+            )
         }
         Text(text = "o")
 
@@ -210,9 +226,17 @@ fun registerForm(
                 text = AnnotatedString("Inicia sesion"),
                 style = TextStyle(color = ColorLink),
                 onClick = {
-                        navController.navigate(route = AppScreens.Login.route)
+                        onNavToLoginPage.invoke()
                 }
             )
+        }
+        if(loginUiState?.isLoading == true){
+            CircularProgressIndicator()
+        }
+        LaunchedEffect(key1 = loginViewModel?.hasUser){
+            if(loginViewModel?.hasUser == true){
+                onNavToHomePage.invoke()
+            }
         }
     }
 }

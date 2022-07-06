@@ -1,30 +1,73 @@
 package com.idnp.danp_proyecto_final.navegation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.idnp.danp_proyecto_final.screens.*
-import com.idnp.danp_proyecto_final.screens.login.user.LoginScreen
-import com.idnp.danp_proyecto_final.screens.login.user.RegisterScreen
+import com.idnp.danp_proyecto_final.presentation.*
+import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
+import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
+import com.idnp.danp_proyecto_final.presentation.login.user.RegisterScreen
+
+enum class LoginRoutes{
+    Signup,
+    SignIn
+}
+enum class HomeRoutes{
+    Home
+}
 
 
 @Composable
-fun AppNavigation (){
-    val navController = rememberNavController()
+fun AppNavigation (
+    navController: NavHostController = rememberNavController(),
+    AuthViewModel: AuthViewModel
+){
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Login.route
+        startDestination = LoginRoutes.SignIn.name
     ){
 
-        composable(route = AppScreens.Login.route ){
-            LoginScreen(navController)
+        composable(route = LoginRoutes.SignIn.name ){
+            LoginScreen(onNavToHomePage = {
+                navController.navigate(HomeRoutes.Home.name){
+                    launchSingleTop = true
+                    popUpTo(route = LoginRoutes.Signup.name){
+                        inclusive = true
+                    }
+                }
+            },
+                loginViewModel = AuthViewModel
+            ){
+                navController.navigate(LoginRoutes.Signup.name){
+                    launchSingleTop = true
+                    popUpTo(LoginRoutes.SignIn.name){
+                        inclusive = true
+                    }
+                }
+            }
         }
 
-        composable(route = AppScreens.Register.route ){
-            RegisterScreen(navController)
+        composable(route = LoginRoutes.Signup.name ){
+            RegisterScreen(onNavToHomePage = {
+                navController.navigate(HomeRoutes.Home.name){
+                    popUpTo(LoginRoutes.Signup.name){
+                        inclusive = true
+                    }
+                }
+            },
+                loginViewModel = AuthViewModel
+            ){
+                navController.navigate(LoginRoutes.SignIn.name)
+            }
+        }
+
+        composable(route = HomeRoutes.Home.name){
+            HomeDepartamentosScreen(navController)
         }
 
         composable(route = AppScreens.HomeDepartamentos.route ){
