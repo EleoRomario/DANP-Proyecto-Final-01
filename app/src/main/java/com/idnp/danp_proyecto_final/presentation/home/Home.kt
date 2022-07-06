@@ -28,8 +28,12 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.domain.model.User
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.TopBarPeru
+import com.idnp.danp_proyecto_final.presentation.components.ProfileScreen
+import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
+import com.idnp.danp_proyecto_final.presentation.modal
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
@@ -39,13 +43,20 @@ import kotlinx.coroutines.yield
 import kotlin.math.absoluteValue
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(
+    viewModel: AuthViewModel,
+    onNavLogin: () -> Unit
+){
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
     Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = { ProfileScreen(viewModel,onNavLogin) },
         topBar = {
-            TopBarPeru()
+            TopBarPeru(scope,scaffoldState)
         }
     ) {
-        HomeDepBodyContent(navController)
 
     }
 }
@@ -277,5 +288,5 @@ fun cardCategoria(category:String, img: Int, navController: NavController){
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
-    HomeScreen(navController)
+   // HomeScreen(navController)
 }

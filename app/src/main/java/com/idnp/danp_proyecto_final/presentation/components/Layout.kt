@@ -41,9 +41,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun TopBarPeru(){
+fun TopBarPeru(scope: CoroutineScope,scaffoldState: ScaffoldState){
     CenterAlignedTopAppBar(
         title = { Text("Perú", fontSize = 25.sp) },
+        actions = {
+            IconButton(
+                onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }) {
+                Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
+            }
+
+        },
     )
 }
 

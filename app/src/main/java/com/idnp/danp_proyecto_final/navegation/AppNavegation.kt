@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.navegation
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,10 +12,10 @@ import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
-import com.idnp.danp_proyecto_final.presentation.login.user.RegisterScreen
+//import com.idnp.danp_proyecto_final.presentation.login.user.RegisterScreen
 
 enum class LoginRoutes{
-    Signup,
+    //Signup,
     SignIn
 }
 enum class HomeRoutes{
@@ -36,23 +37,13 @@ fun AppNavigation (
             LoginScreen(onNavToHomePage = {
                 navController.navigate(HomeRoutes.Home.name){
                     launchSingleTop = true
-                    popUpTo(route = LoginRoutes.Signup.name){
-                        inclusive = true
-                    }
                 }
             },
                 loginViewModel = AuthViewModel
-            ){
-                navController.navigate(LoginRoutes.Signup.name){
-                    launchSingleTop = true
-                    popUpTo(LoginRoutes.SignIn.name){
-                        inclusive = true
-                    }
-                }
-            }
+            )
         }
 
-        composable(route = LoginRoutes.Signup.name ){
+        /*composable(route = LoginRoutes.Signup.name ){
             RegisterScreen(onNavToHomePage = {
                 navController.navigate(HomeRoutes.Home.name){
                     popUpTo(LoginRoutes.Signup.name){
@@ -64,10 +55,14 @@ fun AppNavigation (
             ){
                 navController.navigate(LoginRoutes.SignIn.name)
             }
-        }
+        }*/
 
         composable(route = HomeRoutes.Home.name){
-            HomeScreen(navController)
+            HomeScreen(AuthViewModel, onNavLogin = {
+                navController.navigate(LoginRoutes.SignIn.name){
+                    launchSingleTop = true
+                }
+            })
         }
 
 
@@ -86,8 +81,8 @@ fun AppNavigation (
 
 
 
-        composable(route = AppScreens.HomeDepartamentos.route ){
-            HomeScreen(navController)
+        /*composable(route = AppScreens.HomeDepartamentos.route ){
+            HomeScreen()
         }
 
         composable(route = AppScreens.ListDepartamentos.route){
@@ -131,6 +126,6 @@ fun AppNavigation (
 
         composable(route = AppScreens.SearchDestino.route ){
             SearchDestinosScreen(navController)
-        }
+        }*/
     }
 }
