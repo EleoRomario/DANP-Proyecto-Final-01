@@ -22,6 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
+import com.idnp.danp_proyecto_final.presentation.components.TopBarBackMenu
+import com.idnp.danp_proyecto_final.presentation.components.cardLugarTuristico
+import com.idnp.danp_proyecto_final.presentation.components.modal
 import com.idnp.danp_proyecto_final.ui.theme.ColorWhiteAlpha
 
 @Composable
@@ -30,7 +34,7 @@ fun SearchDestinosScreen(navController: NavController){
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)},
+        drawerContent = { modal(navController) },
         topBar = {
             TopBarBackMenu(scope, scaffoldState,navController)
         },

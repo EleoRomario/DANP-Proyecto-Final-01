@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -26,14 +27,14 @@ import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
-import com.idnp.danp_proyecto_final.domain.model.User
 import com.idnp.danp_proyecto_final.navegation.AppScreens
-import com.idnp.danp_proyecto_final.presentation.TopBarPeru
+import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
 import com.idnp.danp_proyecto_final.presentation.components.ProfileScreen
-import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
-import com.idnp.danp_proyecto_final.presentation.modal
+import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.Secundary
@@ -44,24 +45,22 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
-    viewModel: AuthViewModel,
-    onNavLogin: () -> Unit
+    navController: NavController
 ){
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-
     Scaffold(
-        scaffoldState = scaffoldState,
-        drawerContent = { ProfileScreen(viewModel,onNavLogin) },
         topBar = {
-            TopBarPeru(scope,scaffoldState)
+            TopBarPeru()
+        },
+        content = { padding ->
+            Column(modifier = Modifier.padding(padding)){
+                //HomeContent()
+            }
         }
-    ) {
-
-    }
+    )
 }
+@Preview(showBackground = true)
 @Composable
-fun HomeDepBodyContent(navController: NavController){
+fun HomeContent(){
     val scrollState = rememberScrollState()
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
@@ -73,28 +72,23 @@ fun HomeDepBodyContent(navController: NavController){
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logo),
-                contentDescription = "logo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(20.dp)
-            )
-            Text("Encuentra tu próximo viaje",
-                fontSize = 15.sp,
-                color = TextAlt,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            Divider(
-                color = Secundary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp),
-                thickness = 1.dp
-            )
-            departamentos(navController)
+            Box() {
+                Image(imageVector = ImageVector.vectorResource(id = R.drawable.machupicchu),
+                    contentDescription = "bg_inicio",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                )
+                Text("Encuentra tu próximo viaje",
+                    fontSize = 25.sp,
+                    color = TextAlt,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+            //departamentos(navController)
             Spacer( modifier = Modifier.padding(vertical = 10.dp))
-            categorias(navController)
+            //categorias(navController)
             Spacer(modifier = Modifier.height(75.dp))
         }
     }

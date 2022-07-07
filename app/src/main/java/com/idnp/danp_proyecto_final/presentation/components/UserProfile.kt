@@ -1,13 +1,13 @@
 package com.idnp.danp_proyecto_final.presentation.components
 
-import android.net.Uri
-import androidx.compose.foundation.BorderStroke
+import android.content.Context
+import android.util.Log
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberImagePainter
-import com.idnp.danp_proyecto_final.presentation.login.user.AuthViewModel
+import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,21 +21,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.domain.model.User
+import com.idnp.danp_proyecto_final.navegation.AppScreens
 
 @Composable
 fun ProfileScreen(
-    viewModel: AuthViewModel,
-    onNavLogin: () -> Unit,
+    navController: NavController
 ){
-
-    val user = viewModel.currentUser
+    val user = Firebase.auth.currentUser
+    Log.d("LOGIN","->${user?.displayName}")
     user?.let {
         val name = user.displayName
         val email = user.email
@@ -71,7 +72,8 @@ fun ProfileScreen(
             modifier = Modifier
                 .clickable(
                     onClick = {
-                       viewModel.signOut()
+                        Firebase.auth.signOut()
+                        navController.navigate(route = AppScreens.LoginScreen.route )
                     }
                 )
                 .fillMaxWidth(),
@@ -92,13 +94,6 @@ fun ProfileScreen(
                 Text(text = "Cerrar Sesion")
             }
         }
-
-        LaunchedEffect(key1 = viewModel.hasUser){
-            if(viewModel.hasUser){
-                onNavLogin.invoke()
-            }
-        }
-
         }
     }
 }
@@ -106,6 +101,6 @@ fun ProfileScreen(
 @Preview(showBackground = true)
 @Composable
 fun preveProfile(){
-    val viewModel = AuthViewModel()
+    val viewModel = LoginViewModel()
     //ProfileScreen(viewModel)
 }

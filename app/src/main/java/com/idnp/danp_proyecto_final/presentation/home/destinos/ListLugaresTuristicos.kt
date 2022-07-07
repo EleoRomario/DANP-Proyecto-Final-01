@@ -13,6 +13,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
+import com.idnp.danp_proyecto_final.presentation.components.TopBarDepBack
+import com.idnp.danp_proyecto_final.presentation.components.cardLugarTuristico
+import com.idnp.danp_proyecto_final.presentation.components.modal
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
 /*
@@ -28,7 +32,7 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
     }
     Scaffold(
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)},
+        drawerContent = { modal(navController) },
         topBar = {
             TopBarDepBack(departamento.title,scope,scaffoldState,navController)
         },

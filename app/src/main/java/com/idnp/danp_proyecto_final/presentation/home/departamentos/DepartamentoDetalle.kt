@@ -22,6 +22,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.presentation.components.TopBarMenu
+import com.idnp.danp_proyecto_final.presentation.components.modal
 import com.idnp.danp_proyecto_final.ui.theme.ColorWhiteAlpha
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
@@ -35,7 +37,7 @@ fun DetalleDepartamentoScreen(navController: NavController, departamento:String?
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)},
+        drawerContent = { modal(navController) },
     ){
         DetalleContent(departamento,navController)
         TopBarMenu(scope,scaffoldState,navController)

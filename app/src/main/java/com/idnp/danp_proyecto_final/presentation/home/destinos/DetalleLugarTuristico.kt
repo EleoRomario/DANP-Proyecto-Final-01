@@ -25,6 +25,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
+import com.idnp.danp_proyecto_final.presentation.components.TopBarMenuDep
+import com.idnp.danp_proyecto_final.presentation.components.modal
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 
 /*
@@ -41,7 +44,7 @@ fun DetalleLugarTuristicoScreen(navController: NavController, departamento: Stri
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
-        drawerContent = { modal(navController)},
+        drawerContent = { modal(navController) },
         bottomBar = {
             BottomBarNavegation(-1,navController)
         },

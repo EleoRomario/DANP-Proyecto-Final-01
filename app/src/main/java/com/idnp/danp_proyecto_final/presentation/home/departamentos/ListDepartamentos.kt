@@ -22,6 +22,8 @@ import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.data.DepartamentosData
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
+import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
 /*

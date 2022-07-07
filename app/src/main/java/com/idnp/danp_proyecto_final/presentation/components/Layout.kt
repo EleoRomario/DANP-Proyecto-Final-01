@@ -1,4 +1,4 @@
-package com.idnp.danp_proyecto_final.presentation
+package com.idnp.danp_proyecto_final.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
@@ -41,20 +42,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun TopBarPeru(scope: CoroutineScope,scaffoldState: ScaffoldState){
+fun TopBarPeru(){
     CenterAlignedTopAppBar(
         title = { Text("Perú", fontSize = 25.sp) },
-        actions = {
-            IconButton(
-                onClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
-                    }
-                }) {
-                Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu_1), contentDescription = "menu")
-            }
-
-        },
     )
 }
 
