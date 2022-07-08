@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
                     val auth = Firebase.auth
                     val currentUser = auth.currentUser
                     AppNavigation(currentUser)
+                    CustomNotification()
                 }
             }
         }
