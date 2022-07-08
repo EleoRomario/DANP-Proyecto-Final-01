@@ -1,17 +1,19 @@
 package com.idnp.danp_proyecto_final.navegation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
-import com.idnp.danp_proyecto_final.presentation.launching_navigation.LaunchingNavigation
-import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
 
@@ -19,6 +21,15 @@ import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
 fun AppNavigation(user: FirebaseUser?) {
 
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+
+    val uri = "app://com.idnap.danp_proyecto_final/"
+
+    val actions = remember(navController){
+        Actions(navController, context)
+    }
+
     NavHost(navController = navController, startDestination = if(user == null)
         AppScreens.LoginScreen.route else AppScreens.HomeScreen.route){
         composable( route = AppScreens.LoginScreen.route ){
@@ -28,7 +39,10 @@ fun AppNavigation(user: FirebaseUser?) {
             HomeScreen(navController)
         }
 
-        composable(route = AppScreens.ListDepartamentos.route){
+        composable(
+            route = AppScreens.ListDepartamentos.route,
+            deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
+        ){
             ListDepartamentosScreen(navController)
         }
 
@@ -81,7 +95,14 @@ fun AppNavigation(user: FirebaseUser?) {
         }*/
     }
 }
+internal data class Actions(val navController: NavHostController, val context: Context) {
 
+
+    val openDetail: () -> Unit = {
+        navController.navigate(AppScreens.ListDepartamentos.route)
+    }
+
+}
         /*composable(route = LoginRoutes.Signup.name ){
             RegisterScreen(onNavToHomePage = {
                 navController.navigate(HomeRoutes.Home.name){

@@ -3,6 +3,7 @@ package com.idnp.danp_proyecto_final
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -20,7 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.idnp.danp_proyecto_final.navegation.AppNavigation
+import com.idnp.danp_proyecto_final.navegation.AppScreens
 
 class MyFirebaseMessagingService : FirebaseMessagingService(){
 
@@ -37,11 +42,8 @@ fun CustomNotification(){
     val context = LocalContext.current
     val channelId = "MyTestChannel"
     val notificationId = 0
-    val myBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.machupicchu)
-    val bigText = "This is my test notification in one line. Made it longer " +
-            "by setting the setStyle property. " +
-            "It should not fit in one line anymore, " +
-            "rather show as a longer notification content."
+    val myBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.arequipa)
+    val bigText = "Vive la experiencia de viajar a Arequipa la ciudad blanca y disfrutar de sus espectaculares paisajes."
 
     LaunchedEffect(Unit) {
         createNotificationChannel(channelId, context)
@@ -49,9 +51,9 @@ fun CustomNotification(){
     ShowBigPictureWithThumbnailNotification(
             context,
             channelId,
-            notificationId + 3,
-            "Nuevo destino registrado",
-            "This is a notification showing a big picture and an auto-hiding avatar.",
+            notificationId,
+            "Nuevo destino",
+            bigText,
             myBitmap
         )
 }
@@ -86,6 +88,18 @@ fun ShowBigPictureWithThumbnailNotification(
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 
+    val detailDestinoIntent = Intent(
+        Intent.ACTION_VIEW,
+        "https://example.com/".toUri(),
+        context,
+        MainActivity::class.java
+    )
+
+    val pending: PendingIntent = TaskStackBuilder.create(context).run {
+        addNextIntentWithParentStack(detailDestinoIntent)
+        getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
     val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
     val builder = NotificationCompat.Builder(context, channelId)
@@ -100,10 +114,11 @@ fun ShowBigPictureWithThumbnailNotification(
         )
         .setPriority(priority)
         .addAction(R.drawable.ic_heart,"favorite",pendingIntent)
-        .addAction(R.drawable.ic_heart,"share",pendingIntent)
-
+        .addAction(R.drawable.ic_heart,"ver",pending)
+        .setAutoCancel(true)
 
     with(NotificationManagerCompat.from(context)) {
         notify(notificationId, builder.build())
     }
+
 }
