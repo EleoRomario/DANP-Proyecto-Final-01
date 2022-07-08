@@ -290,9 +290,10 @@ fun BottomBarNavegation(id:Int,navController: NavController){
         elevation = 5.dp
     ) {
         items.forEachIndexed{ index, item ->
-            NavigationBarItem(
-                icon = {Image(imageVector = ImageVector.vectorResource(id = item.icon), contentDescription = "home")},
+            BottomNavigationItem(
+                icon = {Image(imageVector = ImageVector.vectorResource(id = item.icon), contentDescription = "item")},
                 selected = id == index,
+                label = {Text(item.title, fontSize = 8.sp)},
                 onClick = {
                     navController.navigate(item.route)
                 }

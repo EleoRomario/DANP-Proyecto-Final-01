@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
 import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
 
 @Composable
@@ -31,7 +32,7 @@ fun ProfileScreen(
     val user = Firebase.auth.currentUser
     Scaffold(
         topBar = {
-            TopBarPeru()
+            TopBarBack(navController)
         },
         content = { padding ->
             Column(modifier = Modifier.padding(padding)){
