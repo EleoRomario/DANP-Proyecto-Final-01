@@ -24,9 +24,9 @@ class LaunchingViewModel: ViewModel() {
                 if (it.isSuccessful){
                     _loginState.value = true
                     navController.navigate(AppScreens.HomeScreen.route){
-                        popUpTo(AppScreens.LaunchingNavigation.route){
+                       /* popUpTo(AppScreens.LaunchingNavigation.route){
                             inclusive = false
-                        }
+                        }*/
                     }
                 }else {
                     _loginState.value = false

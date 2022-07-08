@@ -88,7 +88,9 @@ fun HomeContent(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    OutlinedButton(onClick = { /*TODO*/ },
+                    OutlinedButton(onClick = {
+                                         navController.navigate(route = AppScreens.ProfileScreen.route)
+                    },
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(text = "Mis destinos")

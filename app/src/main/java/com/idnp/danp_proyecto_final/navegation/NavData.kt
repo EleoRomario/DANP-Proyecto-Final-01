@@ -14,7 +14,7 @@ val navList: List<NavData> = listOf(
         0,
         "Home",
         R.drawable.ic_home,
-        AppScreens.HomeDepartamentos.route
+        AppScreens.HomeScreen.route
     ),
     NavData(
         1,

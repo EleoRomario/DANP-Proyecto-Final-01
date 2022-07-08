@@ -6,9 +6,8 @@ sealed class AppScreens(val route:String){
     object LoginScreen: AppScreens("login_screen")
     object SignUpScreen: AppScreens("register_screen")
     object HomeScreen: AppScreens("home_screen")
-    object LaunchingNavigation: AppScreens("launching_navigation")
+    object ProfileScreen: AppScreens("profile_screen")
 
-    object HomeDepartamentos: AppScreens("home_departamentos_screen")
     object ListDepartamentos: AppScreens("list_departamentos_screen")
     object CategoryDestinos: AppScreens("category_destinos_screen")
     object DetalleDepartamento: AppScreens("detalle_departamento_screen")
