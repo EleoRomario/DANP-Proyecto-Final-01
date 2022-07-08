@@ -26,8 +26,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.idnp.danp_proyecto_final.R
@@ -85,13 +88,14 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
             Log.d("Firebase Login", "LoginScreen: ${exception.localizedMessage}")
         }
     }
-    LoginHead()
+
 
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        LoginHead()
         Text(
             modifier = Modifier
                 .padding(vertical = 20.dp, horizontal = 12.dp),
@@ -106,7 +110,7 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
                 .padding(12.dp)
                 .fillMaxHeight(0.5f),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ){
 
             OutlinedTextField(
@@ -173,12 +177,31 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
                 }) {
                 Text(text = "Iniciar Sesion")
             }
-            Spacer(modifier = Modifier.height(12.dp))
             if (viewModel.loadingState.collectAsState().value == LoadingState.LOADING)
                 CircularProgressIndicator(
                     modifier = Modifier.size(36.dp),
                     color = Primary
                 )
+
+            Text("o")
+
+            val context = LocalContext.current
+            val token = stringResource(R.string.default_web_client_id)
+
+            GoogleSignInButton(isClicked = (viewModel.loadingState.collectAsState().value == LoadingState.LOADING)) {
+
+                Log.d("Firebase Login", "LaunchingNavigation: Clickedd")
+                val gso = GoogleSignInOptions.Builder(
+                    GoogleSignInOptions.DEFAULT_SIGN_IN
+                )
+                    .requestIdToken(token)
+                    .requestEmail()
+                    .build()
+
+                val googleSIgnInClient = GoogleSignIn.getClient(context, gso)
+                launcher.launch(googleSIgnInClient.signInIntent)
+            }
+
             Row() {
                 Text(text = "¿No tienes cuenta?")
                 Spacer(Modifier.width(10.dp))

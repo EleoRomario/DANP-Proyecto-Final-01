@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalPagerApi::class)
+
 package com.idnp.danp_proyecto_final.presentation.home
 
 import androidx.compose.animation.core.tween
@@ -26,18 +28,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
+import androidx.compose.foundation.Image
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VerifiedUser
 import com.google.accompanist.pager.*
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
-import com.idnp.danp_proyecto_final.presentation.components.ProfileScreen
-import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
-import com.idnp.danp_proyecto_final.ui.theme.Secundary
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -53,51 +54,67 @@ fun HomeScreen(
         },
         content = { padding ->
             Column(modifier = Modifier.padding(padding)){
-                //HomeContent()
-
+                HomeContent(navController)
             }
         }
     )
 }
-@Preview(showBackground = true)
+
 @Composable
-fun HomeContent(){
+fun HomeContent(
+    navController: NavController
+){
     val scrollState = rememberScrollState()
     Column(modifier = Modifier
-        .padding(horizontal = 30.dp)
         .verticalScroll(scrollState)
     ) {
         var text by remember {
             mutableStateOf(TextFieldValue(""))
         }
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Box() {
-                Image(imageVector = ImageVector.vectorResource(id = R.drawable.machupicchu),
-                    contentDescription = "bg_inicio",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
+            Box(
+                modifier = Modifier.fillMaxWidth().height(250.dp),
+            ) {
+                Image(painter = painterResource(id = R.drawable.home),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
                 )
-                Text("Encuentra tu próximo viaje",
-                    fontSize = 25.sp,
-                    color = TextAlt,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(30.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    OutlinedButton(onClick = { /*TODO*/ },
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(text = "Mis destinos")
+                    }
+                    Text("Encuentra tu próximo viaje",
+                        fontSize = 40.sp,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Left
+                    )
+                }
+
             }
-            //departamentos(navController)
-            Spacer( modifier = Modifier.padding(vertical = 10.dp))
-            //categorias(navController)
-            Spacer(modifier = Modifier.height(75.dp))
+            Column(modifier = Modifier.padding(horizontal = 30.dp)) {
+                Departamentos(navController)
+                Spacer( modifier = Modifier.padding(vertical = 10.dp))
+                Categorias(navController)
+                Spacer(modifier = Modifier.height(75.dp))
+            }
+
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun departamentos(navController: NavController){
+fun Departamentos(navController: NavController){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -119,8 +136,6 @@ fun departamentos(navController: NavController){
     }
 }
 
-
-@ExperimentalPagerApi
 @Composable
 fun SliderCards(navController: NavController){
 
@@ -223,7 +238,7 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
 }
 
 @Composable
-fun categorias(navController: NavController){
+fun Categorias(navController: NavController){
     Column() {
         Row(modifier = Modifier
             .fillMaxWidth(),
@@ -238,15 +253,15 @@ fun categorias(navController: NavController){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            cardCategoria("cultural",R.drawable.cultural, navController)
-            cardCategoria("aventura",R.drawable.machupicchu, navController)
-            cardCategoria("extremo", R.drawable.extremo,navController)
+            CardCategoria("cultural",R.drawable.cultural, navController)
+            CardCategoria("aventura",R.drawable.machupicchu, navController)
+            CardCategoria("extremo", R.drawable.extremo,navController)
         }
     }
 
 }
 @Composable
-fun cardCategoria(category:String, img: Int, navController: NavController){
+fun CardCategoria(category:String, img: Int, navController: NavController){
     Box (
         modifier = Modifier
             .size(80.dp)
@@ -283,5 +298,5 @@ fun cardCategoria(category:String, img: Int, navController: NavController){
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
-   // HomeScreen(navController)
+   HomeScreen(navController)
 }
