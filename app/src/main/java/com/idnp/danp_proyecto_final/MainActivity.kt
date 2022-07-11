@@ -1,16 +1,20 @@
 package com.idnp.danp_proyecto_final
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.navegation.AppNavigation
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import com.idnp.danp_proyecto_final.ui.theme.DANPProyectoFinalTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +32,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val auth = Firebase.auth
                     val currentUser = auth.currentUser
-                    AppNavigation(currentUser)
+                    val viewModel: DepartamentosViewModel = hiltViewModel()
+                    val state = viewModel.state.value
+
+                    Log.d("DEP","-->"+state.isLoading)
+                    if(!state.isLoading){
+                        AppNavigation(state, currentUser)
+                    }
                     //CustomNotification()
                 }
             }

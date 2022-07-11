@@ -2,6 +2,7 @@
 
 package com.idnp.danp_proyecto_final.presentation.home
 
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -32,11 +33,15 @@ import coil.compose.rememberImagePainter
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.ui.text.capitalize
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
@@ -46,22 +51,21 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
+    state: DepartamentoListState,
     navController: NavController
 ){
     Scaffold(
         topBar = {
             TopBarPeru()
-        },
-        content = { padding ->
-            Column(modifier = Modifier.padding(padding)){
-                HomeContent(navController)
-            }
         }
-    )
+    ){
+        HomeContent(state, navController)
+    }
 }
 
 @Composable
 fun HomeContent(
+    state: DepartamentoListState,
     navController: NavController
 ){
     val scrollState = rememberScrollState()
@@ -76,7 +80,9 @@ fun HomeContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth().height(250.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
             ) {
                 Image(painter = painterResource(id = R.drawable.home),
                     modifier = Modifier.fillMaxSize(),
@@ -84,7 +90,9 @@ fun HomeContent(
                     contentDescription = null
                 )
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(30.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(30.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
@@ -105,7 +113,11 @@ fun HomeContent(
 
             }
             Column(modifier = Modifier.padding(horizontal = 30.dp)) {
-                Departamentos(navController)
+                Log.d("DEP", "-->"+state.departamentos)
+                Departamentos(
+                    state,
+                    navController
+                )
                 Spacer( modifier = Modifier.padding(vertical = 10.dp))
                 Categorias(navController)
                 Spacer(modifier = Modifier.height(75.dp))
@@ -116,7 +128,10 @@ fun HomeContent(
 }
 
 @Composable
-fun Departamentos(navController: NavController){
+fun Departamentos(
+    state: DepartamentoListState,
+    navController: NavController
+){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -134,15 +149,19 @@ fun Departamentos(navController: NavController){
             )
         }
         Spacer( modifier = Modifier.padding(vertical = 10.dp))
-        SliderCards(navController)
+        SliderCards(state,navController)
     }
 }
 
 @Composable
-fun SliderCards(navController: NavController){
+fun SliderCards(
+    state: DepartamentoListState,
+    navController: NavController
+){
+
 
     val pagerState  = rememberPagerState(
-        pageCount = departamentosList.size,
+        pageCount = state.departamentos.size,
         initialPage =  0
     )
 
@@ -184,8 +203,13 @@ fun SliderCards(navController: NavController){
                 .fillMaxWidth()
                 //shape = RoundedCornerShape(20.dp)
             ) {
-                val newDepartamento = departamentosList[page]
-                CardDepartamento(code = newDepartamento.code,title = newDepartamento.title, img = newDepartamento.imgUri, navController)
+                val newDepartamento = state.departamentos[page]
+                CardDepartamento(
+                    code = newDepartamento.id,
+                    title = newDepartamento.title,
+                    img = newDepartamento.image,
+                    navController
+                )
 
             }
 
@@ -196,7 +220,12 @@ fun SliderCards(navController: NavController){
 }
 
 @Composable
-fun CardDepartamento(code:String, title:String, img:Int, navController: NavController){
+fun CardDepartamento(
+    code:String,
+    title:String,
+    img:String,
+    navController: NavController
+){
     Box(
         modifier = Modifier.fillMaxWidth()
     ){
@@ -208,7 +237,18 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
                     navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
                 }
             ){
-                Image(painterResource(img), contentDescription = "null", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                Image(
+                    painter = rememberImagePainter(
+                        data = img,
+                        builder = {
+                            placeholder(R.drawable.placeholder)
+
+                        }
+                    ),
+                    contentDescription = "null",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
                 Box(
                     modifier = Modifier
                         .height(250.dp)
@@ -232,7 +272,7 @@ fun CardDepartamento(code:String, title:String, img:Int, navController: NavContr
                 ){
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_location), contentDescription = "location")
                     Spacer(modifier = Modifier.width(10.dp))
-                    Text(title, fontSize = 20.sp, color = Color.White)
+                    Text(title.capitalize(), fontSize = 20.sp, color = Color.White)
                 }
 
             }
@@ -300,5 +340,5 @@ fun CardCategoria(category:String, img: Int, navController: NavController){
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
-   HomeScreen(navController)
+   //HomeScreen(navController)
 }

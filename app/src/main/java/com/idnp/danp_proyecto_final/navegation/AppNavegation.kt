@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.ListDepartamentosScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
@@ -20,7 +21,11 @@ import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun AppNavigation(user: FirebaseUser?) {
+fun AppNavigation(
+    state: DepartamentoListState,
+    user: FirebaseUser?
+)
+{
 
     val navController = rememberNavController()
 
@@ -42,14 +47,14 @@ fun AppNavigation(user: FirebaseUser?) {
             AppScreens.HomeScreen.route**/
     ){
         composable( route = AppScreens.SplashScreen.route){
-            SplashScreen(navController, user)
+            SplashScreen(state, navController, user)
         }
 
         composable( route = AppScreens.LoginScreen.route ){
             LoginScreen(navController = navController)
         }
         composable( route = AppScreens.HomeScreen.route ) {
-            HomeScreen(navController)
+            HomeScreen(state,navController)
         }
 
         composable(
