@@ -13,7 +13,9 @@ import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.navegation.AppNavigation
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import com.idnp.danp_proyecto_final.ui.theme.DANPProyectoFinalTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

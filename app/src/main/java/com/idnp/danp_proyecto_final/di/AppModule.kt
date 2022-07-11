@@ -2,6 +2,8 @@ package com.idnp.danp_proyecto_final.di
 
 import android.app.Application
 import androidx.room.Room
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import com.idnp.danp_proyecto_final.room.data.repository.DepartamentoRepositoryImpl
 import com.idnp.danp_proyecto_final.room.data.repository.DestinoRepositoryImpl
 import com.idnp.danp_proyecto_final.room.data.source.local.AppDatabase
@@ -36,4 +38,15 @@ object AppModule {
     fun provideDRepository(db: AppDatabase): DestinoRepository {
         return DestinoRepositoryImpl(db.destinoDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideFirestoreInstance() = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideDepartamentoList(
+        firestore: FirebaseFirestore
+    ) = firestore.collection("departamentos")
+
 }
