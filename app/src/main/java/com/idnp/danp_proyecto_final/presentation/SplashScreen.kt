@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,14 +16,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.R
+import com.idnp.danp_proyecto_final.navegation.AppScreens
+import kotlinx.coroutines.delay
 
 @Composable
-fun PeruScreen(){
+fun SplashScreen(
+    navController: NavController,
+    user: FirebaseUser?
+){
+    LaunchedEffect(key1 = true){
+        delay(2000)
+        navController.popBackStack()
+        if(user == null)
+            navController.navigate(AppScreens.LoginScreen.route)
+        else
+            navController.navigate(AppScreens.HomeScreen.route)
+    }
     Scaffold(
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ancash),
+            painter = painterResource(id = R.drawable.home),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -58,5 +74,5 @@ fun logoPeru(){
 @Preview(showBackground = true)
 @Composable
 fun previewPeru(){
-    PeruScreen()
+    //SplashScreen()
 }

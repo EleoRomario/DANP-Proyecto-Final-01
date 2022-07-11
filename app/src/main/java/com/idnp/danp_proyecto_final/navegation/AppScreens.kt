@@ -2,7 +2,7 @@ package com.idnp.danp_proyecto_final.navegation
 
 sealed class AppScreens(val route:String){
 
-    object Inicio: AppScreens("inicio_screen")
+    object SplashScreen: AppScreens("splash_screen")
     object LoginScreen: AppScreens("login_screen")
     object SignUpScreen: AppScreens("register_screen")
     object HomeScreen: AppScreens("home_screen")

@@ -30,8 +30,19 @@ fun AppNavigation(user: FirebaseUser?) {
         Actions(navController, context)
     }
 
-    NavHost(navController = navController, startDestination = if(user == null)
-        AppScreens.LoginScreen.route else AppScreens.HomeScreen.route){
+    NavHost(
+        navController = navController,
+        startDestination = AppScreens.SplashScreen.route
+        /**
+        if(user == null)
+            AppScreens.LoginScreen.route
+        else
+            AppScreens.HomeScreen.route**/
+    ){
+        composable( route = AppScreens.SplashScreen.route){
+            SplashScreen(navController, user)
+        }
+
         composable( route = AppScreens.LoginScreen.route ){
             LoginScreen(navController = navController)
         }
@@ -41,7 +52,7 @@ fun AppNavigation(user: FirebaseUser?) {
 
         composable(
             route = AppScreens.ListDepartamentos.route,
-            deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
+            //deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
         ){
             ListDepartamentosScreen(navController)
         }

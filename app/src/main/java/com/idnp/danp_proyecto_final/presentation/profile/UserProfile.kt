@@ -66,7 +66,10 @@ fun ProfileContent(
         OutlinedButton(
             onClick = {
                 Firebase.auth.signOut()
-                navController.navigate(route = AppScreens.LoginScreen.route)
+
+                navController.navigate(route = AppScreens.LoginScreen.route){
+                    navController.popBackStack()
+                }
                 Toast.makeText(context, "Successfully Signed Out", Toast.LENGTH_SHORT).show()
             },
             shape = RoundedCornerShape(12.dp)

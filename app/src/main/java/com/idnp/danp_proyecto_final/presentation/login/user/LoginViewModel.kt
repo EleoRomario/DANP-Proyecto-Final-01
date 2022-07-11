@@ -39,7 +39,7 @@ class LoginViewModel() : ViewModel() {
                 if (it.isSuccessful) {
                     _loginState.value = true
                     navController.navigate(AppScreens.HomeScreen.route){
-                       // popUpTo(AppScreens.LaunchingNavigation.route)
+                       popUpTo(AppScreens.LoginScreen.route)
                     }
                 } else {
                     _loginState.value = false
@@ -58,9 +58,9 @@ class LoginViewModel() : ViewModel() {
                 if (it.isSuccessful){
                     _loginState.value = true
                     navController.navigate(AppScreens.HomeScreen.route){
-                        /*popUpTo(AppScreens.LaunchingNavigation.route){
+                        popUpTo(AppScreens.LoginScreen.route) {
                             inclusive = false
-                        }*/
+                        }
                     }
                 }else {
                     _loginState.value = false
