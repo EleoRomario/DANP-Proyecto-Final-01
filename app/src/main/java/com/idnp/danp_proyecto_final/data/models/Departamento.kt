@@ -4,11 +4,11 @@ import java.util.*
 
 data class Departamento(
     val id: String,
-    val created: Date,
+    val created: String,
     val title: String,
     val description: String,
-    val image: String
+    val image: String,
 ){
-    constructor() : this("",Date(),"","","")
+    constructor() : this("","","","","")
 }
 

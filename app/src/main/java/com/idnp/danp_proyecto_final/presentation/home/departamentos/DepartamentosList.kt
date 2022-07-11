@@ -93,7 +93,7 @@ fun GridCards(
         }
         Spacer( modifier = Modifier.padding(vertical = 10.dp))
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(130.dp),
+            columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.Center,
             contentPadding = PaddingValues(
                 start = 0.dp,
@@ -126,9 +126,9 @@ fun CardDep(
             .width(150.dp)
             .clickable {
                 navController.navigate(route = AppScreens.DetalleDepartamento.route + "/" + code)
-            },
+            }
+            .padding(4.dp),
     ){
-        Log.d("DEP", "->" + img)
         Image(
             painter = rememberImagePainter(
                 data = img,

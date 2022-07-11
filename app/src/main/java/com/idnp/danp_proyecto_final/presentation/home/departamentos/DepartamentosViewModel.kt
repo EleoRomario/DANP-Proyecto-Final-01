@@ -24,11 +24,15 @@ constructor(
     private val _state: MutableState<DepartamentoListState> = mutableStateOf(DepartamentoListState())
     val state: State<DepartamentoListState> = _state
 
+    private val _stateD: MutableState<DestinoListState> = mutableStateOf(DestinoListState())
+    val stateD: State<DestinoListState> = _stateD
+
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
     init {
         getDepartamentoList()
+        getDestinoList()
     }
 
     fun getDepartamentoList(){
@@ -45,5 +49,20 @@ constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+    fun getDestinoList(){
+        departamentosRepository.getDestinosList().onEach {result ->
+            when(result){
+                is Result.Error -> {
+                    _stateD.value = DestinoListState(error = result.message ?: "Error inesperado")
+                }
+                is Result.Loading -> {
+                    _stateD.value = DestinoListState(isLoading = true)
+                }
+                is Result.Success -> {
+                    _stateD.value = DestinoListState(destinos = result.data ?: emptyList())
+                }
+            }
+        }
     }
 }
