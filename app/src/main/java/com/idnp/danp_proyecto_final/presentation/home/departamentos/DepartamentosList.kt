@@ -31,7 +31,10 @@ import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
 @Composable
-fun ListDepartamentosScreen(navController: NavController){
+fun ListDepartamentosScreen(
+    state: DepartamentoListState,
+    navController: NavController
+){
     Scaffold (
         topBar = {
             TopBarBack(navController)
@@ -42,7 +45,6 @@ fun ListDepartamentosScreen(navController: NavController){
     ){
 
         val viewModel: DepartamentosViewModel = hiltViewModel()
-        val state = viewModel.state.value
         val isRefreshing = viewModel.isRefreshing.collectAsState()
 
         ListBodyContent(
@@ -165,5 +167,5 @@ fun CardDep(
 @Composable
 fun GridDefaultPreview() {
     val navController = rememberNavController()
-    ListDepartamentosScreen(navController)
+    //ListDepartamentosScreen(navController)
 }

@@ -14,11 +14,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DetalleDepartamentoScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.ListDepartamentosScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
-import dagger.hilt.android.HiltAndroidApp
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun AppNavigation(
@@ -61,7 +60,14 @@ fun AppNavigation(
             route = AppScreens.ListDepartamentos.route,
             //deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
         ){
-            ListDepartamentosScreen(navController)
+            ListDepartamentosScreen(state, navController)
+        }
+
+        composable(route = AppScreens.DetalleDepartamento.route + "/{departamento}", arguments = listOf(
+            navArgument(name = "departamento"){
+                type = NavType.StringType
+            })){
+            DetalleDepartamentoScreen(state, navController,it.arguments?.getString("departamento"))
         }
 
         composable(route = AppScreens.CategoryDestinos.route + "/{category}", arguments = listOf(
@@ -71,12 +77,7 @@ fun AppNavigation(
             CategoryDestinosScreen(navController, it.arguments?.getString("category"))
         }
 
-        composable(route = AppScreens.DetalleDepartamento.route + "/{departamento}", arguments = listOf(
-            navArgument(name = "departamento"){
-                type = NavType.StringType
-            })){
-            DetalleDepartamentoScreen(navController,it.arguments?.getString("departamento"))
-        }
+
 
         composable(route = AppScreens.ListLugaresTuristico.route + "/{departamento}" , arguments = listOf(
             navArgument(name = "departamento"){

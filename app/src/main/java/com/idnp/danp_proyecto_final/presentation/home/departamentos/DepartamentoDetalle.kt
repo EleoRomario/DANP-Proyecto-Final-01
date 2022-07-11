@@ -1,4 +1,4 @@
-package com.idnp.danp_proyecto_final.presentation
+package com.idnp.danp_proyecto_final.presentation.home.departamentos
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.idnp.danp_proyecto_final.data.departamentosList
+import coil.compose.rememberImagePainter
+import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarMenu
 import com.idnp.danp_proyecto_final.presentation.components.modal
@@ -32,28 +33,39 @@ Eleo
 * */
 
 @Composable
-fun DetalleDepartamentoScreen(navController: NavController, departamento:String?){
+fun DetalleDepartamentoScreen(
+    state: DepartamentoListState,
+    navController: NavController, departamento:String?
+){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController) },
     ){
-        DetalleContent(departamento,navController)
+        DetalleContent(state,departamento,navController)
         TopBarMenu(scope,scaffoldState,navController)
     }
 }
 @Composable
-fun DetalleContent(code:String?, navController: NavController){
-
-    val departamento = departamentosList.first {
-        it.code == code
+fun DetalleContent(
+    state: DepartamentoListState,
+    code:String?, navController: NavController
+){
+    val departamento = state.departamentos.first{
+        it.id == code
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painterResource(departamento.imgUri),
-            contentDescription = "background",
+            painter = rememberImagePainter(
+                data = departamento.image,
+                builder = {
+                    placeholder(R.drawable.placeholder)
+
+                }
+            ),
+            contentDescription = "null",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -92,7 +104,7 @@ fun DetalleContent(code:String?, navController: NavController){
                     .background(if (isExpanded) ColorWhiteAlpha else Color.Transparent)
             ) {
                 Text(
-                    text = departamento.title,
+                    text = departamento.title.capitalize(),
                     modifier = Modifier
                         .padding(horizontal = 10.dp)
                         .fillMaxWidth()
@@ -141,5 +153,5 @@ fun DetalleContent(code:String?, navController: NavController){
 @Composable
 fun DetalleDefaultPreview() {
     val navController = rememberNavController()
-    DetalleDepartamentoScreen(navController, "arequipa")
+    //DetalleDepartamentoScreen(navController, "arequipa")
 }
