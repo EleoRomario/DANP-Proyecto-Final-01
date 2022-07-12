@@ -1,5 +1,6 @@
-package com.idnp.danp_proyecto_final.presentation
+package com.idnp.danp_proyecto_final.presentation.home.destinos
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,10 +16,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.CollectionReference
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -28,20 +32,29 @@ import com.idnp.danp_proyecto_final.data.destinosList
 import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
 import com.idnp.danp_proyecto_final.presentation.components.TopBarMenuDep
 import com.idnp.danp_proyecto_final.presentation.components.modal
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DestinoListState
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 
-/*
-Rolando
-* */
-
 @Composable
-fun DetalleLugarTuristicoScreen(navController: NavController, departamento: String?, destino: String?){
+fun DetalleLugarTuristicoScreen(
+    navController: NavController,
+    departamentoTitle: String?,
+    destinoTitle: String?,
+    destinoDescription: String?,
+    destinoImage: String?,
+    destinoLatitud: String?,
+    destinoLongitud: String?,
+    viewModel: DepartamentosViewModel = hiltViewModel()
+){
 
-    val dep= departamentosList.first {
-        it.code == departamento
-    }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+
+    val stateDestino = viewModel.stateD.value
+    Log.d("DESTINOS", "--->"+stateDestino)
+
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController) },
@@ -49,43 +62,67 @@ fun DetalleLugarTuristicoScreen(navController: NavController, departamento: Stri
             BottomBarNavegation(-1,navController)
         },
     ){
-        LugarBodyContent(departamento, destino)
-        TopBarMenuDep(dep.title,scope,scaffoldState,navController)
+        LugarBodyContent(
+            departamentoTitle,
+            destinoTitle,
+        destinoDescription,
+        destinoImage,
+        destinoLatitud,
+        destinoLongitud,
+        )
+        TopBarMenuDep(departamentoTitle,scope,scaffoldState,navController)
     }
 
 
 }
 @Composable
-fun LugarBodyContent(codeDep: String?, code: String?){
-
-    val destinos = destinosList.filter{
-        it.codeDep == codeDep
-    }
-    val depTitle = departamentosList.first{
-        it.code == codeDep
-    }
-    val lugarT = destinos.first {
-        it.code == code
-    }
+fun LugarBodyContent(
+    departamentoTitle: String?,
+    destinoTitle: String?,
+    destinoDescription: String?,
+    destinoImage: String?,
+    destinoLatitud: String?,
+    destinoLongitud: String?,
+){
 
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.verticalScroll(scrollState)) {
-        Image(painter = painterResource(lugarT.img), contentDescription = "",
-            contentScale  = ContentScale.Crop,
+        Image(
+            painter = rememberImagePainter(
+                data = destinoImage,
+                builder = {
+                    placeholder(R.drawable.placeholder)
+
+                }
+            ),
+            contentDescription = "null",
             modifier= Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .clip(RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp))
+                .clip(RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp)),
+            contentScale = ContentScale.Crop
         )
-        infoLugarTuristico(depTitle.title, lugarT.title,lugarT.description,lugarT.latitud,lugarT.longitud)
+        InfoLugarTuristico(
+            departamentoTitle,
+            destinoTitle,
+            destinoDescription,
+            destinoLatitud,
+            destinoLongitud,
+        )
 
     }
 
 }
 
 @Composable
-fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, long: Double){
+fun InfoLugarTuristico(
+    departamentoTitle: String?,
+    destinoTitle: String?,
+    destinoDescription: String?,
+    destinoLatitud: String?,
+    destinoLongitud: String?,
+){
 
     Column(
         modifier = Modifier.padding(30.dp)
@@ -98,10 +135,12 @@ fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, lon
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
-            Text(text = title,
-                fontSize = 25.sp,
-                modifier = Modifier.weight(4f)
-            )
+            if (destinoTitle != null) {
+                Text(text = destinoTitle,
+                    fontSize = 25.sp,
+                    modifier = Modifier.weight(4f)
+                )
+            }
             Image(imageVector = ImageVector.vectorResource(R.drawable.ic_heart_unselected), contentDescription = "heart",
                 modifier = Modifier
                     .weight(1f)
@@ -116,17 +155,27 @@ fun infoLugarTuristico(dep: String, title: String, des: String, lat: Double, lon
         ) {
             Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_location), contentDescription = "location")
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = dep , fontSize = 16.sp, color = TextAlt)
+            if (departamentoTitle != null) {
+                Text(text = departamentoTitle, fontSize = 16.sp, color = TextAlt)
+            }
         }
         Spacer(modifier = Modifier.height(15.dp))
         Text("Descripción", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = des, fontSize = 14.sp, color = TextAlt)
+        if (destinoDescription != null) {
+            Text(text = destinoDescription, fontSize = 14.sp, color = TextAlt)
+        }
         Spacer(modifier = Modifier.height(15.dp))
         Text("Localización", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(15.dp))
         Row(modifier = Modifier.height(400.dp)){
-            mapLugarTuristico(lat,long, title)
+            if (destinoTitle != null) {
+                if (destinoLongitud != null) {
+                    if (destinoLatitud != null) {
+                        mapLugarTuristico(destinoLatitud.toDouble(),destinoLongitud.toDouble(), destinoTitle)
+                    }
+                }
+            }
         }
     }
 }
@@ -158,5 +207,5 @@ fun mapLugarTuristico(lat: Double, long: Double, title: String){
 @Composable
 fun LugaresDefaultPreview() {
     var navController= rememberNavController()
-    DetalleLugarTuristicoScreen(navController,"arequipa", "are_04")
+    //DetalleLugarTuristicoScreen(navController,"arequipa", "are_04")
 }

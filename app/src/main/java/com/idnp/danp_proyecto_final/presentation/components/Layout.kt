@@ -177,7 +177,7 @@ fun TopBarMenu(scope: CoroutineScope,scaffoldState: ScaffoldState,navController:
 }
 
 @Composable
-fun TopBarMenuDep(dep: String, scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
+fun TopBarMenuDep(dep: String?, scope: CoroutineScope,scaffoldState: ScaffoldState,navController: NavController){
     Box(
         modifier = Modifier.background(
             Brush.verticalGradient(
@@ -202,7 +202,11 @@ fun TopBarMenuDep(dep: String, scope: CoroutineScope,scaffoldState: ScaffoldStat
 
                 }
             },
-            title = { Text(dep, color = Color.White, fontSize = 25.sp) },
+            title = {
+                if (dep != null) {
+                    Text(dep, color = Color.White, fontSize = 25.sp)
+                }
+            },
             actions = {
                 IconButton(
                     onClick = {
@@ -307,8 +311,10 @@ fun BottomBarNavegation(id:Int,navController: NavController){
 fun CardLugarTuristico(
     departamentoTitle: String,
     destinoTitle: String,
+    destinoDescription: String,
     destinoImage: String,
-    destinoId: String,
+    destinoLatitud: String,
+    destinoLongitud: String,
     navController: NavController
 ){
     var isLiked by remember{
@@ -321,7 +327,15 @@ fun CardLugarTuristico(
         modifier = Modifier
             .padding(vertical = 10.dp)
             .clickable {
-                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${destinoId}"+"/${destinoId}")
+                navController.navigate(
+                    AppScreens.DetalleLugarTuristico.route
+                            + "/${departamentoTitle}"
+                            + "/${destinoTitle}"
+                            + "/${destinoDescription}"
+                            + "/${destinoImage}"
+                            + "/${destinoLatitud}"
+                            + "/${destinoLongitud}"
+                )
             }
     ) {
         Row(

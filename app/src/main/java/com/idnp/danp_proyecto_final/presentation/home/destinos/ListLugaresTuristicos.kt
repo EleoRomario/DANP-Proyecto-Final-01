@@ -107,8 +107,10 @@ fun CardsLugaresTuristicos(
             CardLugarTuristico(
                 departamentoTitle,
                 destino.title,
+                destino.description,
                 destino.image,
-                destino.id,
+                destino.latitud,
+                destino.longitud,
                 navController
             )
         }

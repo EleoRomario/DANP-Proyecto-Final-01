@@ -11,13 +11,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseUser
+import com.idnp.danp_proyecto_final.data.models.Destino
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
-import com.idnp.danp_proyecto_final.presentation.home.departamentos.DestinoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DetalleDepartamentoScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.ListDepartamentosScreen
 import com.idnp.danp_proyecto_final.presentation.home.destinos.CategoryDestinosScreen
+import com.idnp.danp_proyecto_final.presentation.home.destinos.DetalleLugarTuristicoScreen
 import com.idnp.danp_proyecto_final.presentation.home.destinos.ListLugaresTuristicoScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
@@ -89,17 +90,37 @@ fun AppNavigation(
             ListLugaresTuristicoScreen(state, navController,it.arguments?.getString("departamento"))
         }
 
-        composable(route = AppScreens.DetalleLugarTuristico.route + "/{departamento}/{destino}",
+        composable(route = AppScreens.DetalleLugarTuristico.route + "/{departamento}/{title}/{description}/{image}/{latitud}/{longitud}",
             arguments = listOf(
                 navArgument(name = "departamento"){
                     type = NavType.StringType
                 },
-                navArgument(name = "destino"){
+                navArgument(name = "title"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "description"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "image"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "latitud"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "longitud"){
                     type = NavType.StringType
                 },
             )
         ){
-            DetalleLugarTuristicoScreen(navController,it.arguments?.getString("departamento"),it.arguments?.getString("destino"))
+            DetalleLugarTuristicoScreen(
+                navController,
+                it.arguments?.getString("departamento"),
+                it.arguments?.getString("title"),
+                it.arguments?.getString("description"),
+                it.arguments?.getString("image"),
+                it.arguments?.getString("latitud"),
+                it.arguments?.getString("longitud"),
+            )
         }
 
         composable(route = AppScreens.SearchDestino.route ){
