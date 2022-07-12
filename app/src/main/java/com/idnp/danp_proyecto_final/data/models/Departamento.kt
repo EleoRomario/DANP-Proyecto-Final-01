@@ -1,6 +1,5 @@
 package com.idnp.danp_proyecto_final.data.models
 
-import java.util.*
 
 data class Departamento(
     val id: String,

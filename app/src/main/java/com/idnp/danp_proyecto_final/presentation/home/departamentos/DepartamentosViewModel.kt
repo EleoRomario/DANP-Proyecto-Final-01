@@ -1,10 +1,13 @@
 package com.idnp.danp_proyecto_final.presentation.home.departamentos
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.CollectionReference
 import com.idnp.danp_proyecto_final.TurismoApp
 import com.idnp.danp_proyecto_final.domain.repository.DepartamentosRepository
 import com.idnp.danp_proyecto_final.domain.repository.Result
@@ -13,13 +16,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DepartamentosViewModel
 @Inject
 constructor(
-    private val departamentosRepository: DepartamentosRepository
+    private val departamentosRepository: DepartamentosRepository,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _state: MutableState<DepartamentoListState> = mutableStateOf(DepartamentoListState())
     val state: State<DepartamentoListState> = _state
@@ -32,7 +37,10 @@ constructor(
 
     init {
         getDepartamentoList()
-        getDestinoList()
+        savedStateHandle.get<String>("departamento")?.let{
+            getDestinoList(it)
+            Log.d("DESTINOS", "->"+it)
+        }
     }
 
     fun getDepartamentoList(){
@@ -50,8 +58,9 @@ constructor(
             }
         }.launchIn(viewModelScope)
     }
-    fun getDestinoList(){
-        departamentosRepository.getDestinosList().onEach {result ->
+    fun getDestinoList(document: String){
+        departamentosRepository.getDestinosList(document).onEach {result ->
+            Log.d("DESTINOS", ">>>>"+result)
             when(result){
                 is Result.Error -> {
                     _stateD.value = DestinoListState(error = result.message ?: "Error inesperado")
@@ -63,6 +72,6 @@ constructor(
                     _stateD.value = DestinoListState(destinos = result.data ?: emptyList())
                 }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }

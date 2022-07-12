@@ -24,7 +24,6 @@ import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
 import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
 import com.idnp.danp_proyecto_final.presentation.components.TopBarBackMenu
-import com.idnp.danp_proyecto_final.presentation.components.cardLugarTuristico
 import com.idnp.danp_proyecto_final.presentation.components.modal
 import com.idnp.danp_proyecto_final.ui.theme.ColorWhiteAlpha
 
@@ -108,7 +107,7 @@ fun SearchDestinosList(textVal: MutableState<TextFieldValue>, navController: Nav
             var depTitle = departamentosList.first{
                 it.code == destinos[destino].codeDep
             }
-            cardLugarTuristico(depTitle.title,destinos[destino].title,destinos[destino].img,destinos[destino].codeDep,destinos[destino].code, navController)
+            //cardLugarTuristico(depTitle.title,destinos[destino].title,destinos[destino].img,destinos[destino].codeDep,destinos[destino].code, navController)
         }
     }
 }

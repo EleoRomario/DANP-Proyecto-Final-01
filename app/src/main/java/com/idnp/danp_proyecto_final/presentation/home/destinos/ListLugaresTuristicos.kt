@@ -1,7 +1,9 @@
-package com.idnp.danp_proyecto_final.presentation
+package com.idnp.danp_proyecto_final.presentation.home.destinos
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -9,32 +11,48 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
-import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
-import com.idnp.danp_proyecto_final.presentation.components.TopBarDepBack
-import com.idnp.danp_proyecto_final.presentation.components.cardLugarTuristico
-import com.idnp.danp_proyecto_final.presentation.components.modal
+import com.idnp.danp_proyecto_final.presentation.components.*
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DestinoListState
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
 /*
 Renato
 * */
 @Composable
-fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
+fun ListLugaresTuristicoScreen(
+    state: DepartamentoListState,
+    navController: NavController,
+    code: String?,
+    viewModel: DepartamentosViewModel = hiltViewModel()
+){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    val departamento = departamentosList.first {
-        it.code == code
+    val stateDestino = viewModel.stateD.value
+    Log.d("DESTINOS", "--->"+stateDestino)
+
+    val departamento = state.departamentos.first {
+        it.id == code
     }
+
+
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { modal(navController) },
         topBar = {
-            TopBarDepBack(departamento.title,scope,scaffoldState,navController)
+            TopBarDepBack(
+                departamento.title,
+                scope,
+                scaffoldState,
+                navController
+            )
         },
         bottomBar = {
             BottomBarNavegation(-1,navController)
@@ -42,12 +60,20 @@ fun ListLugaresTuristicoScreen(navController: NavController, code: String?){
 
 
     ){
-        listLugaresBodyContent(departamento.title,code, navController)
+        ListLugaresBodyContent(
+            stateDestino,
+            departamento.title,
+            navController
+        )
     }
 }
 
 @Composable
-fun listLugaresBodyContent(title:String, code: String?, navController: NavController){
+fun ListLugaresBodyContent(
+    stateD: DestinoListState,
+    departamentoTitle:String,
+    navController: NavController
+){
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
     ) {
@@ -60,19 +86,31 @@ fun listLugaresBodyContent(title:String, code: String?, navController: NavContro
 
             Text("Destinos Turisticos", fontSize = 20.sp, color = Primary)
             Spacer( modifier = Modifier.padding(vertical = 5.dp))
-            cardsLugaresTuristicos(title,code, navController)
+            CardsLugaresTuristicos(
+                departamentoTitle,
+                stateD,
+                navController
+            )
         }
     }
 }
 
 @Composable
-fun cardsLugaresTuristicos(title: String, code: String?, navController: NavController){
-    val destinos = destinosList.filter{
-        it.codeDep == code
-    }
+fun CardsLugaresTuristicos(
+    departamentoTitle: String,
+    stateD: DestinoListState,
+    navController: NavController
+){
+    val destinos = stateD.destinos
     LazyColumn(){
-        items(destinos.size){ destino ->
-            cardLugarTuristico(title,destinos[destino].title, destinos[destino].img, code, destinos[destino].code ,navController)
+        items(destinos){ destino ->
+            CardLugarTuristico(
+                departamentoTitle,
+                destino.title,
+                destino.image,
+                destino.id,
+                navController
+            )
         }
     }
 }
@@ -82,5 +120,5 @@ fun cardsLugaresTuristicos(title: String, code: String?, navController: NavContr
 @Composable
 fun ListLugarDefaultPreview() {
     val navController = rememberNavController()
-    ListLugaresTuristicoScreen(navController,"arequipa")
+   // ListLugaresTuristicoScreen(navController,"arequipa")
 }

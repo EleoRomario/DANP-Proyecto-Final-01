@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
@@ -303,7 +304,13 @@ fun BottomBarNavegation(id:Int,navController: NavController){
 }
 
 @Composable
-fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, code: String?, navController: NavController){
+fun CardLugarTuristico(
+    departamentoTitle: String,
+    destinoTitle: String,
+    destinoImage: String,
+    destinoId: String,
+    navController: NavController
+){
     var isLiked by remember{
         mutableStateOf(false)
     }
@@ -314,7 +321,7 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
         modifier = Modifier
             .padding(vertical = 10.dp)
             .clickable {
-                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${codeDep}/${code}")
+                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${destinoId}"+"/${destinoId}")
             }
     ) {
         Row(
@@ -323,8 +330,14 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(imgUri),
-                contentDescription = "",
+                painter = rememberImagePainter(
+                    data = destinoImage,
+                    builder = {
+                        placeholder(R.drawable.placeholder)
+
+                    }
+                ),
+                contentDescription = "null",
                 modifier = Modifier
                     .size(100.dp, 110.dp)
                     .clip(RoundedCornerShape(10.dp)),
@@ -343,7 +356,7 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(title, fontSize = 15.sp, color = Primary,
+                        Text(destinoTitle, fontSize = 15.sp, color = Primary,
                             modifier = Modifier.weight(3f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
@@ -366,7 +379,7 @@ fun cardLugarTuristico(dep:String,title: String, imgUri: Int, codeDep: String?, 
                     ) {
                         Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(dep, color = TextAlt, fontSize = 12.sp)
+                        Text(departamentoTitle, color = TextAlt, fontSize = 12.sp)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),

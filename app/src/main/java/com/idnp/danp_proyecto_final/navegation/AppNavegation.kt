@@ -14,8 +14,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DestinoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DetalleDepartamentoScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.ListDepartamentosScreen
+import com.idnp.danp_proyecto_final.presentation.home.destinos.CategoryDestinosScreen
+import com.idnp.danp_proyecto_final.presentation.home.destinos.ListLugaresTuristicoScreen
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginScreen
 import com.idnp.danp_proyecto_final.presentation.profile.ProfileScreen
 
@@ -55,7 +58,6 @@ fun AppNavigation(
         composable( route = AppScreens.HomeScreen.route ) {
             HomeScreen(state,navController)
         }
-
         composable(
             route = AppScreens.ListDepartamentos.route,
             //deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
@@ -74,7 +76,7 @@ fun AppNavigation(
             navArgument(name = "category"){
                 type = NavType.StringType
             })){
-            CategoryDestinosScreen(navController, it.arguments?.getString("category"))
+            CategoryDestinosScreen(state, navController, it.arguments?.getString("category"))
         }
 
 
@@ -84,7 +86,7 @@ fun AppNavigation(
                 type = NavType.StringType
             },
         )){
-            ListLugaresTuristicoScreen(navController,it.arguments?.getString("departamento"))
+            ListLugaresTuristicoScreen(state, navController,it.arguments?.getString("departamento"))
         }
 
         composable(route = AppScreens.DetalleLugarTuristico.route + "/{departamento}/{destino}",
