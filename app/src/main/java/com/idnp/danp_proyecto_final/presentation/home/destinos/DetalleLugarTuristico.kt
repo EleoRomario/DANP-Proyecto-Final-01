@@ -53,7 +53,6 @@ fun DetalleLugarTuristicoScreen(
     val scope = rememberCoroutineScope()
 
     val stateDestino = viewModel.stateD.value
-    Log.d("DESTINOS", "--->"+stateDestino)
 
     Scaffold(
         scaffoldState = scaffoldState,

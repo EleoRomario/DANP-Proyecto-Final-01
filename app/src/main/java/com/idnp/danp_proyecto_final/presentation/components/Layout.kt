@@ -1,5 +1,7 @@
 package com.idnp.danp_proyecto_final.presentation.components
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,12 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
-import com.google.firebase.auth.FirebaseUser
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.navegation.navList
 import com.idnp.danp_proyecto_final.ui.theme.Primary
@@ -283,7 +287,8 @@ fun BottomBarNavegation(id:Int,navController: NavController){
     val items = navList
 
     BottomNavigation(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .graphicsLayer {
                 shape = RoundedCornerShape(
                     topStart = 20.dp,
@@ -307,6 +312,7 @@ fun BottomBarNavegation(id:Int,navController: NavController){
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CardLugarTuristico(
     departamentoTitle: String,
@@ -315,11 +321,13 @@ fun CardLugarTuristico(
     destinoImage: String,
     destinoLatitud: String,
     destinoLongitud: String,
-    navController: NavController
+    navController: NavController,
+    viewModel: DataStoreViewModel
 ){
     var isLiked by remember{
         mutableStateOf(false)
     }
+
     Card(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(0.1.dp, color = Color.LightGray),
@@ -375,17 +383,22 @@ fun CardLugarTuristico(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        Image(
-                            imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
-                            contentDescription = "favorite",
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(top = 10.dp)
-                                .clickable {
-                                    isLiked = !isLiked
-                                }
 
-                        )
+                            Image(
+                                imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
+                                contentDescription = "favorite",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(top = 10.dp)
+                                    .clickable {
+                                        isLiked = !isLiked
+                                        Log.d("FAVORITE","click")
+                                        viewModel.insertDataStore(
+                                            isLiked,
+                                            destinoTitle
+                                        )
+                                    }
+                            )
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),

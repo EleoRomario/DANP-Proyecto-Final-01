@@ -14,8 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.idnp.danp_proyecto_final.data.departamentosList
-import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.presentation.components.*
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
@@ -30,13 +29,13 @@ fun ListLugaresTuristicoScreen(
     state: DepartamentoListState,
     navController: NavController,
     code: String?,
-    viewModel: DepartamentosViewModel = hiltViewModel()
+    viewModel: DepartamentosViewModel = hiltViewModel(),
+    viewModelState: DataStoreViewModel = hiltViewModel()
 ){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
     val stateDestino = viewModel.stateD.value
-    Log.d("DESTINOS", "--->"+stateDestino)
 
     val departamento = state.departamentos.first {
         it.id == code
@@ -63,7 +62,8 @@ fun ListLugaresTuristicoScreen(
         ListLugaresBodyContent(
             stateDestino,
             departamento.title,
-            navController
+            navController,
+            viewModelState
         )
     }
 }
@@ -72,7 +72,8 @@ fun ListLugaresTuristicoScreen(
 fun ListLugaresBodyContent(
     stateD: DestinoListState,
     departamentoTitle:String,
-    navController: NavController
+    navController: NavController,
+    viewModelState: DataStoreViewModel
 ){
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
@@ -89,7 +90,8 @@ fun ListLugaresBodyContent(
             CardsLugaresTuristicos(
                 departamentoTitle,
                 stateD,
-                navController
+                navController,
+                viewModelState
             )
         }
     }
@@ -99,9 +101,12 @@ fun ListLugaresBodyContent(
 fun CardsLugaresTuristicos(
     departamentoTitle: String,
     stateD: DestinoListState,
-    navController: NavController
+    navController: NavController,
+    viewModelState: DataStoreViewModel
 ){
     val destinos = stateD.destinos
+
+
     LazyColumn(){
         items(destinos){ destino ->
             CardLugarTuristico(
@@ -111,7 +116,8 @@ fun CardsLugaresTuristicos(
                 destino.image,
                 destino.latitud,
                 destino.longitud,
-                navController
+                navController,
+                viewModelState
             )
         }
     }

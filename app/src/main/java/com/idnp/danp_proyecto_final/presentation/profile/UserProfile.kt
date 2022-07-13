@@ -1,5 +1,7 @@
 package com.idnp.danp_proyecto_final.presentation.profile
 
+import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,6 +12,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -17,26 +23,36 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.map
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.idnp.danp_proyecto_final.data.datastore.FavoriteDestino
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
-import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
+import kotlinx.coroutines.flow.flow
+import java.util.concurrent.Flow
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: DataStoreViewModel = hiltViewModel()
 ){
     val user = Firebase.auth.currentUser
+
     Scaffold(
         topBar = {
             TopBarBack(navController)
         },
         content = { padding ->
             Column(modifier = Modifier.padding(padding)){
-                ProfileContent(navController, user)
+                ProfileContent(navController, user, viewModel)
             }
         }
     )
@@ -45,7 +61,8 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(
     navController: NavController,
-    user: FirebaseUser?
+    user: FirebaseUser?,
+    viewModel: DataStoreViewModel
 ){
     val context = LocalContext.current
 
@@ -76,9 +93,18 @@ fun ProfileContent(
         ) {
             Text(text = "Sign Out")
         }
+        Favoritos(viewModel)
     }
 }
 
+@Composable
+fun Favoritos(
+    viewModel: DataStoreViewModel
+){
+    var title = viewModel.destinoPrefs.observeAsState()
+
+    Log.d("FAVORITE","------"+title)
+}
 
 @Preview(showBackground = true)
 @Composable

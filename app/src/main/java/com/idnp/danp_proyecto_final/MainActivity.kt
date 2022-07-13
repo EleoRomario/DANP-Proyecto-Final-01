@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppNavigation
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
@@ -35,7 +36,6 @@ class MainActivity : ComponentActivity() {
                     val viewModel: DepartamentosViewModel = hiltViewModel()
                     val state = viewModel.state.value
 
-                    Log.d("DEP","-->"+state.isLoading)
                     if(!state.isLoading){
                         AppNavigation(state, currentUser)
                     }
