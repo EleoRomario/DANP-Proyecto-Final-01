@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -321,6 +322,7 @@ fun CardLugarTuristico(
     destinoImage: String,
     destinoLatitud: String,
     destinoLongitud: String,
+    destinoCategory: String,
     navController: NavController,
     viewModel: DataStoreViewModel
 ){
@@ -378,13 +380,12 @@ fun CardLugarTuristico(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(destinoTitle, fontSize = 15.sp, color = Primary,
+                        Text(destinoTitle.capitalize(), fontSize = 15.sp, color = Primary,
                             modifier = Modifier.weight(3f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                         )
-
-                            Image(
+                        Image(
                                 imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
                                 contentDescription = "favorite",
                                 modifier = Modifier
@@ -395,27 +396,35 @@ fun CardLugarTuristico(
                                         Log.d("FAVORITE","click")
                                         viewModel.insertDataStore(
                                             isLiked,
-                                            destinoTitle
+                                            destinoTitle,
+                                            destinoImage,
+                                            destinoDescription,
+                                            destinoCategory,
+                                            departamentoTitle,
+                                            destinoLatitud,
+                                            destinoLongitud
                                         )
                                     }
                             )
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(departamentoTitle, color = TextAlt, fontSize = 12.sp)
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_star), contentDescription = "calification")
-                        Text(text = "4.5")
-
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Bottom
+                    ){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(departamentoTitle, color = TextAlt, fontSize = 12.sp)
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_star), contentDescription = "calification")
+                            Text(text = "4.5")
+                        }
                     }
                 }
             }

@@ -37,32 +37,68 @@ class DestinoDataStore
         .map { preferences ->
             val isFavorite = preferences[FAVORITE_KEY] ?: false
             val destinoTitle = preferences[TITLE] ?: ""
-            Log.d("FAVORITE","->>"+isFavorite+destinoTitle)
+            val destinoImage = preferences[IMAGE] ?: ""
+            val destinoDescription = preferences[DESCRIPTION] ?: ""
+            val destinoCategory = preferences[CATEGORY] ?: ""
+            val destinoDepartamento = preferences[DEPARTAMENTO] ?: ""
+            val destinoLatitud = preferences[LATITUD] ?: ""
+            val destinoLongitud = preferences[LONGITUD] ?: ""
+
             FavoriteDestino(
                 isFavorite = isFavorite,
-                title = destinoTitle
+                title = destinoTitle,
+                image = destinoImage,
+                description = destinoDescription,
+                category = destinoCategory,
+                departamento = destinoDepartamento,
+                latitud = destinoLatitud,
+                longitud = destinoLongitud
             )
         }
 
     suspend fun favoriteDestino(
         favorite: Boolean,
-        title: String
+        title: String,
+        image: String,
+        description: String,
+        category: String,
+        departamento: String,
+        latitud: String,
+        longitud: String
     ){
 
         context.dataStore.edit { preferences ->
             preferences[FAVORITE_KEY] = favorite
             preferences[TITLE] = title
+            preferences[IMAGE] = image
+            preferences[DESCRIPTION] = description
+            preferences[CATEGORY] = category
+            preferences[DEPARTAMENTO] = departamento
+            preferences[LATITUD]= latitud
+            preferences[LONGITUD] = longitud
         }
     }
 
     companion object{
         val FAVORITE_KEY = booleanPreferencesKey("destino_favorite")
         val TITLE = stringPreferencesKey("destino_title")
+        val IMAGE = stringPreferencesKey("destino_image")
+        val DESCRIPTION = stringPreferencesKey("destino_description")
+        val CATEGORY = stringPreferencesKey("destino_categoy")
+        val DEPARTAMENTO = stringPreferencesKey("destino_departamento")
+        val LATITUD = stringPreferencesKey("destino_latitud")
+        val LONGITUD = stringPreferencesKey("destino_longitud")
     }
     }
 
 data class FavoriteDestino(
     val isFavorite: Boolean,
     val title: String,
+    val image: String,
+    val description: String,
+    val category: String,
+    val departamento: String,
+    val latitud: String,
+    val longitud: String
 )
 

@@ -32,9 +32,11 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.datastore.FavoriteDestino
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
+import com.idnp.danp_proyecto_final.presentation.components.CardLugarTuristico
 import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
 import kotlinx.coroutines.flow.flow
 import java.util.concurrent.Flow
@@ -93,17 +95,37 @@ fun ProfileContent(
         ) {
             Text(text = "Sign Out")
         }
-        Favoritos(viewModel)
+        Divider(Modifier.fillMaxWidth())
+        Text(text = "Destinos Favoritos")
+        Spacer(modifier = Modifier.height(10.dp))
+        Favoritos(
+            navController,
+            viewModel
+        )
     }
 }
 
 @Composable
 fun Favoritos(
+    navController: NavController,
     viewModel: DataStoreViewModel
 ){
-    var title = viewModel.destinoPrefs.observeAsState()
+    val favorites = viewModel.destinoPrefs.observeAsState().value
 
-    Log.d("FAVORITE","------"+title)
+    if (favorites != null) {
+        CardLugarTuristico(
+            departamentoTitle = favorites.departamento,
+            destinoTitle = favorites.title,
+            destinoDescription = favorites.description,
+            destinoImage = favorites.image,
+            destinoLatitud = favorites.latitud,
+            destinoLongitud = favorites.longitud,
+            destinoCategory = favorites.category,
+            navController = navController,
+            viewModel = viewModel
+        )
+        Log.d("FAVORITE","------"+favorites.title)
+    }
 }
 
 @Preview(showBackground = true)

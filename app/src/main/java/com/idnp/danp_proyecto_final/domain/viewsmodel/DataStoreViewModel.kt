@@ -17,9 +17,17 @@ constructor(
 
     val destinoPrefs = destinoDataStore.favoritesPrefsFlow.asLiveData()
 
-    fun insertDataStore(favorite: Boolean, title: String){
+    fun insertDataStore(
+        favorite: Boolean,
+        title: String, image: String,
+        description: String,
+        category: String,
+        departamento: String,
+        latitud: String,
+        longitud: String
+    ){
         viewModelScope.launch {
-            destinoDataStore.favoriteDestino(favorite,title)
+            destinoDataStore.favoriteDestino(favorite,title,image,description,category,departamento,latitud,longitud)
         }
     }
 }

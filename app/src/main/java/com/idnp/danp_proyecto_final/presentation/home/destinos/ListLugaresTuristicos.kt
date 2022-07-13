@@ -116,6 +116,7 @@ fun CardsLugaresTuristicos(
                 destino.image,
                 destino.latitud,
                 destino.longitud,
+                destino.category,
                 navController,
                 viewModelState
             )
