@@ -30,17 +30,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import androidx.compose.foundation.Image
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.VerifiedUser
-import androidx.compose.ui.text.capitalize
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.pager.*
 import com.idnp.danp_proyecto_final.R
-import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.data.models.Departamento
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
-import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
@@ -48,10 +48,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import kotlin.math.absoluteValue
 
+@OptIn(ExperimentalPagingApi::class)
 @Composable
 fun HomeScreen(
     state: DepartamentoListState,
-    navController: NavController
+    navController: NavController,
 ){
     Scaffold(
         topBar = {
@@ -203,12 +204,12 @@ fun SliderCards(
                 //shape = RoundedCornerShape(20.dp)
             ) {
                 val newDepartamento = state.departamentos[page]
-                CardDepartamento(
-                    code = newDepartamento.id,
-                    title = newDepartamento.title,
-                    img = newDepartamento.image,
-                    navController
-                )
+                    CardDepartamento(
+                        code = newDepartamento.id,
+                        title = newDepartamento.title,
+                        img = newDepartamento.image,
+                        navController
+                    )
 
             }
 

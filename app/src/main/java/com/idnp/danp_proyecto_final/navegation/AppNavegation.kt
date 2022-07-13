@@ -11,6 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseUser
+import com.google.gson.Gson
+import com.idnp.danp_proyecto_final.data.models.Departamento
 import com.idnp.danp_proyecto_final.data.models.Destino
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
@@ -52,16 +54,15 @@ fun AppNavigation(
         composable( route = AppScreens.SplashScreen.route){
             SplashScreen(state, navController, user)
         }
-
         composable( route = AppScreens.LoginScreen.route ){
             LoginScreen(navController = navController)
         }
-        composable( route = AppScreens.HomeScreen.route ) {
+        composable( route = AppScreens.HomeScreen.route
+        ) {
             HomeScreen(state,navController)
         }
         composable(
-            route = AppScreens.ListDepartamentos.route,
-            //deepLinks = listOf(navDeepLink { uriPattern = "$uri" })
+            route = AppScreens.ListDepartamentos.route
         ){
             ListDepartamentosScreen(state, navController)
         }
