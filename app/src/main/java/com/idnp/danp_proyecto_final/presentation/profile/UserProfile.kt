@@ -38,13 +38,18 @@ import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.CardLugarTuristico
 import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
+import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
+import com.idnp.danp_proyecto_final.room.presentation.edit.destinos.DestinoEditViewModel
+import com.idnp.danp_proyecto_final.room.presentation.home.destinos.DestinoViewModel
 import kotlinx.coroutines.flow.flow
 import java.util.concurrent.Flow
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewModel: DataStoreViewModel = hiltViewModel()
+    viewModel: DataStoreViewModel = hiltViewModel(),
+    roomView: EditViewModel = hiltViewModel(),
+    roomDestinoView: DestinoEditViewModel = hiltViewModel()
 ){
     val user = Firebase.auth.currentUser
 
@@ -54,7 +59,7 @@ fun ProfileScreen(
         },
         content = { padding ->
             Column(modifier = Modifier.padding(padding)){
-                ProfileContent(navController, user, viewModel)
+                ProfileContent(navController, user, viewModel,roomView,roomDestinoView)
             }
         }
     )
@@ -64,7 +69,9 @@ fun ProfileScreen(
 fun ProfileContent(
     navController: NavController,
     user: FirebaseUser?,
-    viewModel: DataStoreViewModel
+    viewModel: DataStoreViewModel,
+    roomView: EditViewModel ,
+    roomDestinoView: DestinoEditViewModel
 ){
     val context = LocalContext.current
 
@@ -100,7 +107,9 @@ fun ProfileContent(
         Spacer(modifier = Modifier.height(10.dp))
         Favoritos(
             navController,
-            viewModel
+            viewModel,
+            roomView,
+            roomDestinoView
         )
     }
 }
@@ -108,7 +117,9 @@ fun ProfileContent(
 @Composable
 fun Favoritos(
     navController: NavController,
-    viewModel: DataStoreViewModel
+    viewModel: DataStoreViewModel,
+    roomView: EditViewModel,
+    roomDestinoView: DestinoEditViewModel
 ){
     val favorites = viewModel.destinoPrefs.observeAsState().value
 
@@ -122,7 +133,9 @@ fun Favoritos(
             destinoLongitud = favorites.longitud,
             destinoCategory = favorites.category,
             navController = navController,
-            viewModel = viewModel
+            viewModel = viewModel,
+            roomView,
+            roomDestinoView
         )
         Log.d("FAVORITE","------"+favorites.title)
     }

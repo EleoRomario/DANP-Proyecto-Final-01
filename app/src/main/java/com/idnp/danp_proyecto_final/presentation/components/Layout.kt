@@ -41,6 +41,10 @@ import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.navegation.navList
+import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
+import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
+import com.idnp.danp_proyecto_final.room.presentation.edit.destinos.DestinoEditEvent
+import com.idnp.danp_proyecto_final.room.presentation.edit.destinos.DestinoEditViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
@@ -324,7 +328,9 @@ fun CardLugarTuristico(
     destinoLongitud: String,
     destinoCategory: String,
     navController: NavController,
-    viewModel: DataStoreViewModel
+    viewModel: DataStoreViewModel,
+    roomView: EditViewModel,
+    roomDestinoView: DestinoEditViewModel
 ){
     var isLiked by remember{
         mutableStateOf(false)
@@ -404,6 +410,14 @@ fun CardLugarTuristico(
                                             destinoLatitud,
                                             destinoLongitud
                                         )
+                                        roomView.onEvent(EditEvent.EnteredTitle(departamentoTitle))
+                                        roomView.onEvent(EditEvent.InsertDepartamento)
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredTitle(destinoTitle))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredDescription(destinoDescription))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredImage(destinoImage))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredCategory(destinoCategory))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredLatitud(destinoLatitud))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredLongitud(destinoLongitud))
                                     }
                             )
                     }
