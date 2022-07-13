@@ -12,22 +12,21 @@ import javax.inject.Inject
 class DataStoreViewModel
 @Inject
 constructor(
-    private val destinoDataStore: DestinoDataStore
+    private val userDataStore: DestinoDataStore
 ): ViewModel(){
 
-    val destinoPrefs = destinoDataStore.favoritesPrefsFlow.asLiveData()
+    val destinoPrefs = userDataStore.userPrefsFlow.asLiveData()
 
     fun insertDataStore(
-        favorite: Boolean,
-        title: String, image: String,
-        description: String,
-        category: String,
-        departamento: String,
-        latitud: String,
-        longitud: String
+        active: Boolean,
+        name: String,
+        photo: String,
+        email: String,
+        token: String,
+        created: String,
     ){
         viewModelScope.launch {
-            destinoDataStore.favoriteDestino(favorite,title,image,description,category,departamento,latitud,longitud)
+            userDataStore.userLogin(active,name,photo,email,token,created)
         }
     }
 }

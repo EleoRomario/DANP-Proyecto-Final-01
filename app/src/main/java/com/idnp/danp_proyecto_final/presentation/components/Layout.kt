@@ -409,8 +409,6 @@ fun CardLugarTuristico(
                                             destinoDescription,
                                             destinoCategory,
                                             departamentoTitle,
-                                            destinoLatitud,
-                                            destinoLongitud
                                         )
                                         roomView.onEvent(EditEvent.EnteredTitle(departamentoTitle))
                                         roomView.onEvent(EditEvent.InsertDepartamento)

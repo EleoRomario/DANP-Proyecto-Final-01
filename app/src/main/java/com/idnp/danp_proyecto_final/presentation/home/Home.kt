@@ -35,8 +35,11 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.pager.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.models.Departamento
+import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.TopBarPeru
@@ -46,6 +49,7 @@ import com.idnp.danp_proyecto_final.ui.theme.PrimaryAlpha
 import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
+import java.util.*
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagingApi::class)
@@ -53,13 +57,25 @@ import kotlin.math.absoluteValue
 fun HomeScreen(
     state: DepartamentoListState,
     navController: NavController,
+    viewModel: DataStoreViewModel = hiltViewModel()
 ){
+
+    val user = Firebase.auth.currentUser
+
     Scaffold(
         topBar = {
             TopBarPeru()
         }
     ){
         HomeContent(state, navController)
+        viewModel.insertDataStore(
+            true,
+            user?.displayName.toString(),
+            user?.photoUrl.toString(),
+            user?.email.toString(),
+            "",
+            Date().toString()
+        )
     }
 }
 
