@@ -38,42 +38,14 @@ class DestinoEditViewModel @Inject constructor(
 
     private val _destinoLongitud = mutableStateOf(TextFieldState())
     val destinoLongitud: State<TextFieldState> = _destinoLongitud
+    private val _departamentoID = mutableStateOf(TextFieldState())
+    val departamentoID: State<TextFieldState> = _departamentoID
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var currentDestinoId: Int? = null
     val codeDep:Int? = savedStateHandle.get<Int>("departamentoId")
-
-    init {
-        savedStateHandle.get<Int>("destinoId")?.let { destinoId ->
-            if (destinoId != -1) {
-                viewModelScope.launch {
-                    getDestino(destinoId)?.also { destino ->
-                        currentDestinoId = destino.id
-                        _destinoTitle.value = destinoTitle.value.copy(
-                            text = destino.title
-                        )
-                        _destinoDescripcion.value = destinoDescription.value.copy(
-                            text = destino.description
-                        )
-                        _destinoImage.value = destinoImage.value.copy(
-                            text = destino.image
-                        )
-                        _destinoCategory.value = destinoCategory.value.copy(
-                            text = destino.category
-                        )
-                        _destinoLatitud.value = destinoLatitud.value.copy(
-                            text = destino.latitud
-                        )
-                        _destinoLongitud.value = destinoLongitud.value.copy(
-                            text = destino.longitud
-                        )
-                    }
-                }
-            }
-        }
-    }
 
     fun onEvent(event: DestinoEditEvent) {
         when (event) {
@@ -107,13 +79,19 @@ class DestinoEditViewModel @Inject constructor(
                     text = event.value
                 )
             }
+            is DestinoEditEvent.EnteredDepID -> {
+                _departamentoID.value = departamentoID.value.copy(
+                    text = event.value
+                )
+            }
+
             DestinoEditEvent.InsertDestino -> {
                 viewModelScope.launch {
                     viewModelScope.launch {
                         insertDestino(
                             Destino(
                                 id = currentDestinoId,
-                                codeDep = codeDep,
+                                codeDep = departamentoID.value.text.toInt(),
                                 title = destinoTitle.value.text,
                                 description = destinoDescription.value.text,
                                 image = destinoImage.value.text,

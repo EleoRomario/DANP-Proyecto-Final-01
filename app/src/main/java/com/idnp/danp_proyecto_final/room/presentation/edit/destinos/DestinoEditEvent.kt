@@ -8,5 +8,6 @@ sealed class DestinoEditEvent {
     data class EnteredCategory(val value: String): DestinoEditEvent()
     data class EnteredLatitud(val value: String): DestinoEditEvent()
     data class EnteredLongitud(val value: String): DestinoEditEvent()
+    data class EnteredDepID(val value: String): DestinoEditEvent()
     object InsertDestino: DestinoEditEvent()
 }

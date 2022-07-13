@@ -19,8 +19,10 @@ import com.idnp.danp_proyecto_final.presentation.components.*
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DestinoListState
+import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
 import com.idnp.danp_proyecto_final.room.presentation.edit.destinos.DestinoEditViewModel
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeViewModel
 import com.idnp.danp_proyecto_final.ui.theme.Primary
 
 @Composable
@@ -31,12 +33,15 @@ fun ListLugaresTuristicoScreen(
     viewModel: DepartamentosViewModel = hiltViewModel(),
     viewModelState: DataStoreViewModel = hiltViewModel(),
     roomView: EditViewModel = hiltViewModel(),
-    roomDestinoView: DestinoEditViewModel = hiltViewModel()
+    roomDestinoView: DestinoEditViewModel = hiltViewModel(),
+    roomDepartamentos: HomeViewModel = hiltViewModel()
 ){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
     val stateDestino = viewModel.stateD.value
+
+    val roomdb = roomDepartamentos.state.value
 
     val departamento = state.departamentos.first {
         it.id == code
@@ -66,7 +71,8 @@ fun ListLugaresTuristicoScreen(
             navController,
             viewModelState,
             roomView,
-            roomDestinoView
+            roomDestinoView,
+            roomdb.departamentos.size
         )
     }
 }
@@ -78,7 +84,8 @@ fun ListLugaresBodyContent(
     navController: NavController,
     viewModelState: DataStoreViewModel,
     roomView: EditViewModel,
-    roomDestinoView: DestinoEditViewModel
+    roomDestinoView: DestinoEditViewModel,
+    departamentos: Int
 ){
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
@@ -98,7 +105,8 @@ fun ListLugaresBodyContent(
                 navController,
                 viewModelState,
                 roomView,
-                roomDestinoView
+                roomDestinoView,
+                departamentos
             )
         }
     }
@@ -111,7 +119,8 @@ fun CardsLugaresTuristicos(
     navController: NavController,
     viewModelState: DataStoreViewModel,
     roomView: EditViewModel,
-    roomDestinoView: DestinoEditViewModel
+    roomDestinoView: DestinoEditViewModel,
+    size: Int
 ){
     val destinos = stateD.destinos
 
@@ -129,7 +138,8 @@ fun CardsLugaresTuristicos(
                 navController,
                 viewModelState,
                 roomView,
-                roomDestinoView
+                roomDestinoView,
+                size
             )
         }
     }

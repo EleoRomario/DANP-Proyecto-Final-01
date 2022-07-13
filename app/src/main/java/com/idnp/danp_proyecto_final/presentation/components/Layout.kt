@@ -2,6 +2,7 @@ package com.idnp.danp_proyecto_final.presentation.components
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.util.Size
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -330,7 +331,8 @@ fun CardLugarTuristico(
     navController: NavController,
     viewModel: DataStoreViewModel,
     roomView: EditViewModel,
-    roomDestinoView: DestinoEditViewModel
+    roomDestinoView: DestinoEditViewModel,
+    size: Int
 ){
     var isLiked by remember{
         mutableStateOf(false)
@@ -412,12 +414,15 @@ fun CardLugarTuristico(
                                         )
                                         roomView.onEvent(EditEvent.EnteredTitle(departamentoTitle))
                                         roomView.onEvent(EditEvent.InsertDepartamento)
+                                        val sizeCurrent = size + 1
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredTitle(destinoTitle))
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredDescription(destinoDescription))
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredImage(destinoImage))
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredCategory(destinoCategory))
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredLatitud(destinoLatitud))
                                         roomDestinoView.onEvent(DestinoEditEvent.EnteredLongitud(destinoLongitud))
+                                        roomDestinoView.onEvent(DestinoEditEvent.EnteredDepID(sizeCurrent.toString()))
+                                        roomDestinoView.onEvent(DestinoEditEvent.InsertDestino)
                                     }
                             )
                     }
@@ -445,6 +450,101 @@ fun CardLugarTuristico(
         }
     }
 }
+
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun CardLugarTuristicoFavorito(
+    departamentoTitle: String,
+    destinoTitle: String,
+    destinoDescription: String,
+    destinoImage: String,
+    destinoLatitud: String,
+    destinoLongitud: String,
+    destinoCategory: String,
+    navController: NavController,
+){
+
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(0.1.dp, color = Color.LightGray),
+        backgroundColor = Color.White,
+        modifier = Modifier
+            .padding(vertical = 10.dp)
+            .clickable {
+                navController.navigate(
+                    AppScreens.DetalleLugarTuristico.route
+                            + "/${departamentoTitle}"
+                            + "/${destinoTitle}"
+                            + "/${destinoDescription}"
+                            + "/${destinoImage}"
+                            + "/${destinoLatitud}"
+                            + "/${destinoLongitud}"
+                )
+            }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = rememberImagePainter(
+                    data = destinoImage,
+                    builder = {
+                        placeholder(R.drawable.placeholder)
+
+                    }
+                ),
+                contentDescription = "null",
+                modifier = Modifier
+                    .size(100.dp, 110.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Box(){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(110.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Text(destinoTitle.capitalize(), fontSize = 15.sp, color = Primary,
+                            modifier = Modifier.weight(3f),
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Bottom
+                    ){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(departamentoTitle, color = TextAlt, fontSize = 12.sp)
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_star), contentDescription = "calification")
+                            Text(text = "4.5")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

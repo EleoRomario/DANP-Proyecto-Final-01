@@ -10,6 +10,8 @@ import coil.compose.rememberImagePainter
 import com.idnp.danp_proyecto_final.presentation.login.user.LoginViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.collectAsState
@@ -37,21 +39,24 @@ import com.idnp.danp_proyecto_final.data.datastore.FavoriteDestino
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.presentation.components.CardLugarTuristico
+import com.idnp.danp_proyecto_final.presentation.components.CardLugarTuristicoFavorito
 import com.idnp.danp_proyecto_final.presentation.components.TopBarBack
+import com.idnp.danp_proyecto_final.room.domain.relation.DepartamentoWithDestinos
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditViewModel
 import com.idnp.danp_proyecto_final.room.presentation.edit.destinos.DestinoEditViewModel
+import com.idnp.danp_proyecto_final.room.presentation.home.HomeViewModel
 import com.idnp.danp_proyecto_final.room.presentation.home.destinos.DestinoViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flow
 import java.util.concurrent.Flow
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewModel: DataStoreViewModel = hiltViewModel(),
-    roomView: EditViewModel = hiltViewModel(),
-    roomDestinoView: DestinoEditViewModel = hiltViewModel()
+    roomDepartamentos: HomeViewModel = hiltViewModel()
 ){
     val user = Firebase.auth.currentUser
+    val state = roomDepartamentos.state.value
 
     Scaffold(
         topBar = {
@@ -59,7 +64,7 @@ fun ProfileScreen(
         },
         content = { padding ->
             Column(modifier = Modifier.padding(padding)){
-                ProfileContent(navController, user, viewModel,roomView,roomDestinoView)
+                ProfileContent(navController, user,state.departamentos)
             }
         }
     )
@@ -69,9 +74,7 @@ fun ProfileScreen(
 fun ProfileContent(
     navController: NavController,
     user: FirebaseUser?,
-    viewModel: DataStoreViewModel,
-    roomView: EditViewModel ,
-    roomDestinoView: DestinoEditViewModel
+    departamentos: List<DepartamentoWithDestinos> = emptyList()
 ){
     val context = LocalContext.current
 
@@ -107,9 +110,7 @@ fun ProfileContent(
         Spacer(modifier = Modifier.height(10.dp))
         Favoritos(
             navController,
-            viewModel,
-            roomView,
-            roomDestinoView
+            departamentos
         )
     }
 }
@@ -117,28 +118,29 @@ fun ProfileContent(
 @Composable
 fun Favoritos(
     navController: NavController,
-    viewModel: DataStoreViewModel,
-    roomView: EditViewModel,
-    roomDestinoView: DestinoEditViewModel
+    departamentos: List<DepartamentoWithDestinos> = emptyList()
 ){
-    val favorites = viewModel.destinoPrefs.observeAsState().value
-
-    if (favorites != null) {
-        CardLugarTuristico(
-            departamentoTitle = favorites.departamento,
-            destinoTitle = favorites.title,
-            destinoDescription = favorites.description,
-            destinoImage = favorites.image,
-            destinoLatitud = favorites.latitud,
-            destinoLongitud = favorites.longitud,
-            destinoCategory = favorites.category,
-            navController = navController,
-            viewModel = viewModel,
-            roomView,
-            roomDestinoView
-        )
-        Log.d("FAVORITE","------"+favorites.title)
+    //val favorites = viewModel.destinoPrefs.observeAsState().value
+    Log.d("ROOM","->"+departamentos.size)
+    for (destino in departamentos){
+        Log.d("ROOM","->"+destino)
+        LazyColumn(){
+            items(destino.destinos){favorites->
+                CardLugarTuristicoFavorito(
+                    departamentoTitle = destino.departamento.title,
+                    destinoTitle = favorites.title,
+                    destinoDescription = favorites.description,
+                    destinoImage = favorites.image,
+                    destinoLatitud = favorites.latitud,
+                    destinoLongitud = favorites.longitud,
+                    destinoCategory = favorites.category,
+                    navController = navController,
+                )
+                Log.d("FAVORITE","------"+favorites.title)
+            }
+        }
     }
+
 }
 
 @Preview(showBackground = true)

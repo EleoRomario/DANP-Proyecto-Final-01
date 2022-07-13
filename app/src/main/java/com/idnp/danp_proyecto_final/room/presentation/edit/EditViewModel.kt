@@ -29,20 +29,7 @@ class EditViewModel @Inject constructor(
 
     private var currentDepartamentoId: Int? = null
 
-    init {
-        savedStateHandle.get<Int>("departamentoId")?.let { departamentoId ->
-            if (departamentoId != -1) {
-                viewModelScope.launch {
-                    getdepartamento(departamentoId)?.also { departamento ->
-                        currentDepartamentoId = departamento.id
-                        _departamentoTitle.value = departamentoTitle.value.copy(
-                            text = departamento.title
-                        )
-                    }
-                }
-            }
-        }
-    }
+
 
     fun onEvent(event: EditEvent) {
        when (event) {
