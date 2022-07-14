@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
+import com.idnp.danp_proyecto_final.domain.viewsmodel.SharedViewModel
 import com.idnp.danp_proyecto_final.presentation.components.*
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
@@ -72,7 +73,7 @@ fun ListLugaresTuristicoScreen(
             viewModelState,
             roomView,
             roomDestinoView,
-            roomdb.departamentos.size
+            roomdb.departamentos.size,
         )
     }
 }
@@ -85,7 +86,7 @@ fun ListLugaresBodyContent(
     viewModelState: DataStoreViewModel,
     roomView: EditViewModel,
     roomDestinoView: DestinoEditViewModel,
-    departamentos: Int
+    departamentos: Int,
 ){
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
@@ -106,7 +107,7 @@ fun ListLugaresBodyContent(
                 viewModelState,
                 roomView,
                 roomDestinoView,
-                departamentos
+                departamentos,
             )
         }
     }
@@ -120,7 +121,7 @@ fun CardsLugaresTuristicos(
     viewModelState: DataStoreViewModel,
     roomView: EditViewModel,
     roomDestinoView: DestinoEditViewModel,
-    size: Int
+    size: Int,
 ){
     val destinos = stateD.destinos
 
@@ -139,7 +140,7 @@ fun CardsLugaresTuristicos(
                 viewModelState,
                 roomView,
                 roomDestinoView,
-                size
+                size,
             )
         }
     }

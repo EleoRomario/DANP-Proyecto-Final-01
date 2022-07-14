@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,6 +16,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.gson.Gson
 import com.idnp.danp_proyecto_final.data.models.Departamento
 import com.idnp.danp_proyecto_final.data.models.Destino
+import com.idnp.danp_proyecto_final.domain.model.SharedDestino
+import com.idnp.danp_proyecto_final.domain.viewsmodel.SharedViewModel
 import com.idnp.danp_proyecto_final.presentation.*
 import com.idnp.danp_proyecto_final.presentation.home.HomeScreen
 import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentoListState
@@ -41,6 +45,7 @@ fun AppNavigation(
     val actions = remember(navController){
         Actions(navController, context)
     }
+
 
     NavHost(
         navController = navController,
@@ -88,10 +93,14 @@ fun AppNavigation(
                 type = NavType.StringType
             },
         )){
-            ListLugaresTuristicoScreen(state, navController,it.arguments?.getString("departamento"))
+            ListLugaresTuristicoScreen(
+                state = state,
+                navController = navController,
+                it.arguments?.getString("departamento")
+            )
         }
 
-        composable(route = AppScreens.DetalleLugarTuristico.route + "/{departamento}/{title}/{description}/{image}/{latitud}/{longitud}",
+       /* composable(route = AppScreens.DetalleLugarTuristico.route + "/{departamento}/{title}/{description}/{image}/{latitud}/{longitud}",
             arguments = listOf(
                 navArgument(name = "departamento"){
                     type = NavType.StringType
@@ -122,6 +131,16 @@ fun AppNavigation(
                 it.arguments?.getString("latitud"),
                 it.arguments?.getString("longitud"),
             )
+        }*/
+
+        composable(route = AppScreens.DetalleLugarTuristico.route){
+            var destino = navController.previousBackStackEntry?.arguments?.getParcelable<SharedDestino>("shared_destino")
+            destino?.let {
+                DetalleLugarTuristicoScreen(
+                    destino = it,
+                    navController = navController,
+                )
+            }
         }
 
         composable(route = AppScreens.SearchDestino.route ){

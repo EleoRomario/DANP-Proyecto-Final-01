@@ -39,7 +39,9 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
+import com.idnp.danp_proyecto_final.domain.model.SharedDestino
 import com.idnp.danp_proyecto_final.domain.viewsmodel.DataStoreViewModel
+import com.idnp.danp_proyecto_final.domain.viewsmodel.SharedViewModel
 import com.idnp.danp_proyecto_final.navegation.AppScreens
 import com.idnp.danp_proyecto_final.navegation.navList
 import com.idnp.danp_proyecto_final.room.presentation.edit.EditEvent
@@ -332,11 +334,13 @@ fun CardLugarTuristico(
     viewModel: DataStoreViewModel,
     roomView: EditViewModel,
     roomDestinoView: DestinoEditViewModel,
-    size: Int
+    size: Int,
 ){
     var isLiked by remember{
         mutableStateOf(false)
     }
+
+
 
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -345,17 +349,19 @@ fun CardLugarTuristico(
         modifier = Modifier
             .padding(vertical = 10.dp)
             .clickable {
-                navController.navigate(
-                    AppScreens.DetalleLugarTuristico.route
-                            + "/${departamentoTitle}"
-                            + "/${destinoTitle}"
-                            + "/${destinoDescription}"
-                            + "/${destinoImage}"
-                            + "/${destinoLatitud}"
-                            + "/${destinoLongitud}"
+                val destino = SharedDestino(
+                    departamentoTitle,
+                    destinoTitle,
+                    destinoDescription,
+                    destinoImage,
+                    destinoLatitud,
+                    destinoLongitud,
+                    destinoCategory
                 )
+                gotoDestino(destino, navController)
             }
     ) {
+
         Row(
             modifier = Modifier
                 .padding(10.dp)
@@ -401,15 +407,6 @@ fun CardLugarTuristico(
                                     .padding(top = 10.dp)
                                     .clickable {
                                         isLiked = !isLiked
-                                        Log.d("FAVORITE","click")
-                                        viewModel.insertDataStore(
-                                            isLiked,
-                                            destinoTitle,
-                                            destinoImage,
-                                            destinoDescription,
-                                            destinoCategory,
-                                            departamentoTitle,
-                                        )
                                         roomView.onEvent(EditEvent.EnteredTitle(departamentoTitle))
                                         roomView.onEvent(EditEvent.InsertDepartamento)
                                         val sizeCurrent = size + 1
@@ -469,15 +466,16 @@ fun CardLugarTuristicoFavorito(
         modifier = Modifier
             .padding(vertical = 10.dp)
             .clickable {
-                navController.navigate(
-                    AppScreens.DetalleLugarTuristico.route
-                            + "/${departamentoTitle}"
-                            + "/${destinoTitle}"
-                            + "/${destinoDescription}"
-                            + "/${destinoImage}"
-                            + "/${destinoLatitud}"
-                            + "/${destinoLongitud}"
+                val destino = SharedDestino(
+                    departamentoTitle,
+                    destinoTitle,
+                    destinoDescription,
+                    destinoImage,
+                    destinoLatitud,
+                    destinoLongitud,
+                    destinoCategory
                 )
+                gotoDestino(destino, navController)
             }
     ) {
         Row(
@@ -543,10 +541,7 @@ fun CardLugarTuristicoFavorito(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun LayoutDefaultPreview() {
-    val navController = rememberNavController()
-    BottomBarNavegation(2,navController)
+fun gotoDestino(destino: SharedDestino, navController: NavController){
+    navController.currentBackStackEntry?.arguments?.putParcelable("shared_destino", destino)
+    navController.navigate(AppScreens.DetalleLugarTuristico.route)
 }

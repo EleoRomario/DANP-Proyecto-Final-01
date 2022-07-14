@@ -29,6 +29,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.idnp.danp_proyecto_final.R
 import com.idnp.danp_proyecto_final.data.departamentosList
 import com.idnp.danp_proyecto_final.data.destinosList
+import com.idnp.danp_proyecto_final.domain.model.SharedDestino
+import com.idnp.danp_proyecto_final.domain.viewsmodel.SharedViewModel
 import com.idnp.danp_proyecto_final.presentation.components.BottomBarNavegation
 import com.idnp.danp_proyecto_final.presentation.components.TopBarMenuDep
 import com.idnp.danp_proyecto_final.presentation.components.modal
@@ -39,15 +41,11 @@ import com.idnp.danp_proyecto_final.ui.theme.TextAlt
 
 @Composable
 fun DetalleLugarTuristicoScreen(
+    destino: SharedDestino,
     navController: NavController,
-    departamentoTitle: String?,
-    destinoTitle: String?,
-    destinoDescription: String?,
-    destinoImage: String?,
-    destinoLatitud: String?,
-    destinoLongitud: String?,
-    viewModel: DepartamentosViewModel = hiltViewModel()
+    viewModel: DepartamentosViewModel = hiltViewModel(),
 ){
+
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -61,15 +59,17 @@ fun DetalleLugarTuristicoScreen(
             BottomBarNavegation(-1,navController)
         },
     ){
-        LugarBodyContent(
-            departamentoTitle,
-            destinoTitle,
-        destinoDescription,
-        destinoImage,
-        destinoLatitud,
-        destinoLongitud,
-        )
-        TopBarMenuDep(departamentoTitle,scope,scaffoldState,navController)
+        if (destino != null) {
+            LugarBodyContent(
+                destino.departamento,
+                destino.title,
+                destino.description,
+                destino.image,
+                destino.latitud,
+                destino.longitud,
+            )
+            TopBarMenuDep(destino.departamento,scope,scaffoldState,navController)
+        }
     }
 
 

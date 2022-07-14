@@ -76,7 +76,6 @@ fun logoPeru(){
             )
         Text(text = "Perú", fontSize = 25.sp)
         Text(text = "Destino mágico")
-        CircularProgressIndicator(color = Primary)
     }
 }
 
