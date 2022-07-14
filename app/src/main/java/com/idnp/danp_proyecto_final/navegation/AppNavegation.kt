@@ -1,5 +1,6 @@
 package com.idnp.danp_proyecto_final.navegation
 
+import SearchDestinosScreen
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

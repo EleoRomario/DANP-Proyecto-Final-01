@@ -39,7 +39,6 @@ constructor(
         getDepartamentoList()
         savedStateHandle.get<String>("departamento")?.let{
             getDestinoList(it)
-            Log.d("DESTINOS", "->"+it)
         }
     }
 

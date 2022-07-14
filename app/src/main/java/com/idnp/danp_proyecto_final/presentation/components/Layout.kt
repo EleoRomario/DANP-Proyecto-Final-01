@@ -545,3 +545,84 @@ fun gotoDestino(destino: SharedDestino, navController: NavController){
     navController.currentBackStackEntry?.arguments?.putParcelable("shared_destino", destino)
     navController.navigate(AppScreens.DetalleLugarTuristico.route)
 }
+
+@Composable
+fun destinoCategoria(dep:String,title: String, imgUri: Int, codeDep: String?, code: String?, navController: NavController){
+    var isLiked by remember{
+        mutableStateOf(false)
+    }
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(0.1.dp, color = Color.LightGray),
+        backgroundColor = Color.White,
+        modifier = Modifier
+            .padding(vertical = 10.dp)
+            .clickable {
+                navController.navigate(AppScreens.DetalleLugarTuristico.route + "/${codeDep}/${code}")
+            }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(imgUri),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(100.dp, 110.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Box(){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(110.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Text(title, fontSize = 15.sp, color = Primary,
+                            modifier = Modifier.weight(3f),
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Image(
+                            imageVector = ImageVector.vectorResource(if(isLiked) R.drawable.ic_heart else  R.drawable.ic_heart_unselected),
+                            contentDescription = "favorite",
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(top = 10.dp)
+                                .clickable {
+                                    isLiked = !isLiked
+                                }
+
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_location), contentDescription = "location")
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(dep, color = TextAlt, fontSize = 12.sp)
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Image(imageVector = ImageVector.vectorResource(R.drawable.ic_star), contentDescription = "calification")
+                        Text(text = "4.5")
+
+                    }
+                }
+            }
+        }
+    }
+}

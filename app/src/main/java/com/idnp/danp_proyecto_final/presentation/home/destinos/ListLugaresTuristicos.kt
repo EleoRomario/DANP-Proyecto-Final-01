@@ -145,11 +145,3 @@ fun CardsLugaresTuristicos(
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun ListLugarDefaultPreview() {
-    val navController = rememberNavController()
-   // ListLugaresTuristicoScreen(navController,"arequipa")
-}
