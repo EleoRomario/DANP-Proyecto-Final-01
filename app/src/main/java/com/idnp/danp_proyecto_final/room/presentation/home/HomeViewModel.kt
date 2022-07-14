@@ -30,14 +30,4 @@ class HomeViewModel @Inject constructor(
             )
         }.launchIn(viewModelScope)
     }
-
-    fun onEvent(event: HomeEvent) {
-        when (event) {
-            is HomeEvent.Deletedepartamento -> {
-                viewModelScope.launch {
-                    deletedepartamento(event.departamento)
-                }
-            }
-        }
-    }
 }

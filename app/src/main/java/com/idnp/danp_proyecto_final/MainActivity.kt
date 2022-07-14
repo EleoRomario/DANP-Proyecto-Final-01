@@ -6,42 +6,37 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.idnp.danp_proyecto_final.navegation.AppNavigation
+import com.idnp.danp_proyecto_final.presentation.home.departamentos.DepartamentosViewModel
 import com.idnp.danp_proyecto_final.ui.theme.DANPProyectoFinalTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             DANPProyectoFinalTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    var selectedItem by remember {
-                        mutableStateOf(0)
+                    val auth = Firebase.auth
+                    val currentUser = auth.currentUser
+                    val viewModel: DepartamentosViewModel = hiltViewModel()
+                    val state = viewModel.state.value
+
+                    if(!state.isLoading){
+                        AppNavigation(state, currentUser)
                     }
-                    AppNavigation()
+                    //CustomNotification()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    DANPProyectoFinalTheme {
-        Greeting("Android")
     }
 }

@@ -8,8 +8,5 @@ import androidx.room.PrimaryKey
 @Entity
 data class Departamento(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int? = null,
-    val title:String,
-    val description: String,
-    var image: String
-
+    val title: String,
 )

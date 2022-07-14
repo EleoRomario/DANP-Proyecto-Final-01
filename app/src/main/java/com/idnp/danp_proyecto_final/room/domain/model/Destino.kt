@@ -7,10 +7,10 @@ import androidx.room.*
 data class Destino (
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     @ColumnInfo(name = "codeDep")@NonNull val codeDep:Int?,
-    val title:String,
-    val category:String,
-    val image: String,
+    val title: String,
     val description: String,
-    val latitud: Double,
-    val longitud: Double,
+    val image: String,
+    val latitud: String,
+    val longitud: String,
+    val category: String
 )

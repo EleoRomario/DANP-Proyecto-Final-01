@@ -14,11 +14,11 @@ val navList: List<NavData> = listOf(
         0,
         "Home",
         R.drawable.ic_home,
-        AppScreens.HomeDepartamentos.route
+        AppScreens.HomeScreen.route
     ),
     NavData(
         1,
-        "List",
+        "Explorar",
         R.drawable.ic_compass,
         AppScreens.ListDepartamentos.route
     ),
@@ -30,8 +30,14 @@ val navList: List<NavData> = listOf(
     ),
     NavData(
         3,
-        "Categorias",
+        "Buscar",
         R.drawable.ic_search_menu,
         AppScreens.SearchDestino.route
+    ),
+    NavData(
+        4,
+        "Perfil",
+        R.drawable.ic_user,
+        AppScreens.ProfileScreen.route
     )
 )

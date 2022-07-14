@@ -14,7 +14,7 @@ val Typography by lazy {
         body1 = TextStyle(
             fontFamily = fonts,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 14.sp
         )
         /* Other default text styles to override
     button = TextStyle(
